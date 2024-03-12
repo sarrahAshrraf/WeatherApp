@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
                 android:textSize="23sp" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvDayFormat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -64,7 +64,7 @@
                     android:src="@drawable/ddsunny" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tvStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/weatherstatus"
@@ -73,7 +73,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/tvTemp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -121,7 +121,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView72"
+                            android:id="@+id/tvclouds"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/clouds"
@@ -154,7 +154,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView77"
+                            android:id="@+id/tvWind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Wind speed"
@@ -187,7 +187,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView79"
+                            android:id="@+id/tvHumidity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/humidity"
@@ -220,7 +220,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/tvPressure"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/pressure"
@@ -241,7 +241,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/tvTodayRecTxt"
                     android:layout_width="198dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

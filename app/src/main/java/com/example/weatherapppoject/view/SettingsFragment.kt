@@ -37,7 +37,7 @@ class SettingsFragment : Fragment() {
           }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setLocale(sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default"))
         binding.langueRadioGrop.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
             if (!checkedRadioButton.isChecked) {
@@ -62,8 +62,8 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
-    }
 
+    }
     private fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -71,7 +71,6 @@ class SettingsFragment : Fragment() {
 
         val config = Configuration(resources.configuration)
         config.setLocale(locale)
-
         val context= ContextUtils.wrapContext(requireContext(), locale)
         val translatedSettingsText = context.getString(R.string.settings)
         val translatedLanguageText = context.getString(R.string.language)
@@ -80,6 +79,15 @@ class SettingsFragment : Fragment() {
         binding.textView10.text = translatedLanguageText
 
 //        requireActivity().recreate()
+
+    }
+    override fun onResume() {
+        super.onResume()
+        val selectedLanguage = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "en")
+        when (selectedLanguage) {
+            "ar" -> binding.arRdiobtn.isChecked = true
+            "en" -> binding.enRdiobtn.isChecked = true
+        }
     }
 }
 object ContextUtils {
