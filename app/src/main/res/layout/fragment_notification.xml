@@ -4,40 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FFFFFF"
-    tools:context=".view.SplashScreen">
+    tools:context=".view.NotificationFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
-        android:layout_width="340dp"
-        android:layout_height="302dp"
+        android:layout_width="375dp"
+        android:layout_height="595dp"
         android:layout_marginStart="19dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="19dp"
         android:layout_marginBottom="129dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.817"
+        app:layout_constraintVertical_bias="0.867"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/clouds" />
+        app:lottie_rawRes="@raw/nonotification" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="346dp"
-        android:layout_height="288dp"
-
-        android:layout_marginStart="104dp"
-        android:layout_marginEnd="103dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="373dp"
+        android:layout_height="615dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205" />
-
+        app:layout_constraintVertical_bias="0.301" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
