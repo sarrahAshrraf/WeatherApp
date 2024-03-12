@@ -75,7 +75,7 @@ class SettingsFragment : Fragment() {
         val translatedSettingsText = context.getString(R.string.settings)
         val translatedLanguageText = context.getString(R.string.language)
 
-        binding.textView9.text = translatedSettingsText
+        binding.tvSettings.text = translatedSettingsText
         binding.textView10.text = translatedLanguageText
 
 //        requireActivity().recreate()

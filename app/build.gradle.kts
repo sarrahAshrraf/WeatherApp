@@ -5,7 +5,7 @@ plugins {
 
 android {
     viewBinding{ enable= true}
-//    dataBinding{enable = true}
+    dataBinding{enable = true}
     namespace = "com.example.weatherapppoject"
     compileSdk = 34
 
@@ -50,4 +50,12 @@ dependencies {
     implementation ("com.airbnb.android:lottie:5.2.0")
     //glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    //retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    //viewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
 }

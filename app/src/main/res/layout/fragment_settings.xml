@@ -1,65 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_blue"
     tools:context=".view.SettingsFragment">
 
     <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/settings" />
+        android:id="@+id/tvSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="180dp"
+        android:fontFamily="@font/myfont"
+        android:text="@string/settings"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/langueRadioGrop"
-        android:layout_width="220dp"
-        android:layout_height="102dp"
-        android:layout_marginBottom="496dp"
+        android:layout_width="283dp"
+        android:layout_height="151dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.752">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.239">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/myfont"
+            android:text="@string/language"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
         <RadioButton
             android:id="@+id/arRdiobtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="154dp"
+            android:layout_height="59dp"
             android:layout_weight="1"
-            android:text="@string/arabic" />
+            android:text="@string/arabic"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/buttons"
+            android:textColorLink="#F6B5B5"
+            android:textSize="16sp" />
 
         <RadioButton
             android:id="@+id/enRdiobtn"
-            android:layout_width="wrap_content"
+            android:layout_width="154dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/english" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/language" />
-
-            <LinearLayout
-                android:layout_width="152dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="3">
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:text="@string/english"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
     </RadioGroup>
 
@@ -72,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.017" />
+        app:layout_constraintTop_toTopOf="@+id/tvSettings"
+        app:layout_constraintVertical_bias="0.168" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

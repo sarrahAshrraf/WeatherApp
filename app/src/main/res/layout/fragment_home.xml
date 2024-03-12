@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HomeFragment"
-    android:background="@color/dark_blue">
+    android:background="@color/dark_blue"
+    tools:context=".view.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:background="@drawable/background_2"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -234,9 +234,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
 
                 >
 
@@ -256,8 +256,8 @@
                 android:id="@+id/todayDetailsRecView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="16dp"
                 android:clipToPadding="false"
+                android:paddingStart="16dp"
                 android:paddingEnd="16dp"
 
                 />
@@ -265,9 +265,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textDays"
@@ -283,9 +283,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="16dp"
                 android:clipToPadding="false"
-                android:paddingEnd="16dp"/>
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
 
         </LinearLayout>
     </ScrollView>
