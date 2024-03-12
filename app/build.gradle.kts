@@ -5,7 +5,7 @@ plugins {
 
 android {
     viewBinding{ enable= true}
-    dataBinding{enable = true}
+//    dataBinding{enable = true}
     namespace = "com.example.weatherapppoject"
     compileSdk = 34
 

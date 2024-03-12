@@ -20,35 +20,32 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Today"
-                android:textColor="@color/white"
+                android:layout_marginTop="16dp"
+                android:text="@string/today"
                 android:textAlignment="center"
-                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:textSize="25sp"
-                android:layout_marginTop="16dp"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alexandria"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:textSize="23sp"
                 android:layout_marginTop="8dp"
+                android:text="@string/city"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="23sp" />
 
-                />
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tue Mar 11"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:textSize="20sp"
                 android:layout_marginTop="8dp"
-
-                />
+                android:text="@string/dayformat"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
 
             <LinearLayout
@@ -56,9 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:background="@drawable/background_2"
-                android:orientation="vertical"
-
-                >
+                android:orientation="vertical" >
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -72,7 +67,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Partly Cloudy"
+                    android:text="@string/weatherstatus"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
@@ -82,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="25ْ"
+                    android:text="@string/weathertemp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="43sp"
@@ -110,27 +105,26 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/imageView32"
                             android:layout_width="60dp"
                             android:layout_height="42dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/humidityicon"
                             app:srcCompat="@drawable/cloudsicon" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/textView62"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="5%"
+                            android:text="@string/cloudpercent"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/textView72"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Clouds"
+                            android:text="@string/clouds"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
@@ -144,15 +138,14 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/imageView37"
                             android:layout_width="60dp"
                             android:layout_height="42dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/humidityicon"
                             app:srcCompat="@drawable/windicon" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/textView67"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="12km/h"
@@ -161,7 +154,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/textView77"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Wind speed"
@@ -178,14 +171,14 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/imageView38"
                             android:layout_width="63dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center"
                             android:src="@drawable/humidityicon" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/textView68"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="20%"
@@ -194,10 +187,10 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/textView79"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Humidity"
+                            android:text="@string/humidity"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
@@ -211,11 +204,10 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/imageView39"
                             android:layout_width="60dp"
                             android:layout_height="42dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/humidityicon"
                             app:srcCompat="@drawable/pressureicon" />
 
                         <TextView
@@ -231,7 +223,7 @@
                             android:id="@+id/textView7"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Pressure"
+                            android:text="@string/pressure"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
@@ -253,22 +245,15 @@
                     android:layout_width="198dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Today"
+                    android:text="@string/today"
                     android:textColor="@color/yellow"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="94dp"
-                    android:layout_height="wrap_content"
-
-                    android:text="Next 5 days>"
-                    android:textColor="@color/white" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/weatherdaysRecView"
+                android:id="@+id/todayDetailsRecView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="16dp"
@@ -276,6 +261,31 @@
                 android:paddingEnd="16dp"
 
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp" >
+
+                <TextView
+                    android:id="@+id/textDays"
+                    android:layout_width="198dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/next5days"
+                    android:textColor="@color/yellow"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="16dp"
+                android:clipToPadding="false"
+                android:paddingEnd="16dp"/>
 
         </LinearLayout>
     </ScrollView>

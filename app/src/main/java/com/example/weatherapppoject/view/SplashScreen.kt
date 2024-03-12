@@ -5,31 +5,35 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.example.weatherapppoject.R
-import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class SplashScreen : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val handler = Handler()
+    private var isFirstLaunch = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.animationView.playAnimation()
-        Glide.with(this)
-            .asGif()
-            .load(R.drawable.wordsplashscreen)
-            .into(binding.imageView)
 
-        handler.postDelayed({
-            binding.animationView.cancelAnimation()
-            navigateToHomeActivity() }, 5000)
-
-
-
+        isFirstLaunch = savedInstanceState == null
+        if (isFirstLaunch) {
+            binding.animationView.playAnimation()
+            Glide.with(this)
+                .asGif()
+                .load(R.drawable.wordsplashscreen)
+                .into(binding.imageView)
+            handler.postDelayed({
+                binding.animationView.cancelAnimation()
+                navigateToHomeActivity()
+            }, 5000)
+        } else {
+            navigateToHomeActivity()
+        }
     }
+
     private fun navigateToHomeActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
@@ -38,16 +42,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.animationView.resumeAnimation()
+        if (isFirstLaunch) {
+            binding.animationView.resumeAnimation()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        binding.animationView.pauseAnimation()
+        if (isFirstLaunch) {
+            binding.animationView.pauseAnimation()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.animationView.cancelAnimation()
+        if (isFirstLaunch) {
+            binding.animationView.cancelAnimation()
+        }
     }
 }
