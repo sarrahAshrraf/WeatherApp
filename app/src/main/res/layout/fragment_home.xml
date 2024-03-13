@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.HomeFragment"
-    android:background="@color/dark_blue">
+    android:background="@color/dark_blue"
+    tools:context=".view.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,12 +53,12 @@
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:background="@drawable/background_2"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="247dp"
-                    android:layout_height="131dp"
+                    android:id="@+id/weatherImgView"
+                    android:layout_width="120dp"
+                    android:layout_height="97dp"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
                     android:src="@drawable/ddsunny" />
@@ -107,12 +107,12 @@
                         <ImageView
                             android:id="@+id/imageView32"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/cloudsicon" />
 
                         <TextView
-                            android:id="@+id/textView62"
+                            android:id="@+id/cloudPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/cloudpercent"
@@ -140,12 +140,12 @@
                         <ImageView
                             android:id="@+id/imageView37"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="26dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/windicon" />
 
                         <TextView
-                            android:id="@+id/textView67"
+                            android:id="@+id/windPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="12km/h"
@@ -157,7 +157,7 @@
                             android:id="@+id/tvWind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Wind speed"
+                            android:text="@string/winds"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
@@ -173,12 +173,12 @@
                         <ImageView
                             android:id="@+id/imageView38"
                             android:layout_width="63dp"
-                            android:layout_height="45dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             android:src="@drawable/humidityicon" />
 
                         <TextView
-                            android:id="@+id/textView68"
+                            android:id="@+id/humidityPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="20%"
@@ -206,12 +206,12 @@
                         <ImageView
                             android:id="@+id/imageView39"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/pressureicon" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/pressurePercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="997hPa"
@@ -234,9 +234,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
 
                 >
 
@@ -256,8 +256,8 @@
                 android:id="@+id/todayDetailsRecView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="16dp"
                 android:clipToPadding="false"
+                android:paddingStart="16dp"
                 android:paddingEnd="16dp"
 
                 />
@@ -265,9 +265,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textDays"
@@ -283,9 +283,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="16dp"
                 android:clipToPadding="false"
-                android:paddingEnd="16dp"/>
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
 
         </LinearLayout>
     </ScrollView>
