@@ -10,12 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresExtension
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
-import com.example.weatherapppoject.databinding.FragmentSettingsBinding
+import com.example.weatherapppoject.forecastmodel.ForeCastData
+import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RetrofitInstance
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
@@ -24,13 +28,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class HomeFragment : Fragment() {
     private lateinit var sharedPreferencesManager: SharedPrefrencesManager
     lateinit var binding: FragmentHomeBinding
-
+    lateinit var recyclerView: RecyclerView
+//    lateinit var adapter: FiveDaysAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
@@ -45,6 +51,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,21 +63,66 @@ class HomeFragment : Fragment() {
         val context= ContextUtils.wrapContext(requireContext(), locale)
         getCurrentWeather()
 
+        getForeCast()
+        ///recView
+//        adapter = FiveDaysAdapter()
+        binding.todayDetailsRecView.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+//            adapter = this.adapter
+        }
+
+
+
         binding.city.setText(context.getString(R.string.city))
+        binding.tvWind.setText(context.getString(R.string.winds))
         binding.textDays.setText(context.getString(R.string.language))
         binding.tvPressure.setText(context.getString(R.string.pressure))
         binding.textDays.setText(context.getString(R.string.next5days))
         binding.tvTemp.setText(context.getString(R.string.weathertemp))
         binding.tvHumidity.setText(context.getString(R.string.humidity))
         binding.tvclouds.setText(context.getString(R.string.clouds))
-        binding.tvDayFormat.setText(context.getString(R.string.dayformat))
+//        binding.tvDayFormat.setText(context.getString(R.string.dayformat))
         binding.tvStatus.setText(context.getString(R.string.weatherstatus))
     }
+
+
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+private fun getForeCast() {
+    GlobalScope.launch(Dispatchers.IO) {
+        val response = try {
+            RetrofitInstance.wetherAPi.getForeCast("japan", "metric", Utils.APIKEY)
+        } catch (e: IOException) {
+            Toast.makeText(requireContext(), "error" + e, Toast.LENGTH_SHORT).show()
+            Log.i("============", "Error" + e)
+            return@launch
+        } catch (e: HttpException) {
+            Toast.makeText(requireContext(), "" + e, Toast.LENGTH_SHORT).show()
+            Log.i("============", "Error" + e)
+
+            return@launch
+
+
+        }
+
+        if (response.isSuccessful && response.body() != null) {
+
+            withContext(Dispatchers.Main) {
+                val data = response.body()!!
+                var forecastArray = arrayListOf<ForeCastData>()
+                forecastArray = data.list as ArrayList<ForeCastData>
+                val adapter = FiveDaysAdapter(forecastArray)
+                binding.todayDetailsRecView.adapter = adapter
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 private fun getCurrentWeather(){
     GlobalScope.launch (Dispatchers.IO){
         val response = try {
-            RetrofitInstance.wetherAPi.getCureentWeather("London","metric",Utils.APIKEY)
+            RetrofitInstance.wetherAPi.getCureentWeather("egypt","metric",Utils.APIKEY)
         } catch (e: IOException){
         Toast.makeText(requireContext(),"error"+e,Toast.LENGTH_SHORT).show()
             Log.i("============", "Error"+e)
@@ -80,7 +132,6 @@ private fun getCurrentWeather(){
             Log.i("============", "Error"+e)
 
             return@launch
-
 
         }
 
@@ -96,12 +147,13 @@ private fun getCurrentWeather(){
 //            ).format(data.sys.)
            binding.apply {
                tvTemp.text = response.body()!!.main?.temp.toString()
-               cloudPercent.text= response.body()!!.clouds.toString()
-               tvWind.text = response.body()!!.wind.toString()
+               cloudPercent.text= response.body()!!.clouds!!.all.toString()
+               windPercent.text = response.body()!!.wind!!.speed.toString()
                tvDayFormat.text = response.body()!!.dtTxt
                humidityPercent.text = response.body()!!.main?.humidity.toString()
                pressurePercent.text = response.body()!!.main?.pressure.toString()
                tvStatus.text = response.body()!!.weather[0].description
+               tvDayFormat.text = response.body()!!.dtTxt?.let { Utils.getDateAndTime(it) }//////NULL
 
 
 

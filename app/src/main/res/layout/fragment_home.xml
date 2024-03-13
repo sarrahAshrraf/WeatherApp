@@ -57,8 +57,8 @@
 
                 <ImageView
                     android:id="@+id/weatherImgView"
-                    android:layout_width="247dp"
-                    android:layout_height="131dp"
+                    android:layout_width="120dp"
+                    android:layout_height="97dp"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
                     android:src="@drawable/ddsunny" />
@@ -107,7 +107,7 @@
                         <ImageView
                             android:id="@+id/imageView32"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/cloudsicon" />
 
@@ -140,7 +140,7 @@
                         <ImageView
                             android:id="@+id/imageView37"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="26dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/windicon" />
 
@@ -157,7 +157,7 @@
                             android:id="@+id/tvWind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Wind speed"
+                            android:text="@string/winds"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
@@ -173,7 +173,7 @@
                         <ImageView
                             android:id="@+id/imageView38"
                             android:layout_width="63dp"
-                            android:layout_height="45dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             android:src="@drawable/humidityicon" />
 
@@ -206,7 +206,7 @@
                         <ImageView
                             android:id="@+id/imageView39"
                             android:layout_width="60dp"
-                            android:layout_height="42dp"
+                            android:layout_height="27dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/pressureicon" />
 

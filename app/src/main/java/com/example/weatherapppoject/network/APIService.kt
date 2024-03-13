@@ -2,8 +2,8 @@ package com.example.weatherapppoject.network
 
 import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.Utils
+import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.pojo.Current
-import com.example.weatherapppoject.pojo.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -24,4 +24,13 @@ interface APIService {
         @Query("appid") apiKey : String,
 
         ) : Response<WeatherList>
+
+    //3 hrs and 5 days
+    @GET("forecast?")
+    suspend fun getForeCast(
+        @Query("q") city : String,
+        @Query("units") units : String,
+        @Query("appid") apiKey : String,
+
+        ) : Response<WeatherResponse>
 }
