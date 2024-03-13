@@ -56,7 +56,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/weatherImgView"
                     android:layout_width="247dp"
                     android:layout_height="131dp"
                     android:layout_gravity="center"
@@ -112,7 +112,7 @@
                             app:srcCompat="@drawable/cloudsicon" />
 
                         <TextView
-                            android:id="@+id/textView62"
+                            android:id="@+id/cloudPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/cloudpercent"
@@ -145,7 +145,7 @@
                             app:srcCompat="@drawable/windicon" />
 
                         <TextView
-                            android:id="@+id/textView67"
+                            android:id="@+id/windPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="12km/h"
@@ -178,7 +178,7 @@
                             android:src="@drawable/humidityicon" />
 
                         <TextView
-                            android:id="@+id/textView68"
+                            android:id="@+id/humidityPercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="20%"
@@ -211,7 +211,7 @@
                             app:srcCompat="@drawable/pressureicon" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/pressurePercent"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="997hPa"
