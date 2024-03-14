@@ -18,6 +18,21 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tvNetworkIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#EA1717"
+        android:gravity="center"
+        android:text="internetIsDisconnected"
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"

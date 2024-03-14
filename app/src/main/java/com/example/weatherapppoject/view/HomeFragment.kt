@@ -14,16 +14,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresExtension
-import androidx.navigation.Navigation.findNavController
 //import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.Utils
+import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
-import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RetrofitInstance
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
@@ -32,8 +30,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -102,11 +98,11 @@ private fun getForeCast() {
         val response = try {
             RetrofitInstance.wetherAPi.getForeCast("japan", "metric", Utils.APIKEY,"ar")
         } catch (e: IOException) {
-            Toast.makeText(requireContext(), "error" + e, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "error" + e, Toast.LENGTH_SHORT).show()
             Log.i("============", "Error" + e)
             return@launch
         } catch (e: HttpException) {
-            Toast.makeText(requireContext(), "" + e, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(), "" + e, Toast.LENGTH_SHORT).show()
             Log.i("============", "Error" + e)
 
             return@launch
@@ -132,13 +128,13 @@ private fun getForeCast() {
 private fun getCurrentWeather(){
     GlobalScope.launch (Dispatchers.IO){
         val response = try {
-            RetrofitInstance.wetherAPi.getCureentWeather("egypt","metric",Utils.APIKEY)
+            RetrofitInstance.wetherAPi.getCureentWeather("egypt","metric", Utils.APIKEY)
         } catch (e: IOException){
-        Toast.makeText(requireContext(),"error"+e,Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(),"error"+e,Toast.LENGTH_SHORT).show()
             Log.i("============", "Error"+e)
         return@launch
     } catch (e :HttpException){
-            Toast.makeText(requireContext(),""+e,Toast.LENGTH_SHORT).show()
+//            Toast.makeText(requireContext(),""+e,Toast.LENGTH_SHORT).show()
             Log.i("============", "Error"+e)
 
             return@launch

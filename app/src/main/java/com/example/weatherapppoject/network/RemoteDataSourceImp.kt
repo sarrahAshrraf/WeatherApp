@@ -1,7 +1,6 @@
 package com.example.weatherapppoject.network
 
-import com.example.weatherapppoject.Utils
-import com.example.weatherapppoject.Utils.Companion.BASE_URL
+import com.example.weatherapppoject.utils.Utils
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

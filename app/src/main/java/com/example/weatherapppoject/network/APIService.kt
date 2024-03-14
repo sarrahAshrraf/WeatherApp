@@ -1,9 +1,7 @@
 package com.example.weatherapppoject.network
 
 import com.example.WeatherAppProject.WeatherList
-import com.example.weatherapppoject.Utils
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
-import com.example.weatherapppoject.pojo.Current
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

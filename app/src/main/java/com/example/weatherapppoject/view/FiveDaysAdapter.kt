@@ -5,18 +5,11 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.appcompat.view.menu.MenuView.ItemView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.weatherapppoject.R
-import com.example.weatherapppoject.Utils
+import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.ItemDetailsCardBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
-import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.squareup.picasso.Picasso
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class FiveDaysAdapter(private val forecastArray: ArrayList<ForeCastData>): RecyclerView.Adapter<FiveDaysAdapter.ViewHolder>() {
 
