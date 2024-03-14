@@ -255,7 +255,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/todayDetailsRecView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="151dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
@@ -282,7 +282,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="309dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp" />
