@@ -26,11 +26,14 @@ interface APIService {
         ) : Response<WeatherList>
 
     //3 hrs and 5 days
+    ////////////daily => preception forecast
+//    forecast.precipitation.unit Period of measurements. Possible value is 1 hour, 3 hours
     @GET("forecast?")
     suspend fun getForeCast(
         @Query("q") city : String,
         @Query("units") units : String,
         @Query("appid") apiKey : String,
+        @Query("lang") lang :String
 
         ) : Response<WeatherResponse>
 }

@@ -6,12 +6,16 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresExtension
+import androidx.navigation.Navigation.findNavController
+//import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -61,6 +65,12 @@ class HomeFragment : Fragment() {
         val config = Configuration(resources.configuration)
         config.setLocale(locale)
         val context= ContextUtils.wrapContext(requireContext(), locale)
+
+//        binding.swipeRefreshLayout.setOnRefreshListener {
+//            findNavController(view).navigate(R.id.home)
+//        }
+
+
         getCurrentWeather()
 
         getForeCast()
@@ -90,7 +100,7 @@ class HomeFragment : Fragment() {
 private fun getForeCast() {
     GlobalScope.launch(Dispatchers.IO) {
         val response = try {
-            RetrofitInstance.wetherAPi.getForeCast("japan", "metric", Utils.APIKEY)
+            RetrofitInstance.wetherAPi.getForeCast("japan", "metric", Utils.APIKEY,"ar")
         } catch (e: IOException) {
             Toast.makeText(requireContext(), "error" + e, Toast.LENGTH_SHORT).show()
             Log.i("============", "Error" + e)
@@ -146,7 +156,12 @@ private fun getCurrentWeather(){
 //                Locale.ENGLISH
 //            ).format(data.sys.)
            binding.apply {
-               tvTemp.text = response.body()!!.main?.temp.toString()
+               //TODO check if the setting is ar and convert the numbers
+               //TODO add the lang property in the api call like the forecast in APIservice
+               tvTemp.text =
+                   Utils.convertToArabicNumber( response.body()!!.main?.temp.toString())
+//                   response.body()!!.main?.temp.
+//               toString()
                cloudPercent.text= response.body()!!.clouds!!.all.toString()
                windPercent.text = response.body()!!.wind!!.speed.toString()
                tvDayFormat.text = response.body()!!.dtTxt
