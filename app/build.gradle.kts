@@ -63,6 +63,9 @@ dependencies {
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //nav bar
     implementation ("nl.joery.animatedbottombar:library:1.1.0")
+    //navigation
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.4.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.4.0")
 
 
 

@@ -15,6 +15,7 @@ class Utils {
 
         const val IMG_URL = "https://openweathermap.org/img/w/"
 
+
         @RequiresApi(Build.VERSION_CODES.O)
         public fun getDateAndTime(dtTxt :String): CharSequence{
             val input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
