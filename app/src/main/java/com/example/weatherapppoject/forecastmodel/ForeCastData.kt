@@ -11,4 +11,5 @@ data class ForeCastData(
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
+
 )
