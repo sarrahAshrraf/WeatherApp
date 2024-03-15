@@ -23,7 +23,7 @@ class RemoteDataSourceImp : RemoteDataSource {
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
 
-        return weatherApiService.getCureentWeather(city, units, apiKey)
+        return weatherApiService.getCureentWeather(51.5085,-0.1257, units, apiKey)
     }
 
     override suspend fun getFiveDaysInfo(): WeatherResponse {

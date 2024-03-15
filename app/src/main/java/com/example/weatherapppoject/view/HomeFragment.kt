@@ -1,8 +1,13 @@
 package com.example.weatherapppoject.view
 
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.health.connect.datatypes.ExerciseRoute.Location
+import android.location.Address
+import android.location.Geocoder
 import android.net.http.HttpException
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresExtension
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +30,7 @@ import com.example.weatherapppoject.R
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
+import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.network.RetrofitInstance
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -31,6 +38,9 @@ import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,6 +55,23 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: FiveDaysAdapter
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
+    lateinit var remoteDataSource: RemoteDataSource
+    lateinit var  repository : WeatherRepositoryImpl
+    lateinit var viewModelFactory: HomeFragmentViewModelFactory
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        geocoder = Geocoder(requireContext(), Locale.getDefault())
+        remoteDataSource = RemoteDataSourceImp()
+        repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
+        viewModelFactory = HomeFragmentViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,11 +87,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val remoteDataSource = RemoteDataSourceImp()
-        val repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
-        val viewModelFactory = HomeFragmentViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+
         binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+
         viewModel.currentWeather.observe(viewLifecycleOwner) { weatherList ->
             binding.tvTemp.text = "${weatherList.main?.temp}°C"
             binding.tvPressure.text = Utils.convertToArabicNumber(weatherList.main?.pressure.toString())
@@ -77,6 +102,38 @@ class HomeFragment : Fragment() {
             binding.pressurePercent.text = weatherList.main?.pressure.toString()
             binding.tvStatus.text = weatherList.weather[0].description
             binding.tvDayFormat.text = weatherList.dtTxt?.let { Utils.getDateAndTime(it) }//////NULL
+
+
+             fun fetchLocation(){
+                val task: Task<android.location.Location> = fusedLocationProviderClient.lastLocation
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    return
+                }
+                task.addOnSuccessListener {
+//            val geocoder = Geocoder(requireContext(),Locale.getDefault())
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                        geocoder.getFromLocation(it.latitude,it.longitude,1,object: Geocoder.GeocodeListener{
+                            override fun onGeocode(address: MutableList<Address>) {
+//                            weatherList.weather[0].main.
+                            }
+                        } )
+
+                    }
+
+                }
+
+
+            }
+
+
 
             val iconId = weatherList!!.weather[0].icon
             val imgURL = "https://openweathermap.org/img/w/$iconId.png"

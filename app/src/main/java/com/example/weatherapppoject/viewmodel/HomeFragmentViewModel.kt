@@ -18,6 +18,7 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     private val _currentWeather = MutableLiveData<WeatherList>()
     val currentWeather: LiveData<WeatherList> = _currentWeather
 
+
     private val _fiveDaysWeather = MutableLiveData<WeatherResponse>()
     val fiveDaysWeather: LiveData<WeatherResponse> = _fiveDaysWeather
 
@@ -27,7 +28,7 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
                 val weatherList = weatherRepository.getCurrentWeather()
                 _currentWeather.value = weatherList
             } catch (e: Exception) {
-                // Handle the error
+                Log.i("=====Error", "getCurrentWeatherError: "+e)
             }
         }
     }

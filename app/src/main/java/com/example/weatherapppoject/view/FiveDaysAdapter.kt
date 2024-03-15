@@ -34,6 +34,7 @@ class FiveDaysAdapter(private val forecastArray: List<ForeCastData>): RecyclerVi
                 Picasso.get().load(imgURL).into(imageViewRec)
 
             tvTimeRec.text = currentItem.weather[0].description
+            currentItem.main
 //                Utils.getDateAndTime(currentItem.dt_txt)
             tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())
 //                currentItem.main.temp.toString()+"°C"
