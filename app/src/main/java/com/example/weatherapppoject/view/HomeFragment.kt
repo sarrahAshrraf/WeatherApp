@@ -63,6 +63,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: FiveDaysAdapter
+    private lateinit var todayadapter: TodayDataAdapter
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     lateinit var remoteDataSource: RemoteDataSource
@@ -128,7 +130,9 @@ class HomeFragment : Fragment() {
                 if (location != null) {
                     var long = location.longitude
                     var lat = location.latitude
+                    Log.i("++++daea", "onLocationResult: "+long+" "+lat)
                     viewModel.getCurrentWeather(location.latitude, location.longitude)
+                    displayAddress(lat,long)
                 }  else {
                     Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
                 }
@@ -136,12 +140,34 @@ class HomeFragment : Fragment() {
             }
         }
 
+
+
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
             Looper.myLooper()
         )
     }
+    fun displayAddress(latitude: Double, longitude: Double) {
+        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        if (addresses != null) {
+            if (addresses.isNotEmpty()) {
+                val address = addresses[0]
+                val city = address.countryName // Extract the city from the address
+                binding.city.text = city
+
+            }
+        }
+    }
+
+//        if (addresses != null) {
+//            if (addresses.isNotEmpty()) {
+//                val address = addresses[0]
+//                val fullAddress = address.getAddressLine(0)
+//                binding.city.text = fullAddress
+//            }
+//        }
+//    }
 
     private fun enableLocation() {
         Toast.makeText(requireContext(),"Turn On location", Toast.LENGTH_LONG).show()
@@ -178,6 +204,7 @@ class HomeFragment : Fragment() {
 
 
         binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
         viewModel.currentWeather.observe(viewLifecycleOwner) { weatherList ->
             binding.tvTemp.text = "${weatherList.main?.temp}°C"
@@ -191,6 +218,7 @@ class HomeFragment : Fragment() {
             binding.pressurePercent.text = weatherList.main?.pressure.toString()
             binding.tvStatus.text = weatherList.weather[0].description
             binding.tvDayFormat.text = weatherList.dtTxt?.let { Utils.getDateAndTime(it) }//////NULL
+
 
 
              fun fetchLocation(){
@@ -291,13 +319,27 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
-            // Update the UI with the five-day forecast data
+            // Update the UI with the TODAAAY forecast data
             val forecastList = weatherResponse.list
             val forecastItems = forecastList
                 .take(5)// Display only the first 5 forecast items
             adapter = FiveDaysAdapter(forecastItems)
             binding.todayDetailsRecView.adapter = adapter
         }
+         ///TODO the rest of the week !!! Only item per week is enough
+             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
+            // TODO Update the UI with the TODAAAY forecast data
+            val filteredList = weatherResponse.list.filter { forecastData ->
+                val time = forecastData.dt_txt.split(" ")[1]
+                val hour = time.split(":")[0].toInt()
+
+                hour == 12
+            }
+
+            todayadapter = TodayDataAdapter(filteredList)
+            binding.FivedaysRec.adapter = adapter
+        }
+
 
 //        viewModel.getCurrentWeather()
         viewModel.getFiveDaysWeather()
