@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.view
 
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.net.http.HttpException
 import android.os.Build
@@ -43,6 +44,7 @@ import java.util.Locale
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var adapter: FiveDaysAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,8 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,20 +64,93 @@ class HomeFragment : Fragment() {
         val repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
         val viewModelFactory = HomeFragmentViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
-
+        binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         viewModel.currentWeather.observe(viewLifecycleOwner) { weatherList ->
-            // Update the UI with the current weather data
             binding.tvTemp.text = "${weatherList.main?.temp}°C"
-            binding.tvPressure.text = weatherList.main?.pressure.toString()
-            // Update other relevant views with weather data
+            binding.tvPressure.text = Utils.convertToArabicNumber(weatherList.main?.pressure.toString())
+
+           //                Utils.convertToArabicNumber( response.body()!!.main?.temp.toString())
+            binding.cloudPercent.text= "${weatherList.clouds!!.all.toString()}%"
+            binding.windPercent.text = weatherList.wind!!.speed.toString()
+            binding.tvDayFormat.text = weatherList.dtTxt
+            binding.humidityPercent.text = weatherList.main?.humidity.toString()
+            binding.pressurePercent.text = weatherList.main?.pressure.toString()
+            binding.tvStatus.text = weatherList.weather[0].description
+            binding.tvDayFormat.text = weatherList.dtTxt?.let { Utils.getDateAndTime(it) }//////NULL
+
+            val iconId = weatherList!!.weather[0].icon
+            val imgURL = "https://openweathermap.org/img/w/$iconId.png"
+
+            when (iconId) {
+                "01d" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.ddsunny)
+                        .into(binding.weatherImgView)
+                }
+                "01n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.sunny)
+                        .into(binding.weatherImgView)
+                }
+                "02d" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.partlycloudy)
+                        .into(binding.weatherImgView)
+                }
+                "02n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.cloudynight)
+                        .into(binding.weatherImgView)
+                }
+                "03d", "03n", "04d", "04n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.cloudy)
+                        .into(binding.weatherImgView)
+                }
+                "09d", "09n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.ddrainy)
+                        .into(binding.weatherImgView)
+                }
+                "10d", "10n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.rainy)
+                        .into(binding.weatherImgView)
+                }
+                "11d", "11n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.thunderstorm)
+                        .into(binding.weatherImgView)
+                }
+                "13d", "13n" -> {
+                    Glide.with(requireContext())
+                        .load(R.drawable.snow)
+                        .into(binding.weatherImgView)
+                }
+                "50d", "50n" -> {
+                    Glide.with(requireContext())
+//                        .load(R.drawable.mist)
+//                        .into(binding.weatherImgView)
+                }
+                else -> {
+                    Glide.with(requireContext())
+                        .load(imgURL)
+                        .into(binding.weatherImgView)
+                }
+            }
+
+
+
+
         }
 
         viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
             // Update the UI with the five-day forecast data
-//            val forecastList = weatherResponse.list
-//            val forecastItems = forecastList.take(5) // Display only the first 5 forecast items
-//            val forecastAdapter = ForecastAdapter(forecastItems)
-//            binding.recyclerViewForecast.adapter = forecastAdapter
+            val forecastList = weatherResponse.list
+            val forecastItems = forecastList
+                .take(5)// Display only the first 5 forecast items
+            adapter = FiveDaysAdapter(forecastItems)
+            binding.todayDetailsRecView.adapter = adapter
         }
 
         viewModel.getCurrentWeather()
@@ -103,23 +180,11 @@ class HomeFragment : Fragment() {
 //    val viewModelFactory = HomeFragmentViewModelFactory(repository)
 //    viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
 //
-//    // Observe the LiveData in the ViewModel
-//    viewModel.currentWeather.observe(viewLifecycleOwner) { weatherList ->
-//        // Update the UI with the current weather data
-//        // Use weatherList to populate the relevant views
+
 //    }
 //
-//    viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
-//        // Update the UI with the five-day forecast data
-//        // Use weatherResponse to populate the relevant views
-//    }
-//
-//    // Call the ViewModel methods to fetch data
-//    viewModel.getCurrentWeather()
-//    viewModel.getFiveDaysWeather()
-//
-//    }
-//
+
+
 //    override fun onCreateView(
 //        inflater: LayoutInflater, container: ViewGroup?,
 //        savedInstanceState: Bundle?

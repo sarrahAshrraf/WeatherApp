@@ -1,5 +1,6 @@
 package com.example.weatherapppoject.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,15 +33,14 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     }
 
     fun getFiveDaysWeather() {
-//        TODO
-//        viewModelScope.launch {
-//            try {
-//                val weatherResponse = weatherRepository.getFiveDaysWeather()
-//                _fiveDaysWeather.value = weatherResponse
-//            } catch (e: Exception) {
-//                // Handle the error
-//            }
-//        }
+        viewModelScope.launch {
+            try {
+                val weatherResponse = weatherRepository.getFiveDaysWeather()
+                _fiveDaysWeather.value = weatherResponse
+            } catch (e: Exception) {
+                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
+            }
+        }
     }
 }
 

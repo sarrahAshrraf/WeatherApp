@@ -2,6 +2,7 @@ package com.example.weatherapppoject.view
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -11,7 +12,7 @@ import com.example.weatherapppoject.databinding.ItemDetailsCardBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.squareup.picasso.Picasso
 
-class FiveDaysAdapter(private val forecastArray: ArrayList<ForeCastData>): RecyclerView.Adapter<FiveDaysAdapter.ViewHolder>() {
+class FiveDaysAdapter(private val forecastArray: List<ForeCastData>): RecyclerView.Adapter<FiveDaysAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemDetailsCardBinding ) : RecyclerView.ViewHolder(binding.root){}
 
@@ -36,7 +37,7 @@ class FiveDaysAdapter(private val forecastArray: ArrayList<ForeCastData>): Recyc
 //                Utils.getDateAndTime(currentItem.dt_txt)
             tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())
 //                currentItem.main.temp.toString()+"°C"
-
+            Log.i("====RECy", "onBindViewHolder: "+currentItem.weather[0].description)
 
 
         }

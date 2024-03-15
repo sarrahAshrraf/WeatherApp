@@ -34,13 +34,9 @@ class WeatherRepositoryImpl private constructor(
     }
 
     override suspend fun getFiveDaysWeather(): WeatherResponse {
-        return TODO("Provide the return value")
+        Log.i("=====23d", "HI: ")
+        return  remoteDataSource.getFiveDaysInfo()
+
+
     }
-//        return try {
-//            remoteDataSource.getFiveDaysInfo()
-//        } catch (e: Exception) {
-//            Log.i("===Fai Loding", "FAIL to load: Network")
-//            WeatherResponse( ,0,"", emptyList(),0) // Return an empty WeatherResponse object
-//        }
-//    }
 }
