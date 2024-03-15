@@ -3,14 +3,19 @@ package com.example.weatherapppoject.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.health.connect.datatypes.ExerciseRoute.Location
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.net.http.HttpException
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 
@@ -39,6 +44,9 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
@@ -58,11 +66,92 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     lateinit var remoteDataSource: RemoteDataSource
-    lateinit var  repository : WeatherRepositoryImpl
+    lateinit var repository : WeatherRepositoryImpl
     lateinit var viewModelFactory: HomeFragmentViewModelFactory
+    private val locationID = 5
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onStart() {
+        super.onStart()
+        if (checkPermission()) {
+            if (context?.let { isLocationEnabled(it) } == true) {
+                getFreshLocation()
+                Toast.makeText(requireContext(), "location is enabled", Toast.LENGTH_SHORT).show()
+            } else {
+                enableLocation()
+            }
+        } else {
+            requestPermission()
+        }
+    }
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            locationID
+        )
+
+    }
+
+    private fun checkPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getFreshLocation() {
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 10000
+            fastestInterval = 5000
+        }
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                val location: android.location.Location? = locationResult.lastLocation
+                if (location != null) {
+                    var long = location.longitude
+                    var lat = location.latitude
+                    viewModel.getCurrentWeather(location.latitude, location.longitude)
+                }  else {
+                    Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
+                }
+                fusedLocationProviderClient.removeLocationUpdates(this)
+            }
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
+    }
+
+    private fun enableLocation() {
+        Toast.makeText(requireContext(),"Turn On location", Toast.LENGTH_LONG).show()
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(intent)
+
+    }
+
+
+        override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -210,7 +299,7 @@ class HomeFragment : Fragment() {
             binding.todayDetailsRecView.adapter = adapter
         }
 
-        viewModel.getCurrentWeather()
+//        viewModel.getCurrentWeather()
         viewModel.getFiveDaysWeather()
     }
 }

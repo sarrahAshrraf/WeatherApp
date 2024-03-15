@@ -5,6 +5,11 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 
 
 interface RemoteDataSource {
-    suspend fun getWeatherINfo(): WeatherList
+    suspend fun getWeatherINfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String
+    ): WeatherList
     suspend fun getFiveDaysInfo(): WeatherResponse
 }

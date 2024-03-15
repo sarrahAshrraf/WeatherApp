@@ -24,9 +24,14 @@ class WeatherRepositoryImpl private constructor(
         }
     }
 
-    override suspend fun getCurrentWeather(): WeatherList {
+    override suspend fun getCurrentWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String
+    ): WeatherList {
         return try {
-            remoteDataSource.getWeatherINfo()
+            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
         } catch (e: Exception) {
             Log.i("===Fai Loding", "FAIL to load: Network")
             WeatherList() // Return an empty WeatherList object

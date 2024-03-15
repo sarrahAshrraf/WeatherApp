@@ -41,6 +41,7 @@ class LocationViewModel(private val context: Context) : ViewModel() {
         task.addOnSuccessListener {
 //            val geocoder = Geocoder(requireContext(),Locale.getDefault())
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+
                 geocoder.getFromLocation(it.latitude,it.longitude,1,object: Geocoder.GeocodeListener{
                     override fun onGeocode(address: MutableList<Address>) {
 //                            weatherList.weather[0].main.

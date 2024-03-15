@@ -18,12 +18,18 @@ object RetrofitInstance {
 class RemoteDataSourceImp : RemoteDataSource {
     private val weatherApiService = RetrofitInstance.weatherApiService
 
-    override suspend fun getWeatherINfo(): WeatherList {
+    override suspend fun getWeatherINfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String
+    ): WeatherList {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
 
-        return weatherApiService.getCureentWeather(51.5085,-0.1257, units, apiKey)
+//        return weatherApiService.getCureentWeather(51.5085,-0.1257, units, apiKey)
+        return weatherApiService.getCureentWeather(latitude,longitude,units,apiKey)
     }
 
     override suspend fun getFiveDaysInfo(): WeatherResponse {
