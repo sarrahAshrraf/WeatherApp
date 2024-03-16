@@ -7,18 +7,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapppoject.databinding.ItemDetailsCardBinding
+import com.example.weatherapppoject.databinding.WeekDaysItemBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.utils.Utils
 import com.squareup.picasso.Picasso
 
 class TodayDataAdapter (private val forecastArray: List<ForeCastData>): RecyclerView.Adapter<TodayDataAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: ItemDetailsCardBinding) : RecyclerView.ViewHolder(binding.root){}
+    class ViewHolder(val binding: WeekDaysItemBinding) : RecyclerView.ViewHolder(binding.root){}
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodayDataAdapter.ViewHolder {
-        return ViewHolder(ItemDetailsCardBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return ViewHolder(WeekDaysItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
 
     }
 

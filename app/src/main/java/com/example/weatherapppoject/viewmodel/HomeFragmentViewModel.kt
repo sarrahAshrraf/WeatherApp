@@ -25,8 +25,8 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 
     fun getCurrentWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch {
-          try{  val units = "metric" // Replace with the desired units
-            val apiKey = Utils.APIKEY // Replace with your API key
+          try{  val units = "metric"
+            val apiKey = Utils.APIKEY
 
             val weatherList = weatherRepository.getCurrentWeather(latitude, longitude, units, apiKey)
             _currentWeather.value = weatherList}
@@ -36,10 +36,13 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
         }
     }
 
-    fun getFiveDaysWeather() {
+    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
         viewModelScope.launch {
             try {
-                val weatherResponse = weatherRepository.getFiveDaysWeather()
+                val units = "metric"
+                val apiKey = Utils.APIKEY
+                val lang = "ar"
+                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
                 _fiveDaysWeather.value = weatherResponse
             } catch (e: Exception) {
                 Log.i("+======", "getFiveDaysWeather: Eroor" +e)

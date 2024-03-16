@@ -38,9 +38,15 @@ class WeatherRepositoryImpl private constructor(
         }
     }
 
-    override suspend fun getFiveDaysWeather(): WeatherResponse {
+    override suspend fun getFiveDaysWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): WeatherResponse {
         Log.i("=====23d", "HI: ")
-        return  remoteDataSource.getFiveDaysInfo()
+        return  remoteDataSource.getFiveDaysInfo(latitude,longitude,units, apiKey, lang)
 
 
     }

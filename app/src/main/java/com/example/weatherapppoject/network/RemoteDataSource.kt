@@ -11,5 +11,11 @@ interface RemoteDataSource {
         units: String,
         apiKey: String
     ): WeatherList
-    suspend fun getFiveDaysInfo(): WeatherResponse
+    suspend fun getFiveDaysInfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): WeatherResponse
 }

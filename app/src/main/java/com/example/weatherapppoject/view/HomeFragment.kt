@@ -132,6 +132,7 @@ class HomeFragment : Fragment() {
                     var lat = location.latitude
                     Log.i("++++daea", "onLocationResult: "+long+" "+lat)
                     viewModel.getCurrentWeather(location.latitude, location.longitude)
+                    viewModel.getFiveDaysWeather(lat,long)
                     displayAddress(lat,long)
                 }  else {
                     Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
@@ -204,7 +205,7 @@ class HomeFragment : Fragment() {
 
 
         binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-        binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
 
         viewModel.currentWeather.observe(viewLifecycleOwner) { weatherList ->
             binding.tvTemp.text = "${weatherList.main?.temp}°C"
@@ -337,12 +338,12 @@ class HomeFragment : Fragment() {
             }
 
             todayadapter = TodayDataAdapter(filteredList)
-            binding.FivedaysRec.adapter = adapter
+            binding.FivedaysRec.adapter = todayadapter
         }
 
 
 //        viewModel.getCurrentWeather()
-        viewModel.getFiveDaysWeather()
+//        viewModel.getFiveDaysWeather()
     }
 }
 

@@ -32,12 +32,18 @@ class RemoteDataSourceImp : RemoteDataSource {
         return weatherApiService.getCureentWeather(latitude,longitude,units,apiKey)
     }
 
-    override suspend fun getFiveDaysInfo(): WeatherResponse {
+    override suspend fun getFiveDaysInfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): WeatherResponse {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
         val lang = "ar" // Replace with the desired language
 
-        return weatherApiService.getForeCast(city, units, apiKey, lang)
+        return weatherApiService.getForeCast(latitude, longitude , units, apiKey, lang)
     }
 }

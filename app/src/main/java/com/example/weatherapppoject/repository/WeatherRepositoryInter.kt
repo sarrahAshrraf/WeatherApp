@@ -10,6 +10,12 @@ interface WeatherRepositoryInter {
         units: String,
         apiKey: String
     ): WeatherList
-    suspend fun getFiveDaysWeather(): WeatherResponse
+    suspend fun getFiveDaysWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): WeatherResponse
 
 }
