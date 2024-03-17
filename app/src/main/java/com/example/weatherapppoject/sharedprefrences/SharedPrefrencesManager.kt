@@ -20,9 +20,12 @@ class SharedPrefrencesManager private constructor(context: Context){
                     editor.putString(key + "_lat", lat.toString())
                     editor.apply()
                 }
-//                fun getLocationFromMap(key: String, defaultValue: String): String {
-//                    return sharedPreferences.getString(key, defaultValue) ?: defaultValue
-//                }
+                fun savelocationChoice(key: String, value: String) {
+                    sharedPreferences.edit().putString(key, value).apply()
+                }
+                fun getlocationChoice(key: String, defaultValue: String): String {
+                    return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+                }
             fun getLocationFromMap(key: String): Pair<Double, Double>? {
                 val longtKey = key + "_longt"
                 val latKey = key + "_lat"

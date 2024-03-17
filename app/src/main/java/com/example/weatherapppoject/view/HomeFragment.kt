@@ -138,14 +138,25 @@ class HomeFragment : Fragment() {
                     var lat = location.latitude
                     Log.i("++++daea", "onLocationResult: "+long+" "+lat)
 //                    viewModel.getCurrentWeather(location.latitude, location.longitude)
+                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
 
+                    if (sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,"")=="map"){
                     val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
                     val longg = longlat!!.first
                     val latt = longlat.second
 
-                    viewModel.getCurrentWeather(latt,longg)
-                    viewModel.getFiveDaysWeather(lat,long)
+                        viewModel.getCurrentWeather(latt,longg)
+                        viewModel.getFiveDaysWeather(latt,longg)
+                        displayAddress(latt,longg)
+
+                    }
+                    else {
+
+                    viewModel.getCurrentWeather(long,lat)
+                    viewModel.getFiveDaysWeather(long,lat)
                     displayAddress(lat,long)
+
+                    }
                 }  else {
                     Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
                 }

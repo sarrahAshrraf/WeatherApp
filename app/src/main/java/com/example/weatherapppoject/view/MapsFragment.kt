@@ -102,6 +102,7 @@ class MapsFragment : Fragment() {
         googleMap.addMarker(MarkerOptions().position(latLng).title(title))
         val locationFromMark = getAddressFromLatLng(latLng)
         binding.etSearchMap.setText(locationFromMark)
+        sharedPrefrencesManager.savelocationChoice(SharedKey.GPS.name , "map")
         sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
 
     }

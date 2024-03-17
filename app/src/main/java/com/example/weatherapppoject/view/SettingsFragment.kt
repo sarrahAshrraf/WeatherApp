@@ -46,7 +46,9 @@ class SettingsFragment : Fragment() {
                     if (isChecked) {
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
-                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
+                        sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "map")
+
+//                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
                         replaceFragments(MapsFragment())
                         //TODO open map view
                     } else {
@@ -57,7 +59,8 @@ class SettingsFragment : Fragment() {
                     if (isChecked) {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
-                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "gps")
+                        sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "gps")
+
                     } else {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
