@@ -39,7 +39,7 @@ class SharedPrefrencesManager private constructor(context: Context){
 
 enum class SharedKey {
         LANGUAGE,
-        CITY
+        GPS
 
 
 }

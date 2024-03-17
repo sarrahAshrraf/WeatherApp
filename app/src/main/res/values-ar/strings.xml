@@ -17,6 +17,10 @@
     <string name="language">اللغة</string>
     <string name="winds">سرعة الرياح</string>
     <string name="networkstatus">لا يوجد أنترنت</string>
+    <string name="gps">الموقع الحالي</string>
+    <string name="map">خريطة</string>
+
+
 
 
 

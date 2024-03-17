@@ -39,13 +39,13 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             if (isNetworkAvailable) {
                 when (item.itemId) {
-                    R.id.home -> replaceFragments(HomeFragment())
+                    R.id.home -> replaceFragments(MapsFragment())
                     R.id.notification -> replaceFragments(NotificationFragment())
                     R.id.settings -> replaceFragments(SettingsFragment())
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
             }else {
-                replaceFragments(HomeFragment())
+                replaceFragments(MapsFragment())
 
 //                when (item.itemId) {
 ////                    R.id.home -> replaceFragments(BlankFragment())
@@ -76,10 +76,10 @@ class HomeActivity : AppCompatActivity() {
         isNetworkAvailable = NetworkManager.isNetworkAvailable(this)
         if (isNetworkAvailable) {
             binding.tvNetworkIndicator.visibility = View.GONE
-            replaceFragments(HomeFragment())
+            replaceFragments(MapsFragment())
         } else {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
-            replaceFragments(HomeFragment())
+            replaceFragments(MapsFragment())
 //            replaceFragments(BlankFragment())
 
         }

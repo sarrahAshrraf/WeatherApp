@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.239">
+        app:layout_constraintVertical_bias="0.146">
 
         <TextView
             android:id="@+id/textView10"
@@ -59,23 +59,55 @@
             android:layout_width="154dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
             android:text="@string/english"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
     </RadioGroup>
 
-    <RadioGroup
-        android:id="@+id/degreeRadioGrop"
-        android:layout_width="222dp"
-        android:layout_height="138dp"
-        android:layout_marginTop="252dp"
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/locationToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvSettings"
-        app:layout_constraintVertical_bias="0.168" />
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.383"
+        tools:ignore="MissingConstraints">
+
+        <Button
+            android:id="@+id/button1"
+            style="?attr/materialButtonOutlinedStyle"
+
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/buttons"
+            android:text="@string/map"
+            app:iconTint="@color/black"
+            app:strokeColor="@color/buttons" />
+
+        <Button
+            android:id="@+id/button3"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/buttons"
+            android:text="@string/gps"
+            app:strokeColor="@color/buttons" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="254dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
