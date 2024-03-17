@@ -18,7 +18,8 @@ class Utils {
         const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
         const val APIKEY = "3f2c5a9a086fa7d7056043da97b35aae"
 //       "32860e9888c9f07e4c3912d64cab8a03"
-        const val MAPS_KEY ="AIzaSyBJ_XlxltqRMHEaqUxKak6LkIb0jt4qRWM"
+        const val MAPS_KEY ="AIzaSyATC4Zk0_xofsFUTm0GRIyNej3syHx5oro"
+//            "AIzaSyBJ_XlxltqRMHEaqUxKak6LkIb0jt4qRWM"
 
         const val IMG_URL = "https://openweathermap.org/img/w/"
 
