@@ -13,6 +13,8 @@ import com.example.weatherapppoject.R
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.databinding.FragmentMapsBinding
+import com.example.weatherapppoject.sharedprefrences.SharedKey
+import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.Utils
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,6 +31,12 @@ class MapsFragment : Fragment() {
     private lateinit var geocoder: Geocoder
     private lateinit var binding: FragmentMapsBinding
     private lateinit var googleMap: GoogleMap
+    private lateinit var sharedPrefrencesManager: SharedPrefrencesManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPrefrencesManager = SharedPrefrencesManager.getInstance(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +65,12 @@ class MapsFragment : Fragment() {
             if (searchQuery.isNotEmpty()) {
                 searchLocation(searchQuery)
             }
+        }
+        binding.btnSelectOrAddOnMap.setOnClickListener{
+//            binding.btnSelectOrAddOnMap.isEnabled
+            replaceFragments(HomeFragment())
+            Toast.makeText(requireContext(), "click", Toast.LENGTH_SHORT).show()
+
         }
 
         binding.imgClearSearch.setOnClickListener {
@@ -88,14 +102,24 @@ class MapsFragment : Fragment() {
         googleMap.addMarker(MarkerOptions().position(latLng).title(title))
         val locationFromMark = getAddressFromLatLng(latLng)
         binding.etSearchMap.setText(locationFromMark)
+        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
+
     }
 
     private fun getAddressFromLatLng(latLng: LatLng): String {
         val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
         return if (addresses!!.isNotEmpty()) {
             addresses[0]!!.getAddressLine(0)
         } else {
             "Unknown Location"
         }
+    }
+
+    private fun replaceFragments(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null) // Optional: Adds the transaction to the back stack
+        transaction.commit()
     }
 }

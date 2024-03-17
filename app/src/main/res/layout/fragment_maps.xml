@@ -70,38 +70,30 @@
         android:id="@+id/imgCurrentLocation"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardViewSavePreferences"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSelectOrAddOnMap"
         app:layout_constraintEnd_toEndOf="@+id/map"
-        app:layout_constraintTop_toTopOf="@+id/cardViewSavePreferences"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="@+id/btnSelectOrAddOnMap"
+        app:layout_constraintTop_toTopOf="@+id/btnSelectOrAddOnMap"
         app:srcCompat="@drawable/mylocationicon" />
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewSavePreferences"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:alpha="0.7"
-        app:cardCornerRadius="400dp"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSelectOrAddOnMap"
+        android:layout_width="199dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:enabled="true"
+        android:text="Add to favorites"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_select_or_add_on_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:enabled="false"
-            android:text="Add to favorites"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_search_suggestions"
+        app:layout_constraintVertical_bias="0.997" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

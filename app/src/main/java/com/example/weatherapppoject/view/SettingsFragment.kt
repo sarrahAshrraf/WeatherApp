@@ -47,6 +47,7 @@ class SettingsFragment : Fragment() {
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
+                        replaceFragments(MapsFragment())
                         //TODO open map view
                     } else {
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
@@ -115,7 +116,15 @@ class SettingsFragment : Fragment() {
             "en" -> binding.enRdiobtn.isChecked = true
         }
     }
+    private fun replaceFragments(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null) // Optional: Adds the transaction to the back stack
+        transaction.commit()
+    }
 }
+
+
 object ContextUtils {
     fun wrapContext(baseContext: Context, locale: Locale): Context {
         val config = Configuration(baseContext.resources.configuration)

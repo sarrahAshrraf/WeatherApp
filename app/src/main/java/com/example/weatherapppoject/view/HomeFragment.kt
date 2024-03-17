@@ -68,6 +68,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: FiveDaysAdapter
     private lateinit var todayadapter: TodayDataAdapter
+    private lateinit var sharedPreferencesManager: SharedPrefrencesManager
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -90,6 +91,7 @@ class HomeFragment : Fragment() {
             requestPermission()
         }
     }
+
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -135,7 +137,13 @@ class HomeFragment : Fragment() {
                     var long = location.longitude
                     var lat = location.latitude
                     Log.i("++++daea", "onLocationResult: "+long+" "+lat)
-                    viewModel.getCurrentWeather(location.latitude, location.longitude)
+//                    viewModel.getCurrentWeather(location.latitude, location.longitude)
+
+                    val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+                    val longg = longlat!!.first
+                    val latt = longlat.second
+
+                    viewModel.getCurrentWeather(latt,longg)
                     viewModel.getFiveDaysWeather(lat,long)
                     displayAddress(lat,long)
                 }  else {
@@ -184,7 +192,8 @@ class HomeFragment : Fragment() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         remoteDataSource = RemoteDataSourceImp()
         repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
@@ -206,7 +215,6 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
