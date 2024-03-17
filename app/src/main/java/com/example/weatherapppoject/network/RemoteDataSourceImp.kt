@@ -3,6 +3,8 @@ package com.example.weatherapppoject.network
 import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.utils.Utils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,20 +20,32 @@ object RetrofitInstance {
 class RemoteDataSourceImp : RemoteDataSource {
     private val weatherApiService = RetrofitInstance.weatherApiService
 
-    override suspend fun getWeatherINfo(): WeatherList {
+    override suspend fun getWeatherINfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String
+    ): Flow<WeatherList> {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
 
-        return weatherApiService.getCureentWeather(city, units, apiKey)
+//        return weatherApiService.getCureentWeather(51.5085,-0.1257, units, apiKey)
+        return flowOf( weatherApiService.getCureentWeather(latitude,longitude,units,apiKey))
     }
 
-    override suspend fun getFiveDaysInfo(): WeatherResponse {
+    override suspend fun getFiveDaysInfo(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): WeatherResponse {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
         val lang = "ar" // Replace with the desired language
 
-        return weatherApiService.getForeCast(city, units, apiKey, lang)
+        return weatherApiService.getForeCast(latitude, longitude , units, apiKey, lang)
     }
 }

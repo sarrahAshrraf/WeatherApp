@@ -9,7 +9,9 @@ import retrofit2.http.Query
 interface APIService {
     @GET("weather?")
     suspend fun getCureentWeather(
-        @Query("q") city : String,
+//        @Query("q") city : String,
+        @Query("lat") lat :Double,
+        @Query("lon") long :Double,
         @Query("units") units : String,
         @Query("appid") apiKey : String,
 
@@ -17,7 +19,9 @@ interface APIService {
 
     @GET("forecast?")
     suspend fun getForeCast(
-        @Query("q") city : String,
+//        @Query("q") city : String,
+        @Query("lat") lat :Double,
+        @Query("lon") long :Double,
         @Query("units") units : String,
         @Query("appid") apiKey : String,
         @Query("lang") lang :String
