@@ -7,7 +7,7 @@ data class WeatherList (
 
   @SerializedName("dt"         ) var dt         : Int?               = null,
   @SerializedName("main"       ) var main       : Main?              = Main(),
-  @SerializedName("weather"    ) var weather    : ArrayList<Weather> = arrayListOf(),
+  @SerializedName("weather"    ) var weather    : MutableList<Weather> = mutableListOf(),
   @SerializedName("clouds"     ) var clouds     : Clouds?            = Clouds(),
   @SerializedName("wind"       ) var wind       : Wind?              = Wind(),
   @SerializedName("visibility" ) var visibility : Int?               = null,

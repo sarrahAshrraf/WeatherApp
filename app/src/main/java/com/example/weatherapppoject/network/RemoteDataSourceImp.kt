@@ -3,6 +3,8 @@ package com.example.weatherapppoject.network
 import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.utils.Utils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,13 +25,13 @@ class RemoteDataSourceImp : RemoteDataSource {
         longitude: Double,
         units: String,
         apiKey: String
-    ): WeatherList {
+    ): Flow<WeatherList> {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
 
 //        return weatherApiService.getCureentWeather(51.5085,-0.1257, units, apiKey)
-        return weatherApiService.getCureentWeather(latitude,longitude,units,apiKey)
+        return flowOf( weatherApiService.getCureentWeather(latitude,longitude,units,apiKey))
     }
 
     override suspend fun getFiveDaysInfo(

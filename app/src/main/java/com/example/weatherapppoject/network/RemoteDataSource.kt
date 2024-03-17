@@ -2,6 +2,7 @@ package com.example.weatherapppoject.network
 
 import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import kotlinx.coroutines.flow.Flow
 
 
 interface RemoteDataSource {
@@ -10,7 +11,8 @@ interface RemoteDataSource {
         longitude: Double,
         units: String,
         apiKey: String
-    ): WeatherList
+    ): Flow<WeatherList>
+
     suspend fun getFiveDaysInfo(
         latitude: Double,
         longitude: Double,

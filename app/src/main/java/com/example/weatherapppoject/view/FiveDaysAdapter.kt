@@ -29,11 +29,10 @@ class FiveDaysAdapter(private val forecastArray: List<ForeCastData>): RecyclerVi
         holder.binding.apply {
            val imageIcon = currentItem.weather[0].icon
             //           val imageIcon =  currentItem.time[0].symbol.symbolVar
-             val  imgURL = "https://openweathermap.org/img/w/$imageIcon.png"
+            Utils.getWeatherIcon(imageIcon,holder.binding.weatherImgView)
 
-                Picasso.get().load(imgURL).into(imageViewRec)
 
-            tvTimeRec.text = Utils.getDateAndTime(currentItem.dt_txt)
+            tvTimeRec.text = Utils.getTime(currentItem.dt_txt)
 //                currentItem.weather[0].description
 //            currentItem.main
 //                Utils.getDateAndTime(currentItem.dt_txt)

@@ -45,8 +45,18 @@ class HomeActivity : AppCompatActivity() {
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
             }else {
+                replaceFragments(HomeFragment())
+
+//                when (item.itemId) {
+////                    R.id.home -> replaceFragments(BlankFragment())
+//                    R.id.notification -> replaceFragments(NotificationFragment())
+//                    R.id.settings -> replaceFragments(SettingsFragment())
+//                    R.id.favorite -> replaceFragments(FavoriteFragment())
+//                }
                     Toast.makeText(this, "No network connection available", Toast.LENGTH_SHORT).show()
-                }
+
+
+            }
             true
         }
     }
@@ -66,10 +76,12 @@ class HomeActivity : AppCompatActivity() {
         isNetworkAvailable = NetworkManager.isNetworkAvailable(this)
         if (isNetworkAvailable) {
             binding.tvNetworkIndicator.visibility = View.GONE
-            binding.animationView.visibility = View.GONE
+            replaceFragments(HomeFragment())
         } else {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
-            binding.animationView.visibility = View.VISIBLE
+            replaceFragments(HomeFragment())
+//            replaceFragments(BlankFragment())
+
         }
     }
 

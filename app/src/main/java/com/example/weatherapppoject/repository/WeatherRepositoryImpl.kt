@@ -1,11 +1,11 @@
 package com.example.weatherapppoject.repository
 
 import android.util.Log
-import com.example.WeatherAppProject.Weather
 import com.example.WeatherAppProject.WeatherList
-import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class WeatherRepositoryImpl private constructor(
     private val remoteDataSource: RemoteDataSource
@@ -29,12 +29,12 @@ class WeatherRepositoryImpl private constructor(
         longitude: Double,
         units: String,
         apiKey: String
-    ): WeatherList {
+    ): Flow<WeatherList> {
         return try {
             remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
         } catch (e: Exception) {
             Log.i("===Fai Loding", "FAIL to load: Network")
-            WeatherList() // Return an empty WeatherList object
+            flowOf(WeatherList()) // Return an empty WeatherList object
         }
     }
 

@@ -29,9 +29,7 @@ class TodayDataAdapter (private val forecastArray: List<ForeCastData>): Recycler
         holder.binding.apply {
             val imageIcon = currentItem.weather[0].icon
             //           val imageIcon =  currentItem.time[0].symbol.symbolVar
-            val  imgURL = "https://openweathermap.org/img/w/$imageIcon.png"
-
-            Picasso.get().load(imgURL).into(imageViewRec)
+            Utils.getWeatherIcon(imageIcon,holder.binding.imgeViewRec)
 
             tvTimeRec.text = Utils.getDateAndTime(currentItem.dt_txt)
 //                currentItem.weather[0].description
