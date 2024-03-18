@@ -10,7 +10,7 @@ import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 
 //Todo update the entities with -> alerts
-@Database(entities = [ForeCastData::class] ,exportSchema = false, version = 1)
+@Database(entities = [WeatherResponse::class] ,exportSchema = false, version = 1)
 
 @TypeConverters(Converters::class)
 abstract class AppDB : RoomDatabase() {
@@ -25,7 +25,7 @@ abstract class AppDB : RoomDatabase() {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context.applicationContext, AppDB::class.java,
-                    "oo"
+                    "rr"
                 ).build()
                 INSTANCE = instance
                 instance}

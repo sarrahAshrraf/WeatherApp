@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.Clouds
 import com.example.weatherapppoject.forecastmodel.Coord
+import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.Main
 import com.example.weatherapppoject.forecastmodel.Weather
 import com.example.weatherapppoject.forecastmodel.Wind
@@ -21,6 +22,18 @@ class Converters {
     @TypeConverter
     fun toWeatherList(value: String): List<Weather> {
         val listType = object : TypeToken<List<Weather>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    //forecast data from weather response
+    @TypeConverter
+    fun fromForecastList(forecastList: List<ForeCastData>): String {
+        return Gson().toJson(forecastList)
+    }
+
+    @TypeConverter
+    fun toForecastList(value: String): List<ForeCastData> {
+        val listType = object : TypeToken<List<ForeCastData>>() {}.type
         return Gson().fromJson(value, listType)
     }
 

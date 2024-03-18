@@ -7,19 +7,19 @@ import androidx.room.PrimaryKey
 
 
 
-@Entity(tableName = "weather_data", primaryKeys = ["longitude", "latitude", "isFav", "isALert"])
+//@Entity(tableName = "weather_data", primaryKeys = ["longitude", "latitude", "isFav", "isALert"])
 data class ForeCastData(
-    @ColumnInfo(name = "longitude") val longitude: Double = 0.0,
-    @ColumnInfo(name = "latitude")   val latitude: Double = 0.0,
-    @ColumnInfo(name = "clouds") val clouds: Clouds,
-    @ColumnInfo(name = "dt")  val dt: Int,
-    @ColumnInfo(name = "isFav")  var isFav: Int = 0,
-    @ColumnInfo(name = "isALert")  var isALert: Int = 0,
-    @ColumnInfo(name = "date") val dt_txt: String,
-    @ColumnInfo(name = "mainInfo") val main: Main,
-    @ColumnInfo(name = "visibility")     val visibility: Int,
-    @ColumnInfo(name = "weatherlist") val weather: MutableList<Weather>,
-    @ColumnInfo(name = "wind") val wind: Wind,
+//    @ColumnInfo(name = "longitude") val longitude: Double = 0.0,
+//    @ColumnInfo(name = "latitude")   val latitude: Double = 0.0,
+     val clouds: Clouds,
+      val dt: Int,
+//    @ColumnInfo(name = "isFav")  var isFav: Int = 0,
+//    @ColumnInfo(name = "isALert")  var isALert: Int = 0,
+  val dt_txt: String,
+  val main: Main,
+        val visibility: Int,
+    val weather: MutableList<Weather>,
+ val wind: Wind,
 //    @ColumnInfo(name = "city") val city: City
 )
 

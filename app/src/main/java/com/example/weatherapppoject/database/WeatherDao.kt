@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
 import com.example.weatherapppoject.forecastmodel.ForeCastData
+import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
 
@@ -16,29 +17,34 @@ import kotlinx.coroutines.flow.Flow
 interface WeatherDao {
     //insert the weather data when the network fetch them
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertWeatherData(weatherData: ForeCastData)
+    suspend fun insertWeatherData(weatherData: WeatherResponse)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM weather_data")
-    fun getWeatherData(): Flow<List<ForeCastData>>
+    fun getWeatherData(): Flow<List<WeatherResponse>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFav(favorite: ForeCastData)
+    suspend fun insertFav(favorite: WeatherResponse)
     @Transaction
-    suspend fun setAsFavorite(favorite: ForeCastData) {
+    suspend fun setAsFavorite(favorite: WeatherResponse, longitude: Double, latitude: Double) {
         favorite.isFav = 1
+        favorite.latitude = latitude
+        favorite.longitude = longitude
         Log.i("====db set", "setAsFavorite: ")
         insertFav(favorite)
     }
 
     @Delete
-    suspend fun deleteFav(weatherData: ForeCastData)
+    suspend fun deleteFav(weatherData: WeatherResponse)
 
     @Query("DELETE FROM weather_data WHERE isFav = 1")
     suspend fun deleteFavByIsFav()
+    @Query("DELETE FROM weather_data WHERE isFav = 1 AND longitude = :longitude AND latitude = :latitude")
+    suspend fun deleteFavByLonLat(longitude: Double, latitude: Double)
+
 
     //retrive all fav cities in the favorite fragment
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM weather_data WHERE isFav = 1")
-    fun getFav(): Flow<List<ForeCastData>>
+    fun getFav(): Flow<List<WeatherResponse>>
 
 }

@@ -322,18 +322,19 @@ class HomeFragment : Fragment() {
                         binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
 
                         binding.addbtn.setOnClickListener {
-                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "oo").build()
+                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
                             CoroutineScope(Dispatchers.IO).launch {
-                                db.getWeatherDAO().setAsFavorite(weatherResponse.data.list[0])
+                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
 
                         }
                         }
 
 
                         binding.deletebtn.setOnClickListener {
-                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "oo").build()
+                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
                             CoroutineScope(Dispatchers.IO).launch {
-                                db.getWeatherDAO().deleteFavByIsFav()
+//                                db.getWeatherDAO().deleteFavByIsFav()
+                                db.getWeatherDAO().deleteFavByLonLat(weatherResponse.data.longitude,weatherResponse.data.latitude)
 
                             }
                         }
