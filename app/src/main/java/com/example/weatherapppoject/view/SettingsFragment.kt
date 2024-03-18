@@ -2,7 +2,6 @@ package com.example.weatherapppoject.view
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,9 +12,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.databinding.FragmentSettingsBinding
+import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
-import com.example.weatherapppoject.view.ContextUtils
 import java.util.Locale
 
 class SettingsFragment : Fragment() {

@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.repository
 
 import android.util.Log
+import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -8,16 +9,16 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 class WeatherRepositoryImpl private constructor(
-    private val remoteDataSource: RemoteDataSource
-    // private val localDataSource: LocalDataSource
+    private val remoteDataSource: RemoteDataSource,
+     private val localDataSource: LocalDataSourceInte
 ) : WeatherRepositoryInter {
 
     companion object {
         private var instance: WeatherRepositoryImpl? = null
 
-        fun getInstance(remoteDataSource: RemoteDataSource): WeatherRepositoryImpl {
+        fun getInstance(remoteDataSource: RemoteDataSource, localDataSource: LocalDataSourceInte): WeatherRepositoryImpl {
             return instance ?: synchronized(this) {
-                val temp = WeatherRepositoryImpl(remoteDataSource)
+                val temp = WeatherRepositoryImpl(remoteDataSource,localDataSource)
                 instance = temp
                 temp
             }
@@ -53,5 +54,23 @@ class WeatherRepositoryImpl private constructor(
            emptyFlow()
         }
 
+    }
+
+
+//Data Base functions
+    override fun getFavoriteData(): Flow<List<WeatherResponse>> {
+      return  localDataSource.displayAllFav()
+    }
+
+    override suspend fun insertfavIntoDB(
+        fav: WeatherResponse,
+        longitude: Double,
+        latitude: Double
+    ) {
+        localDataSource.setFavoriteData(fav,longitude,latitude)
+    }
+
+    override suspend fun deleteFromFav(longitude: Double, latitude: Double) {
+        localDataSource.deleteFavData(longitude,latitude)
     }
 }

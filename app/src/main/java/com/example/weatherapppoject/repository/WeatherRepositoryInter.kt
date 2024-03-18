@@ -10,6 +10,8 @@ interface WeatherRepositoryInter {
 //        units: String,
 //        apiKey: String
 //    ): Flow<WeatherList>
+
+    //network opreation
     suspend fun getFiveDaysWeather(
         latitude: Double,
         longitude: Double,
@@ -17,5 +19,10 @@ interface WeatherRepositoryInter {
         apiKey: String,
         lang: String
     ): Flow<WeatherResponse>
+
+    //database operation
+     fun getFavoriteData(): Flow<List<WeatherResponse>>
+     suspend fun insertfavIntoDB(fav: WeatherResponse, longitude: Double, latitude: Double)
+     suspend fun deleteFromFav(longitude: Double, latitude: Double)
 
 }

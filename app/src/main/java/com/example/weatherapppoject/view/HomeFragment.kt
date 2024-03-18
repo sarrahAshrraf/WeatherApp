@@ -35,8 +35,12 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.AppDB
+import com.example.weatherapppoject.database.LocalDataSourceImp
+import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
@@ -77,10 +81,13 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     lateinit var remoteDataSource: RemoteDataSource
+    lateinit var localDataSourceInte: LocalDataSourceInte
     lateinit var repository: WeatherRepositoryImpl
     lateinit var viewModelFactory: HomeFragmentViewModelFactory
     private val locationID = 5
 
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var favviewModelFactory: FavoriteViewModelFactory
 
     override fun onStart() {
         super.onStart()
@@ -243,7 +250,14 @@ class HomeFragment : Fragment() {
             LocationServices.getFusedLocationProviderClient(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         remoteDataSource = RemoteDataSourceImp()
-        repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
+//why context??????????????
+        localDataSourceInte = LocalDataSourceImp(requireContext())
+
+
+        repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
+        favviewModelFactory = FavoriteViewModelFactory(repository)
+        favoriteViewModel = ViewModelProvider(this, favviewModelFactory).get(FavoriteViewModel::class.java)
+
         viewModelFactory = HomeFragmentViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
 
@@ -322,10 +336,11 @@ class HomeFragment : Fragment() {
                         binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
 
                         binding.addbtn.setOnClickListener {
-                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
+//                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
                             CoroutineScope(Dispatchers.IO).launch {
-                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
-
+//                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                            favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                                Log.i("===db scope", "onViewCreated: ")
                         }
                         }
 
