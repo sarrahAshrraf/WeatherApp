@@ -1,7 +1,6 @@
 package com.example.weatherapppoject.repository
 
 import android.util.Log
-import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -25,19 +24,19 @@ class WeatherRepositoryImpl private constructor(
         }
     }
 
-    override suspend fun getCurrentWeather(
-        latitude: Double,
-        longitude: Double,
-        units: String,
-        apiKey: String
-    ): Flow<WeatherList> {
-        return try {
-            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
-        } catch (e: Exception) {
-            Log.i("===Fai Loding", "FAIL to load: Network")
-            flowOf(WeatherList()) // Return an empty WeatherList object
-        }
-    }
+//    override suspend fun getCurrentWeather(
+//        latitude: Double,
+//        longitude: Double,
+//        units: String,
+//        apiKey: String
+//    ): Flow<WeatherList> {
+//        return try {
+//            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
+//        } catch (e: Exception) {
+//            Log.i("===Fai Loding", "FAIL to load: Network")
+//            flowOf(WeatherList()) // Return an empty WeatherList object
+//        }
+//    }
 
     override suspend fun getFiveDaysWeather(
         latitude: Double,

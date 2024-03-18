@@ -31,8 +31,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.database.AppDB
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
@@ -52,6 +54,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
@@ -317,6 +320,12 @@ class HomeFragment : Fragment() {
                         binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
                         binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
                         binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+                        binding.addbtn.setOnClickListener {
+                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "weather_db").build()
+                            CoroutineScope(Dispatchers.IO).launch {
+                            db.getWeatherDAO().insert(weatherResponse.data.list[0])
+
+                        }}
 
                         val iconId = weatherResponse.data.list[0].weather[0].icon
                         if (iconId != null) {

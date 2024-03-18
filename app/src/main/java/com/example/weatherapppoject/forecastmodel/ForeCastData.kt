@@ -1,15 +1,21 @@
 package com.example.weatherapppoject.forecastmodel
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "weather_data")
 data class ForeCastData(
-    val clouds: Clouds,
+    @PrimaryKey(autoGenerate = true) val id : Int,
+    @ColumnInfo(name = "clouds") val clouds: Clouds,
     val dt: Int,
-    val dt_txt: String,
-    val main: Main,
+    @ColumnInfo(name = "date") val dt_txt: String,
+    @ColumnInfo (name = "mainInfo")val main: Main,
     val pop: Double,
-    val rain: Rain,
-    val sys: Sys,
+//    val rain: Rain,
+//    val sys: Sys,
     val visibility: Int,
-    val weather: MutableList<Weather>,
-    val wind: Wind
+    @ColumnInfo(name = "weatherlist") val weather: MutableList<Weather>,
+    @ColumnInfo (name = "wind")val wind: Wind
 
 )

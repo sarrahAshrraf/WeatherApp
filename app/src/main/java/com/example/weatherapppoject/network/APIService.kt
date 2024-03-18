@@ -1,21 +1,20 @@
 package com.example.weatherapppoject.network
 
-import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface APIService {
-    @GET("weather?")
-    suspend fun getCureentWeather(
-//        @Query("q") city : String,
-        @Query("lat") lat :Double,
-        @Query("lon") long :Double,
-        @Query("units") units : String,
-        @Query("appid") apiKey : String,
-
-        ) : WeatherList
+//    @GET("weather?")
+//    suspend fun getCureentWeather(
+////        @Query("q") city : String,
+//        @Query("lat") lat :Double,
+//        @Query("lon") long :Double,
+//        @Query("units") units : String,
+//        @Query("appid") apiKey : String,
+//
+//        ) : WeatherList
 
     @GET("forecast?")
     suspend fun getForeCast(

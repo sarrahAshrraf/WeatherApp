@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.WeatherAppProject.Weather
-import com.example.WeatherAppProject.WeatherList
+
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.repository.WeatherRepositoryInter

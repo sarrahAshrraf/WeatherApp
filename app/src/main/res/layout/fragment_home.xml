@@ -34,6 +34,12 @@
             android:visibility="visible"
             tools:visibility="visible">
 
+            <Button
+                android:id="@+id/addbtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="add" />
+
             <TextView
                 android:id="@+id/city"
                 android:layout_width="match_parent"
