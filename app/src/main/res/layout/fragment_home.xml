@@ -40,6 +40,12 @@
                 android:layout_height="wrap_content"
                 android:text="add" />
 
+            <Button
+                android:id="@+id/deletebtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="delte" />
+
             <TextView
                 android:id="@+id/city"
                 android:layout_width="match_parent"

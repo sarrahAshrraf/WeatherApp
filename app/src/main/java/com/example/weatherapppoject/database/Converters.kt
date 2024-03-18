@@ -1,7 +1,9 @@
 package com.example.weatherapppoject.database
 
 import androidx.room.TypeConverter
+import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.Clouds
+import com.example.weatherapppoject.forecastmodel.Coord
 import com.example.weatherapppoject.forecastmodel.Main
 import com.example.weatherapppoject.forecastmodel.Weather
 import com.example.weatherapppoject.forecastmodel.Wind
@@ -53,6 +55,26 @@ class Converters {
     @TypeConverter
     fun toWind(value: String): Wind {
         return Gson().fromJson(value, Wind::class.java)
+    }
+
+    //city -> cord -> lat, lon
+    @TypeConverter
+    fun fromCity(city: City): String {
+        return Gson().toJson(city)
+    }
+
+    @TypeConverter
+    fun toCity(value: String): City {
+        return Gson().fromJson(value, City::class.java)
+    }
+    @TypeConverter
+    fun fromCityCord(city: Coord): String {
+        return Gson().toJson(city)
+    }
+
+    @TypeConverter
+    fun toCityCord(value: String): Coord {
+        return Gson().fromJson(value, Coord::class.java)
     }
 
  }

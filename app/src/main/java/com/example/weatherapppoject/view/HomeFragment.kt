@@ -320,12 +320,23 @@ class HomeFragment : Fragment() {
                         binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
                         binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
                         binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
-                        binding.addbtn.setOnClickListener {
-                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "weather_db").build()
-                            CoroutineScope(Dispatchers.IO).launch {
-                            db.getWeatherDAO().insert(weatherResponse.data.list[0])
 
-                        }}
+                        binding.addbtn.setOnClickListener {
+                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "oo").build()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                db.getWeatherDAO().setAsFavorite(weatherResponse.data.list[0])
+
+                        }
+                        }
+
+
+                        binding.deletebtn.setOnClickListener {
+                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "oo").build()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                db.getWeatherDAO().deleteFavByIsFav()
+
+                            }
+                        }
 
                         val iconId = weatherResponse.data.list[0].weather[0].icon
                         if (iconId != null) {
