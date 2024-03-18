@@ -9,7 +9,7 @@ data class ForeCastData(
     val rain: Rain,
     val sys: Sys,
     val visibility: Int,
-    val weather: List<Weather>,
+    val weather: MutableList<Weather>,
     val wind: Wind
 
 )

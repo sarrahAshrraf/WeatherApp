@@ -158,14 +158,14 @@ class HomeFragment : Fragment() {
                         val longg = longlat!!.first
                         val latt = longlat.second
 
-//                        viewModel.getCurrentWeather(latt,longg)
+                        viewModel.getFiveDaysWeather(latt,longg)
                         viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)
                         displayfullAddress(latt, longg)
 
                     } else {
 
-//                    viewModel.getCurrentWeather(long,lat)
+                    viewModel.getFiveDaysWeather(long,lat)
                         viewModel.getFiveDaysWeather(long, lat)
                         displayAddress(lat, long)
                         displayfullAddress(lat, long)
@@ -299,6 +299,53 @@ class HomeFragment : Fragment() {
 //                }
 //            }
 //        }
+
+
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is ApiState.Suceess -> {
+                        binding.tvTemp.visibility = View.VISIBLE
+                        binding.weatherImgView.visibility = View.VISIBLE
+
+
+                        binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
+                        binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
+                        binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString()
+                        binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
+                        binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
+                        binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
+                        binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+
+                        val iconId = weatherResponse.data.list[0].weather[0].icon
+                        if (iconId != null) {
+                            Utils.getWeatherIcon(iconId, binding.weatherImgView)
+                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+                                binding.backGrou.setAnimation(R.raw.rainbackground)
+                        }
+
+                    }
+
+                    is ApiState.Loading -> {
+                        binding.tvTemp.visibility = View.GONE
+                        binding.weatherImgView.visibility = View.GONE
+
+                    }
+
+                    else -> {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
         //todo change the view model name variabl => todaysData
         lifecycleScope.launch(Dispatchers.Main) {
 
@@ -340,7 +387,7 @@ class HomeFragment : Fragment() {
                         binding.todayDetailsRecView.visibility = View.VISIBLE
 
                         val date = Utils.getDatefortvDate(weatherResponse.data.list[0].dt_txt)
-                        binding.tvDayFormat.text = date.toString()
+
 //            // TODO Update the UI with the TODAAAY forecast data
                         val filteredList = weatherResponse.data.list.filter { forecastData ->
                             val time = forecastData.dt_txt.split(" ")[1]
