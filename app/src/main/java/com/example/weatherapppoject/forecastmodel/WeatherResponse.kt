@@ -4,6 +4,6 @@ data class WeatherResponse(
     val city: City,
     val cnt: Int,
     val cod: String,
-    val list: List<ForeCastData>,
+    val list: MutableList<ForeCastData>,
     val message: Int
 )

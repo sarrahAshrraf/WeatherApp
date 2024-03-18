@@ -5,6 +5,7 @@ import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 class WeatherRepositoryImpl private constructor(
@@ -44,10 +45,14 @@ class WeatherRepositoryImpl private constructor(
         units: String,
         apiKey: String,
         lang: String
-    ): WeatherResponse {
+    ): Flow<WeatherResponse> {
         Log.i("=====23d", "HI: ")
-        return  remoteDataSource.getFiveDaysInfo(latitude,longitude,units, apiKey, lang)
-
+        return  try {
+            remoteDataSource.getFiveDaysInfo(latitude, longitude, units, apiKey, lang)
+        }catch (e: Exception){
+            Log.i("====Error", "getFiveDaysWeather error: "+e)
+           emptyFlow()
+        }
 
     }
 }

@@ -25,9 +25,12 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     private val _currentWeather = MutableStateFlow<ApiState>(ApiState.Loading())
     val currentWeather: StateFlow<ApiState> = _currentWeather
 
+    private val _fiveDaysWeather = MutableStateFlow<ApiState>(ApiState.Loading())
+    val fiveDaysWeather: StateFlow<ApiState> = _fiveDaysWeather
 
-    private val _fiveDaysWeather = MutableLiveData<WeatherResponse>()
-    val fiveDaysWeather: LiveData<WeatherResponse> = _fiveDaysWeather
+
+//    private val _fiveDaysWeather = MutableLiveData<WeatherResponse>()
+//    val fiveDaysWeather: LiveData<WeatherResponse> = _fiveDaysWeather
 
 //    fun getCurrentWeather(latitude: Double, longitude: Double) {
 //        viewModelScope.launch {
@@ -42,30 +45,44 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //        }
 //    }
 
+////TODo
+//    fun getCurrentWeather(latitude: Double, longitude: Double) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val units = "metric"
+//            val apiKey = Utils.APIKEY
+//            weatherRepository.getCurrentWeather(latitude, longitude, units, apiKey).collect{
+//                _currentWeather.value = ApiState.Suceess(it)
+//            }
+//        }
+//    }
 
-    fun getCurrentWeather(latitude: Double, longitude: Double) {
+
+    fun getFiveDaysWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             val units = "metric"
             val apiKey = Utils.APIKEY
-            weatherRepository.getCurrentWeather(latitude, longitude, units, apiKey).collect{
-                _currentWeather.value = ApiState.Suceess(it)
+            val lang = "en"
+            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect{
+                _fiveDaysWeather.value = ApiState.Suceess(it)
             }
         }
     }
 
-    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
-        viewModelScope.launch {
-            try {
-                val units = "metric"
-                val apiKey = Utils.APIKEY
-                val lang = "ar"
-                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
-                _fiveDaysWeather.value = weatherResponse
-            } catch (e: Exception) {
-                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
-            }
-        }
-    }
+
+
+//    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
+//        viewModelScope.launch {
+//            try {
+//                val units = "metric"
+//                val apiKey = Utils.APIKEY
+//                val lang = "ar"
+//                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
+//                _fiveDaysWeather.value = weatherResponse
+//            } catch (e: Exception) {
+//                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
+//            }
+//        }
+//    }
 }
 
 

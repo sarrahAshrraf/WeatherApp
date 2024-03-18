@@ -19,5 +19,5 @@ interface RemoteDataSource {
         units: String,
         apiKey: String,
         lang: String
-    ): WeatherResponse
+    ): Flow<WeatherResponse>
 }

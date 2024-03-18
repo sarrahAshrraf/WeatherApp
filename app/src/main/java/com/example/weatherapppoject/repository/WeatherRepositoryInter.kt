@@ -17,6 +17,6 @@ interface WeatherRepositoryInter {
         units: String,
         apiKey: String,
         lang: String
-    ): WeatherResponse
+    ): Flow<WeatherResponse>
 
 }
