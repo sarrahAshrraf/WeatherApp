@@ -45,6 +45,6 @@ interface WeatherDao {
     //retrive all fav cities in the favorite fragment
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM weather_data WHERE isFav = 1")
-    fun getFav(): Flow<List<WeatherResponse>>
+     fun getFav(): Flow<List<WeatherResponse>>
 
 }

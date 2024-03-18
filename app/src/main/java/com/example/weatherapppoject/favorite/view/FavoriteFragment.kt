@@ -1,21 +1,14 @@
-package com.example.weatherapppoject.view
+package com.example.weatherapppoject.favorite.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.room.Room
 
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.forecastmodel.Clouds
-import com.example.weatherapppoject.forecastmodel.Main
-import com.example.weatherapppoject.forecastmodel.Rain
-import com.example.weatherapppoject.forecastmodel.Weather
+import com.example.weatherapppoject.view.MapsFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class FavoriteFragment : Fragment() {
     private lateinit var floatingActionButton : FloatingActionButton
