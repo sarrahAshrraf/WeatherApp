@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
 import com.squareup.picasso.Picasso
 import java.text.NumberFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -23,7 +24,21 @@ class Utils {
 
         const val IMG_URL = "https://openweathermap.org/img/w/"
 
+        @RequiresApi(Build.VERSION_CODES.O)
+        private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getDate(dtTxt: String): LocalDate {
+            val dateTime = LocalDateTime.parse(dtTxt, dateFormatter)
+            return dateTime.toLocalDate()
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getDatefortvDate(dtTxt: String): String {
+            val dateTime = LocalDateTime.parse(dtTxt, dateFormatter)
+            val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.getDefault())
+            return dateTime.format(dateFormatter)
+        }
         @RequiresApi(Build.VERSION_CODES.O)
         public fun getDateAndTime(dtTxt: String): CharSequence {
             val input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

@@ -49,30 +49,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="@color/white"
                 android:text="TextView"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.54"
+                app:layout_constraintHorizontal_bias="0.744"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.703" />
+                app:layout_constraintVertical_bias="0.644" />
 
             <TextView
                 android:id="@+id/tvTimeRec"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="@color/white"
-
                 android:text="TextView"
+
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/tvTempRec"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.54"
+                app:layout_constraintHorizontal_bias="0.744"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
 
-                app:layout_constraintVertical_bias="0.666" />
+                />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/imgeViewRec"
@@ -83,9 +83,10 @@
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.158"
+                app:layout_constraintHorizontal_bias="0.301"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true" />
         </androidx.constraintlayout.widget.ConstraintLayout>

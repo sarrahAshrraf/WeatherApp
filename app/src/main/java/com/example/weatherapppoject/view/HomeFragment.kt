@@ -58,6 +58,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.time.format.TextStyle
 import java.util.Locale
 
 
@@ -149,6 +150,7 @@ class HomeFragment : Fragment() {
                         viewModel.getCurrentWeather(latt,longg)
                         viewModel.getFiveDaysWeather(latt,longg)
                         displayAddress(latt,longg)
+                        displayfullAddress(latt,longg)
 
                     }
                     else {
@@ -156,6 +158,7 @@ class HomeFragment : Fragment() {
                     viewModel.getCurrentWeather(long,lat)
                     viewModel.getFiveDaysWeather(long,lat)
                     displayAddress(lat,long)
+                        displayfullAddress(lat,long)
 
                     }
                 }  else {
@@ -184,6 +187,18 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    fun displayfullAddress(latitude: Double, longitude: Double) {
+        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        if (addresses != null) {
+            if (addresses.isNotEmpty()) {
+                val address = addresses[0]
+                val locality = address.adminArea // Extract the city from the address
+                binding.tvFullocation.text = locality.toString()
+
+            }
+        }
+    }
+
 
 //        if (addresses != null) {
 //            if (addresses.isNotEmpty()) {
@@ -238,7 +253,7 @@ class HomeFragment : Fragment() {
                         binding.tvTemp.text = "${weatherList.data.main?.temp}°C"
                         binding.cloudPercent.text = "${weatherList.data.clouds?.all.toString()}%"
                         binding.windPercent.text = weatherList.data.wind?.speed.toString()
-                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
+//                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
                         binding.humidityPercent.text = weatherList.data.main?.humidity.toString()
                         binding.pressurePercent.text = weatherList.data.main?.pressure.toString()
                         binding.tvStatus.text = weatherList.data.weather[0].description
@@ -246,8 +261,8 @@ class HomeFragment : Fragment() {
                         val iconId = weatherList.data.weather[0].icon
                         if (iconId != null) {
                             Utils.getWeatherIcon(iconId, binding.weatherImgView)
-//                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
-//                                binding.backGrou.setAnimation(R.raw.rainbackground)
+                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+                                binding.backGrou.setAnimation(R.raw.rainbackground)
                         }
 
                         binding.FivedaysRec.visibility = View.VISIBLE
@@ -265,7 +280,7 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
+            //todo change the view model name variabl => todaysData
         viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
             // Update the UI with the TODAAAY forecast data
             val forecastList = weatherResponse.list
@@ -275,13 +290,16 @@ class HomeFragment : Fragment() {
             binding.todayDetailsRecView.adapter = adapter
         }
          ///TODO the rest of the week !!! Only item per week is enough
-             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
+             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) {
+                 weatherResponse ->
+                 val date = Utils.getDatefortvDate(weatherResponse.list[0].dt_txt)
+                 binding.tvDayFormat.text = date.toString()
             // TODO Update the UI with the TODAAAY forecast data
-            val filteredList = weatherResponse.list.filter { forecastData ->
+                 val filteredList = weatherResponse.list.filter { forecastData ->
                 val time = forecastData.dt_txt.split(" ")[1]
                 val hour = time.split(":")[0].toInt()
-
                 hour == 12
+
             }
 
             todayadapter = TodayDataAdapter(filteredList)

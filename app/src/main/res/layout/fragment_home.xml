@@ -19,6 +19,7 @@
         app:lottie_loop="true" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +45,7 @@
                 android:textSize="23sp" />
 
             <TextView
-                android:id="@+id/tvDayFormat"
+                android:id="@+id/tvFullocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -99,7 +100,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/tvDayFormat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="H:27 L:19"
@@ -190,7 +191,7 @@
                             android:layout_width="63dp"
                             android:layout_height="27dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/humidityicon" />
+                            android:src="@drawable/humiditypercent" />
 
                         <TextView
                             android:id="@+id/humidityPercent"

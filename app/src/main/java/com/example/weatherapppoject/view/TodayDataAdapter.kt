@@ -11,7 +11,10 @@ import com.example.weatherapppoject.databinding.WeekDaysItemBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.utils.Utils
 import com.squareup.picasso.Picasso
+import java.time.format.TextStyle
+import java.util.Locale
 
+//this is the week adapter
 class TodayDataAdapter (private val forecastArray: List<ForeCastData>): RecyclerView.Adapter<TodayDataAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: WeekDaysItemBinding) : RecyclerView.ViewHolder(binding.root){}
@@ -30,12 +33,15 @@ class TodayDataAdapter (private val forecastArray: List<ForeCastData>): Recycler
             val imageIcon = currentItem.weather[0].icon
             //           val imageIcon =  currentItem.time[0].symbol.symbolVar
             Utils.getWeatherIcon(imageIcon,holder.binding.imgeViewRec)
-
+            // Get the day of the week from the date
+            val date = Utils.getDate(currentItem.dt_txt)
+            val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+            dayName.text = dayOfWeek
             tvTimeRec.text = Utils.getDateAndTime(currentItem.dt_txt)
 //                currentItem.weather[0].description
 //            currentItem.main
 //                Utils.getDateAndTime(currentItem.dt_txt)
-            tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+".س"
+            tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+""
 //                currentItem.main.temp.toString()+"°C"
             Log.i("====RECy", "onBindViewHolder: "+currentItem.weather[0].description)
 
