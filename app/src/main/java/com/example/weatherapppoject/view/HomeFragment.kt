@@ -130,6 +130,7 @@ class HomeFragment : Fragment() {
         }
 
         val locationCallback = object : LocationCallback() {
+            @SuppressLint("SuspiciousIndentation")
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
@@ -138,8 +139,8 @@ class HomeFragment : Fragment() {
                     var lat = location.latitude
                     Log.i("++++daea", "onLocationResult: "+long+" "+lat)
 //                    viewModel.getCurrentWeather(location.latitude, location.longitude)
-                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
-
+//                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
+                    Log.i("===sharedKey map", "onLocationResult: "+sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,""))
                     if (sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,"")=="map"){
                     val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
                     val longg = longlat!!.first
@@ -245,8 +246,8 @@ class HomeFragment : Fragment() {
                         val iconId = weatherList.data.weather[0].icon
                         if (iconId != null) {
                             Utils.getWeatherIcon(iconId, binding.weatherImgView)
-                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
-                                binding.backGrou.setAnimation(R.raw.rainbackground)
+//                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+//                                binding.backGrou.setAnimation(R.raw.rainbackground)
                         }
 
                         binding.FivedaysRec.visibility = View.VISIBLE
@@ -257,7 +258,7 @@ class HomeFragment : Fragment() {
                         binding.todayDetailsRecView.visibility = View.GONE
                     }
                     else -> {
-                        binding.today.visibility = View.GONE
+                        binding.tvTemp.visibility = View.GONE
                         Log.i("=====error api", "Error in loading api ")
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }

@@ -120,7 +120,7 @@ class MapsFragment : Fragment() {
     private fun replaceFragments(fragment: Fragment) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null) // Optional: Adds the transaction to the back stack
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 }

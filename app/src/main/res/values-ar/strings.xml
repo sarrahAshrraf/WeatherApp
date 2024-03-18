@@ -19,6 +19,8 @@
     <string name="networkstatus">لا يوجد أنترنت</string>
     <string name="gps">الموقع الحالي</string>
     <string name="map">خريطة</string>
+    <string name="search_map">أبحث في الخريطة..</string>
+
 
 
 

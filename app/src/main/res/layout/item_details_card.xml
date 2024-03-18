@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     app:cardBackgroundColor="@android:color/transparent">
 
 
@@ -10,15 +11,17 @@
         android:layout_width="89dp"
         android:layout_height="108dp"
         android:layout_margin="4dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:background="@color/backgroundlayout"
+        android:backgroundTint="#BFD4EDFA"
         android:foreground="?selectableItemBackground"
         android:padding="16dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <!--        android:clickable="true"-->
+        <!--        android:focusable="true"-->
 
 
         <TextView
@@ -26,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="16sp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/weatherImgView"
@@ -49,7 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="16sp" />
 
 
     </androidx.cardview.widget.CardView>
