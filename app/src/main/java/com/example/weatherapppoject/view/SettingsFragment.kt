@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.databinding.FragmentSettingsBinding
 import com.example.weatherapppoject.sharedprefrences.SharedKey
@@ -38,6 +39,35 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setLocale(sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default"))
+
+        binding.locationToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when (checkedId) {
+                R.id.button1 -> {
+                    if (isChecked) {
+                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "map")
+
+//                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
+                        replaceFragments(MapsFragment())
+                        //TODO open map view
+                    } else {
+                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                    }
+                }
+                R.id.button3 -> {
+                    if (isChecked) {
+                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "gps")
+
+                    } else {
+                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                    }
+                }
+            }
+        }
+
         binding.langueRadioGrop.setOnCheckedChangeListener { group, checkedId ->
             val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
             if (!checkedRadioButton.isChecked) {
@@ -89,7 +119,15 @@ class SettingsFragment : Fragment() {
             "en" -> binding.enRdiobtn.isChecked = true
         }
     }
+    private fun replaceFragments(fragment: Fragment) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frameLayout, fragment)
+        transaction.addToBackStack(null) // Optional: Adds the transaction to the back stack
+        transaction.commit()
+    }
 }
+
+
 object ContextUtils {
     fun wrapContext(baseContext: Context, locale: Locale): Context {
         val config = Configuration(baseContext.resources.configuration)

@@ -14,6 +14,30 @@ class SharedPrefrencesManager private constructor(context: Context){
                 fun saveString(key: String, value: String) {
                         sharedPreferences.edit().putString(key, value).apply()
                 }
+                fun saveLocationFromMap(key: String, longt: Double, lat:Double) {
+                    val editor = sharedPreferences.edit()
+                    editor.putString(key + "_longt", longt.toString())
+                    editor.putString(key + "_lat", lat.toString())
+                    editor.apply()
+                }
+                fun savelocationChoice(key: String, value: String) {
+                    sharedPreferences.edit().putString(key, value).apply()
+                }
+                fun getlocationChoice(key: String, defaultValue: String): String {
+                    return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+                }
+            fun getLocationFromMap(key: String): Pair<Double, Double>? {
+                val longtKey = key + "_longt"
+                val latKey = key + "_lat"
+                val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+                val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+
+                if (longt != null && lat != null) {
+                    return Pair(longt, lat)
+                }
+
+                return null
+            }
 
                 fun getString(key: String, defaultValue: String): String {
                         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
@@ -39,7 +63,7 @@ class SharedPrefrencesManager private constructor(context: Context){
 
 enum class SharedKey {
         LANGUAGE,
-        CITY
+        GPS
 
 
 }

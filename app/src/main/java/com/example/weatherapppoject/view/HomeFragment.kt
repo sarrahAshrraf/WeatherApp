@@ -58,6 +58,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.time.format.TextStyle
 import java.util.Locale
 
 
@@ -68,6 +69,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: FiveDaysAdapter
     private lateinit var todayadapter: TodayDataAdapter
+    private lateinit var sharedPreferencesManager: SharedPrefrencesManager
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -90,6 +92,7 @@ class HomeFragment : Fragment() {
             requestPermission()
         }
     }
+
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -128,6 +131,7 @@ class HomeFragment : Fragment() {
         }
 
         val locationCallback = object : LocationCallback() {
+            @SuppressLint("SuspiciousIndentation")
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
@@ -135,9 +139,28 @@ class HomeFragment : Fragment() {
                     var long = location.longitude
                     var lat = location.latitude
                     Log.i("++++daea", "onLocationResult: "+long+" "+lat)
-                    viewModel.getCurrentWeather(location.latitude, location.longitude)
-                    viewModel.getFiveDaysWeather(lat,long)
+//                    viewModel.getCurrentWeather(location.latitude, location.longitude)
+//                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
+                    Log.i("===sharedKey map", "onLocationResult: "+sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,""))
+                    if (sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,"")=="map"){
+                    val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+                    val longg = longlat!!.first
+                    val latt = longlat.second
+
+                        viewModel.getCurrentWeather(latt,longg)
+                        viewModel.getFiveDaysWeather(latt,longg)
+                        displayAddress(latt,longg)
+                        displayfullAddress(latt,longg)
+
+                    }
+                    else {
+
+                    viewModel.getCurrentWeather(long,lat)
+                    viewModel.getFiveDaysWeather(long,lat)
                     displayAddress(lat,long)
+                        displayfullAddress(lat,long)
+
+                    }
                 }  else {
                     Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
                 }
@@ -164,6 +187,18 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    fun displayfullAddress(latitude: Double, longitude: Double) {
+        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        if (addresses != null) {
+            if (addresses.isNotEmpty()) {
+                val address = addresses[0]
+                val locality = address.adminArea // Extract the city from the address
+                binding.tvFullocation.text = locality.toString()
+
+            }
+        }
+    }
+
 
 //        if (addresses != null) {
 //            if (addresses.isNotEmpty()) {
@@ -184,7 +219,8 @@ class HomeFragment : Fragment() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         remoteDataSource = RemoteDataSourceImp()
         repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
@@ -207,7 +243,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
 
@@ -218,7 +253,7 @@ class HomeFragment : Fragment() {
                         binding.tvTemp.text = "${weatherList.data.main?.temp}°C"
                         binding.cloudPercent.text = "${weatherList.data.clouds?.all.toString()}%"
                         binding.windPercent.text = weatherList.data.wind?.speed.toString()
-                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
+//                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
                         binding.humidityPercent.text = weatherList.data.main?.humidity.toString()
                         binding.pressurePercent.text = weatherList.data.main?.pressure.toString()
                         binding.tvStatus.text = weatherList.data.weather[0].description
@@ -238,14 +273,14 @@ class HomeFragment : Fragment() {
                         binding.todayDetailsRecView.visibility = View.GONE
                     }
                     else -> {
-                        binding.today.visibility = View.GONE
+                        binding.tvTemp.visibility = View.GONE
                         Log.i("=====error api", "Error in loading api ")
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-
+            //todo change the view model name variabl => todaysData
         viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
             // Update the UI with the TODAAAY forecast data
             val forecastList = weatherResponse.list
@@ -255,13 +290,16 @@ class HomeFragment : Fragment() {
             binding.todayDetailsRecView.adapter = adapter
         }
          ///TODO the rest of the week !!! Only item per week is enough
-             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
+             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) {
+                 weatherResponse ->
+                 val date = Utils.getDatefortvDate(weatherResponse.list[0].dt_txt)
+                 binding.tvDayFormat.text = date.toString()
             // TODO Update the UI with the TODAAAY forecast data
-            val filteredList = weatherResponse.list.filter { forecastData ->
+                 val filteredList = weatherResponse.list.filter { forecastData ->
                 val time = forecastData.dt_txt.split(" ")[1]
                 val hour = time.split(":")[0].toInt()
-
                 hour == 12
+
             }
 
             todayadapter = TodayDataAdapter(filteredList)

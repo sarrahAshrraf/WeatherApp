@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
+import com.example.weatherapppoject.sharedprefrences.SharedKey
+import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.NetworkManager
 
 class HomeActivity : AppCompatActivity() {
@@ -23,12 +25,15 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var networkReceiver: BroadcastReceiver
     private var isNetworkAvailable: Boolean = false
     private lateinit var  navController : NavController
+    private lateinit var sharedPrefrencesManager: SharedPrefrencesManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPrefrencesManager = SharedPrefrencesManager.getInstance(this)
+        sharedPrefrencesManager.savelocationChoice(SharedKey.GPS.name,"gps")
 
         networkReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -45,7 +50,7 @@ class HomeActivity : AppCompatActivity() {
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
             }else {
-                replaceFragments(HomeFragment())
+                replaceFragments(SettingsFragment())
 
 //                when (item.itemId) {
 ////                    R.id.home -> replaceFragments(BlankFragment())
@@ -76,7 +81,7 @@ class HomeActivity : AppCompatActivity() {
         isNetworkAvailable = NetworkManager.isNetworkAvailable(this)
         if (isNetworkAvailable) {
             binding.tvNetworkIndicator.visibility = View.GONE
-            replaceFragments(HomeFragment())
+            replaceFragments(SettingsFragment())
         } else {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
             replaceFragments(HomeFragment())

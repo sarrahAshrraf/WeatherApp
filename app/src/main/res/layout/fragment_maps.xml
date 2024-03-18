@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_text">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/img_search_icon"
+        android:layout_width="43dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="15dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_searchMap"
+        app:layout_constraintStart_toStartOf="@+id/et_searchMap"
+        app:layout_constraintTop_toTopOf="@+id/et_searchMap"
+        app:layout_constraintVertical_bias="0.392"
+        app:srcCompat="@drawable/search_icon" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/img_clear_search"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_searchMap"
+        app:layout_constraintEnd_toEndOf="@+id/et_searchMap"
+        app:layout_constraintTop_toTopOf="@+id/et_searchMap"
+        app:srcCompat="@drawable/closeicon" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@android:layout/activity_list_item" />
+
+
+    <EditText
+        android:id="@+id/et_searchMap"
+        android:layout_width="378dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/search_map"
+        android:paddingStart="60dp"
+        android:paddingEnd="70dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.011" />
+
+    <ImageView
+        android:id="@+id/imgCurrentLocation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSelectOrAddOnMap"
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="@+id/btnSelectOrAddOnMap"
+        app:layout_constraintTop_toTopOf="@+id/btnSelectOrAddOnMap"
+        app:srcCompat="@drawable/mylocationicon" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSelectOrAddOnMap"
+        android:layout_width="199dp"
+        android:layout_height="37dp"
+        android:background="@color/white"
+        android:enabled="true"
+        android:gravity="center"
+        android:text="Add to favorites"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_searchMap"
+        app:layout_constraintVertical_bias="0.887" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
