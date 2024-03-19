@@ -4,11 +4,13 @@ import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
@@ -21,6 +23,7 @@ import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
+import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.view.HomeFragment
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
@@ -34,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -98,7 +102,42 @@ class MapsFragment : Fragment() {
 //                sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
 //                favoriteViewModel.addToFavorites()
 //                favoriteViewModel.removeFromFavorites()
-              replaceFragments(HomeFragment())
+
+            val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
+            val longg = longlat!!.first
+            val latt = longlat.second
+            Log.i("==latttt longggg===", ""+ longg+ latt)
+            lifecycleScope.launch(Dispatchers.Main) {
+                homeViewModel.getFiveDaysWeather(latt,longg)
+                homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                    when (weatherResponse) {
+                        is ApiState.Suceess -> {
+                            Log.i("========Su", "Suceeeee: ")
+                            CoroutineScope(Dispatchers.IO).launch {
+//                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                                favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                                Log.i("===db add", "onViewCreated: ")
+                            }
+
+                        }
+
+                        is ApiState.Loading -> {
+                            Log.i("======log", "loding: ")
+
+
+                        }
+
+                        else -> {
+                            Log.i("========errorrr", "rrrrr: ")
+
+                        }
+                    }
+                }
+
+
+            }
+
+            replaceFragments(HomeFragment())
 
             Toast.makeText(requireContext(), "added", Toast.LENGTH_SHORT).show()
 

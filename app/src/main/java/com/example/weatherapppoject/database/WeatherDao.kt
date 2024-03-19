@@ -41,8 +41,12 @@ interface WeatherDao {
     @Query("DELETE FROM weather_data WHERE isFav = 1 AND longitude = :longitude AND latitude = :latitude")
     suspend fun deleteFavByLonLat(longitude: Double, latitude: Double)
 
+    
 
-    //retrive all fav cities in the favorite fragment
+
+
+
+    //retreive all fav cities in the favorite fragment
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * FROM weather_data WHERE isFav = 1")
      fun getFav(): Flow<List<WeatherResponse>>

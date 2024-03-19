@@ -219,8 +219,9 @@ class HomeFragment : Fragment() {
             if (addresses.isNotEmpty()) {
                 val address = addresses[0]
                 val locality = address.adminArea // Extract the city from the address
-                binding.tvFullocation.text = locality.toString()
-
+               if (locality.isNotEmpty()) {
+                   binding.tvFullocation.text = locality!!.toString() //TODO null check!!!
+               }
             }
         }
     }
@@ -325,7 +326,7 @@ class HomeFragment : Fragment() {
                     is ApiState.Suceess -> {
                         binding.tvTemp.visibility = View.VISIBLE
                         binding.weatherImgView.visibility = View.VISIBLE
-
+                        Log.i("===succe in home", "onViewCreated: ")
 
                         binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
                         binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
@@ -349,6 +350,7 @@ class HomeFragment : Fragment() {
                             val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
                             CoroutineScope(Dispatchers.IO).launch {
 //                                db.getWeatherDAO().deleteFavByIsFav()
+                                Log.i("d======eeee","onViewCreated")
                                 db.getWeatherDAO().deleteFavByLonLat(weatherResponse.data.longitude,weatherResponse.data.latitude)
 
                             }
@@ -366,10 +368,13 @@ class HomeFragment : Fragment() {
                     is ApiState.Loading -> {
                         binding.tvTemp.visibility = View.GONE
                         binding.weatherImgView.visibility = View.GONE
+                        Log.i("===lodaing in home", "onViewCreated: ")
 
                     }
 
                     else -> {
+                        Log.i("===fail in home", "onViewCreated: ")
+
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
 
                     }

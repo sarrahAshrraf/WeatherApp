@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 
 import com.example.weatherapppoject.R
@@ -45,6 +47,10 @@ class FavoriteFragment : Fragment() {
     private lateinit var homeViewModel: HomeFragmentViewModel
     private lateinit var homeFactory : HomeFragmentViewModelFactory
     private lateinit var sharedPreferencesManager: SharedPrefrencesManager
+    private lateinit var favAdapter : FavoritesAdapter
+    private lateinit var favRecyclerView: RecyclerView
+    private lateinit var favLayoutManager: LinearLayoutManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,7 @@ class FavoriteFragment : Fragment() {
         homeFactory = HomeFragmentViewModelFactory(repository)
         homeViewModel = ViewModelProvider(this, homeFactory).get(HomeFragmentViewModel::class.java)
 
+
     }
 
     override fun onCreateView(
@@ -69,7 +76,52 @@ class FavoriteFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         floatingActionButton  = view.findViewById(R.id.floatingActionButton)
+        favRecyclerView = view.findViewById(R.id.favRecView)
+        favLayoutManager = LinearLayoutManager(requireContext())
+//        favAdapter = FavoritesAdapter(emptyList()) // Pass an empty list initially
+
+
+
+        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+        val longg = longlat!!.first
+        val latt = longlat.second
+        Log.i("==latttt longggg===", ""+ longg+ latt)
+
+        favAdapter = FavoritesAdapter(emptyList()) { product ->
+            favoriteViewModel.removeFromFavorites(longg,latt)
+        }
+        favRecyclerView.adapter = favAdapter
+        favRecyclerView.layoutManager = favLayoutManager
+//        favoriteViewModel.showFavItems()
+
+        //todo intialize the adapter and the list // 3andy mvvm products lab 3ayza ashofo
+        lifecycleScope.launch(Dispatchers.Main) {
+            favoriteViewModel.showFavItems()
+
+            favoriteViewModel.currentWeather.collect { state ->
+                when (state) {
+                    is DBState.Loading -> {
+                        // Show loading state if needed
+                    }
+
+                    is DBState.Suceess -> {
+                        // Update the adapter with the new data
+                        favAdapter.submitList(state.data)
+                    }
+
+                    is DBState.Failure -> {
+                        Log.i("++++===fill", "Failed in fav fragment: ")
+
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+
 
 
 
@@ -78,68 +130,6 @@ class FavoriteFragment : Fragment() {
             Log.i("==set Onclcik===", "")
 
             replaceFragments(MapsFragment())
-        }
-
-
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
-
-//        lifecycleScope.launch(Dispatchers.Main) {
-//
-//            homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
-//                when (weatherResponse) {
-//                    is ApiState.Suceess -> {
-//                        Log.i("==apiStatecorotine===", ""+weatherResponse.data+ longg+ latt)
-////                            favoriteViewModel.addToFavorites(weatherResponse.data, longg, latt)
-//                        Log.i("==api succc===", ""+weatherResponse.data+ longg+ latt)
-//
-////                            CoroutineScope(Dispatchers.IO).launch {
-//////                                db.getWeatherDAO().setAsFavorite(weatherResponse.data, longg, latt)
-////                                Log.i("==apiStatecorotine===", "coroutine")
-////                                Log.i("==apiStatecorotine===", ""+weatherResponse.data+ longg+ latt)
-////
-////                                favoriteViewModel.addToFavorites(weatherResponse.data, longg, latt)
-////                            }
-//                    }
-//                    is ApiState.Failure -> {
-//                        Log.i("=====", "Failure in favorite API: ${weatherResponse.error}")
-//                        // Handle the failure condition here
-//                    }
-//                    else -> {
-//                        Log.i("=====", "Else in favorite API")
-//                        // Handle any other states here
-//                    }
-//                }
-//            }
-//        }
-
-        lifecycleScope.launch(Dispatchers.Main) {
-
-            homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
-                when (weatherResponse) {
-                    is ApiState.Suceess -> {
-                        Log.i("======API success", ""+weatherResponse.data.list[0].dt_txt)
-
-                        val forecastList = weatherResponse.data.list
-                        val forecastItems = forecastList
-                            .take(8)// Display only the first 5 forecast items
-
-                    }
-
-                    is ApiState.Loading -> {
-                        Log.i("=====API LOADING", "")
-
-                    }
-
-                    else -> {
-                        Log.i("==FAILIR===", "Failure in  API:")
-
-                    }
-                }
-            }
-
 
         }
 

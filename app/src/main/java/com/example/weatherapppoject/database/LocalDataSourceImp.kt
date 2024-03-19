@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.database
 
 import android.content.Context
+import android.util.Log
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,8 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
     }
 
     override suspend fun deleteFavData(longitude: Double, latitude: Double) {
+        Log.i("d======eeee","local data sour4e")
+
         dao.deleteFavByLonLat(longitude,latitude)
     }
 

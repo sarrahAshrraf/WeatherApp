@@ -48,14 +48,13 @@ class HomeActivity : AppCompatActivity() {
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
             }else {
-                replaceFragments(SettingsFragment())
-
-//                when (item.itemId) {
-////                    R.id.home -> replaceFragments(BlankFragment())
-//                    R.id.notification -> replaceFragments(NotificationFragment())
-//                    R.id.settings -> replaceFragments(SettingsFragment())
-//                    R.id.favorite -> replaceFragments(FavoriteFragment())
-//                }
+//                replaceFragments(SettingsFragment())
+                when (item.itemId) {
+                    R.id.home -> replaceFragments(HomeFragment())
+                    R.id.notification -> replaceFragments(NotificationFragment())
+                    R.id.settings -> replaceFragments(SettingsFragment())
+                    R.id.favorite -> replaceFragments(FavoriteFragment())
+                }
                     Toast.makeText(this, "No network connection available", Toast.LENGTH_SHORT).show()
 
 
