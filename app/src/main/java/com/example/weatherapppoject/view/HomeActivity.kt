@@ -78,7 +78,7 @@ class HomeActivity : AppCompatActivity() {
         isNetworkAvailable = NetworkManager.isNetworkAvailable(this)
         if (isNetworkAvailable) {
             binding.tvNetworkIndicator.visibility = View.GONE
-            replaceFragments(SettingsFragment())
+            replaceFragments(HomeFragment())
         } else {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
             replaceFragments(HomeFragment())

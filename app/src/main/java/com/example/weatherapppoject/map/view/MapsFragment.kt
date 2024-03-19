@@ -137,7 +137,7 @@ class MapsFragment : Fragment() {
 
             }
 
-            replaceFragments(HomeFragment())
+            replaceFragments(FavoriteFragment())
 
             Toast.makeText(requireContext(), "added", Toast.LENGTH_SHORT).show()
 

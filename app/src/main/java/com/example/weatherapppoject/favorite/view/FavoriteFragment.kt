@@ -17,6 +17,9 @@ import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.AppDB
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
+import com.example.weatherapppoject.databinding.FavoriteItemBinding
+import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
+import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
@@ -50,6 +53,7 @@ class FavoriteFragment : Fragment() {
     private lateinit var favAdapter : FavoritesAdapter
     private lateinit var favRecyclerView: RecyclerView
     private lateinit var favLayoutManager: LinearLayoutManager
+    private lateinit var binding : FragmentFavoriteBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +76,9 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        return binding.root
+//        return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,38 +88,32 @@ class FavoriteFragment : Fragment() {
         favLayoutManager = LinearLayoutManager(requireContext())
 //        favAdapter = FavoritesAdapter(emptyList()) // Pass an empty list initially
 
-
-
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
-
         favAdapter = FavoritesAdapter(emptyList()) { product ->
-            favoriteViewModel.removeFromFavorites(longg,latt)
+            favoriteViewModel.removeFromFavorites(product)
         }
         favRecyclerView.adapter = favAdapter
         favRecyclerView.layoutManager = favLayoutManager
-//        favoriteViewModel.showFavItems()
+        favoriteViewModel.showFavItems()
 
         //todo intialize the adapter and the list // 3andy mvvm products lab 3ayza ashofo
         lifecycleScope.launch(Dispatchers.Main) {
-            favoriteViewModel.showFavItems()
+//            favoriteViewModel.showFavItems()
 
             favoriteViewModel.currentWeather.collect { state ->
                 when (state) {
                     is DBState.Loading -> {
-                        // Show loading state if needed
+//                       binding.animationView.visibility =View.VISIBLE
                     }
 
                     is DBState.Suceess -> {
                         // Update the adapter with the new data
+//                        binding.animationView.visibility =View.GONE
+
                         favAdapter.submitList(state.data)
-                    }
-
-                    is DBState.Failure -> {
-                        Log.i("++++===fill", "Failed in fav fragment: ")
-
+                        if(favAdapter.itemCount==0){
+                            binding.animationView.visibility =View.VISIBLE
+                        }
+                        else {  binding.animationView.visibility =View.GONE}
                     }
 
                     else -> {}
@@ -123,6 +123,12 @@ class FavoriteFragment : Fragment() {
 
 
 
+
+
+        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+        val longg = longlat!!.first
+        val latt = longlat.second
+        Log.i("==latttt longggg===", ""+ longg+ latt)
 
 
         floatingActionButton.setOnClickListener {

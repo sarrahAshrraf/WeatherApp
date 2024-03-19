@@ -42,7 +42,7 @@ class Utils {
         @RequiresApi(Build.VERSION_CODES.O)
         public fun getDateAndTime(dtTxt: String): CharSequence {
             val input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val output = DateTimeFormatter.ofPattern("MM-dd HH:mm")
+            val output = DateTimeFormatter.ofPattern("dd-MMMM  HH:mm")
             val dateTime = LocalDateTime.parse(dtTxt, input)
             return output.format(dateTime)
         }

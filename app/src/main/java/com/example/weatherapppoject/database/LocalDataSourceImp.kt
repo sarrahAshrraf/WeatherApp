@@ -21,10 +21,10 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
         dao.setAsFavorite(favorite,longitude,latitude)
     }
 
-    override suspend fun deleteFavData(longitude: Double, latitude: Double) {
+    override suspend fun deleteFavData(weatherData: WeatherResponse) {
         Log.i("d======eeee","local data sour4e")
-
-        dao.deleteFavByLonLat(longitude,latitude)
+        dao.delete(weatherData)
+//        dao.deleteFavByLonLat(longitude,latitude)
     }
 
     override  fun displayAllFav(): Flow<List<WeatherResponse>> {

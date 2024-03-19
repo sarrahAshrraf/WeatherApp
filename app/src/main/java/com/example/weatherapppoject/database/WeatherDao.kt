@@ -41,7 +41,8 @@ interface WeatherDao {
     @Query("DELETE FROM weather_data WHERE isFav = 1 AND longitude = :longitude AND latitude = :latitude")
     suspend fun deleteFavByLonLat(longitude: Double, latitude: Double)
 
-    
+    @Delete
+    suspend fun delete(weatherData: WeatherResponse)
 
 
 

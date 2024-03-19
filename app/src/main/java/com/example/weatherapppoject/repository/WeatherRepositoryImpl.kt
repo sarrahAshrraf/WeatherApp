@@ -70,7 +70,7 @@ class WeatherRepositoryImpl private constructor(
         localDataSource.setFavoriteData(fav,longitude,latitude)
     }
 
-    override suspend fun deleteFromFav(longitude: Double, latitude: Double) {
-        localDataSource.deleteFavData(longitude,latitude)
+    override suspend fun deleteFromFav(weatherData: WeatherResponse) {
+        localDataSource.deleteFavData(weatherData)
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSourceInte {
     suspend fun setFavoriteData (favorite: WeatherResponse,longitude: Double,latitude: Double)
-    suspend fun deleteFavData (longitude: Double, latitude: Double)
+    suspend fun deleteFavData (weatherData: WeatherResponse)
      fun displayAllFav(): Flow<List<WeatherResponse>>
 
 }

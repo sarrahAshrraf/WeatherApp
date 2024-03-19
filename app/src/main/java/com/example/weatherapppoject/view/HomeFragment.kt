@@ -70,7 +70,6 @@ import java.util.Locale
 
 
 
-
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var binding: FragmentHomeBinding
@@ -145,19 +144,20 @@ class HomeFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
-                if (location != null) {
+
+                if (location != null && sharedPreferencesManager.getlocationChoice(
+                        SharedKey.GPS.name,
+                        ""
+                    ) == "gps"
+                ) {
                     var long = location.longitude
                     var lat = location.latitude
-                    Log.i("++++daea", "onLocationResult: " + long + " " + lat)
-//                    viewModel.getCurrentWeather(location.latitude, location.longitude)
-//                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
-                    Log.i(
-                        "===sharedKey map",
-                        "onLocationResult: " + sharedPreferencesManager.getlocationChoice(
-                            SharedKey.GPS.name,
-                            ""
-                        )
-                    )
+                    viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getFiveDaysWeather(long, lat)
+                    displayAddress(lat, long)
+                    displayfullAddress(lat, long)
+                }
+                else {
                     if (sharedPreferencesManager.getlocationChoice(
                             SharedKey.GPS.name,
                             ""
@@ -168,26 +168,19 @@ class HomeFragment : Fragment() {
                         val longg = longlat!!.first
                         val latt = longlat.second
 
-                        viewModel.getFiveDaysWeather(latt,longg)
                         viewModel.getFiveDaysWeather(latt, longg)
+//                        viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)
                         displayfullAddress(latt, longg)
 
-                    } else {
-
-                    viewModel.getFiveDaysWeather(long,lat)
-                        viewModel.getFiveDaysWeather(long, lat)
-                        displayAddress(lat, long)
-                        displayfullAddress(lat, long)
-
                     }
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Location is not available",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    else {
+//                        Toast.makeText(requireContext(),"No location",Toast.LENGTH_SHORT).show()
+//
+//
+//                    }
                 }
+
                 fusedLocationProviderClient.removeLocationUpdates(this)
             }
         }
@@ -200,6 +193,7 @@ class HomeFragment : Fragment() {
             Looper.myLooper()
         )
     }
+    //use the geocoder
 
     fun displayAddress(latitude: Double, longitude: Double) {
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
@@ -324,6 +318,10 @@ class HomeFragment : Fragment() {
             viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
                 when (weatherResponse) {
                     is ApiState.Suceess -> {
+                        binding.scrollView2.visibility = View.VISIBLE
+//                        binding.backGrou.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+
                         binding.tvTemp.visibility = View.VISIBLE
                         binding.weatherImgView.visibility = View.VISIBLE
                         Log.i("===succe in home", "onViewCreated: ")
@@ -336,25 +334,25 @@ class HomeFragment : Fragment() {
                         binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
                         binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
 
-                        binding.addbtn.setOnClickListener {
+//                        binding.addbtn.setOnClickListener {
+////                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
+//                            CoroutineScope(Dispatchers.IO).launch {
+////                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+//                            favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+//                                Log.i("===db scope", "onViewCreated: ")
+//                        }
+//                        }
+
+
+//                        binding.deletebtn.setOnClickListener {
 //                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
-                            CoroutineScope(Dispatchers.IO).launch {
-//                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
-                            favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
-                                Log.i("===db scope", "onViewCreated: ")
-                        }
-                        }
-
-
-                        binding.deletebtn.setOnClickListener {
-                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
-                            CoroutineScope(Dispatchers.IO).launch {
-//                                db.getWeatherDAO().deleteFavByIsFav()
-                                Log.i("d======eeee","onViewCreated")
-                                db.getWeatherDAO().deleteFavByLonLat(weatherResponse.data.longitude,weatherResponse.data.latitude)
-
-                            }
-                        }
+//                            CoroutineScope(Dispatchers.IO).launch {
+////                                db.getWeatherDAO().deleteFavByIsFav()
+//                                Log.i("d======eeee","onViewCreated")
+//                                db.getWeatherDAO().deleteFavByLonLat(weatherResponse.data.longitude,weatherResponse.data.latitude)
+//
+//                            }
+//                        }
 
                         val iconId = weatherResponse.data.list[0].weather[0].icon
                         if (iconId != null) {
@@ -368,14 +366,19 @@ class HomeFragment : Fragment() {
                     is ApiState.Loading -> {
                         binding.tvTemp.visibility = View.GONE
                         binding.weatherImgView.visibility = View.GONE
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.scrollView2.visibility = View.GONE
+
+//                        binding.backGrou.visibility = View.VISIBLE
+//                        binding.backGrou.setAnimation(R.raw.clouds)
+
                         Log.i("===lodaing in home", "onViewCreated: ")
 
                     }
 
                     else -> {
-                        Log.i("===fail in home", "onViewCreated: ")
-
-                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.scrollView2.visibility = View.GONE
 
                     }
                 }

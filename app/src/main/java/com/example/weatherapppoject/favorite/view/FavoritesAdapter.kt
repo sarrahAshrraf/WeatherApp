@@ -35,12 +35,13 @@ class FavoritesAdapter (
                 val imageIcon = currentItem.list[0].weather[0].icon
                 //           val imageIcon =  currentItem.time[0].symbol.symbolVar
                 Utils.getWeatherIcon(imageIcon,holder.binding.imgeViewRec)
+                feelslike.text = currentItem.list[0].weather[0].description
+                dayName.text = currentItem.city.name
                 button.setOnClickListener {
                     onRemoveClick(currentItem)
-
                 }
 
-                tvTimeRec.text = Utils.getTime(currentItem.list[0].dt_txt)
+                tvTimeRec.text = Utils.getDateAndTime(currentItem.list[0].dt_txt)
 
                 tvTempRec.text =  Utils.convertToArabicNumber(currentItem.list[0].main.temp.toString())+".س"
 //                currentItem.main.temp.toString()+"°C"
