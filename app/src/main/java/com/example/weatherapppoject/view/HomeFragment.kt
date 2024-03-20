@@ -31,10 +31,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.database.AppDB
+import com.example.weatherapppoject.database.LocalDataSourceImp
+import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
@@ -43,6 +49,7 @@ import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
+import com.example.weatherapppoject.utils.OneCallState
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -52,6 +59,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
@@ -60,7 +68,6 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.time.format.TextStyle
 import java.util.Locale
-
 
 
 
@@ -74,10 +81,13 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     lateinit var remoteDataSource: RemoteDataSource
-    lateinit var repository : WeatherRepositoryImpl
+    lateinit var localDataSourceInte: LocalDataSourceInte
+    lateinit var repository: WeatherRepositoryImpl
     lateinit var viewModelFactory: HomeFragmentViewModelFactory
     private val locationID = 5
 
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var favviewModelFactory: FavoriteViewModelFactory
 
     override fun onStart() {
         super.onStart()
@@ -135,35 +145,46 @@ class HomeFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
-                if (location != null) {
+
+                if (location != null && sharedPreferencesManager.getlocationChoice(
+                        SharedKey.GPS.name,
+                        ""
+                    ) == "gps"
+                ) {
                     var long = location.longitude
                     var lat = location.latitude
-                    Log.i("++++daea", "onLocationResult: "+long+" "+lat)
-//                    viewModel.getCurrentWeather(location.latitude, location.longitude)
-//                    val locationchois= sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name , "")
-                    Log.i("===sharedKey map", "onLocationResult: "+sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,""))
-                    if (sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name,"")=="map"){
-                    val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-                    val longg = longlat!!.first
-                    val latt = longlat.second
+                    viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getAlertsInfo(long,lat)
 
-                        viewModel.getCurrentWeather(latt,longg)
-                        viewModel.getFiveDaysWeather(latt,longg)
-                        displayAddress(latt,longg)
-                        displayfullAddress(latt,longg)
-
-                    }
-                    else {
-
-                    viewModel.getCurrentWeather(long,lat)
-                    viewModel.getFiveDaysWeather(long,lat)
-                    displayAddress(lat,long)
-                        displayfullAddress(lat,long)
-
-                    }
-                }  else {
-                    Toast.makeText(requireContext(), "Location is not available", Toast.LENGTH_SHORT).show()
+                    displayAddress(lat, long)
+                    displayfullAddress(lat, long)
                 }
+                else {
+                    if (sharedPreferencesManager.getlocationChoice(
+                            SharedKey.GPS.name,
+                            ""
+                        ) == "map"
+                    ) {
+                        val longlat =
+                            sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+                        val longg = longlat!!.first
+                        val latt = longlat.second
+
+                        viewModel.getFiveDaysWeather(latt, longg)
+                        viewModel.getAlertsInfo(latt,longg)
+//                        viewModel.getFiveDaysWeather(latt, longg)
+                        displayAddress(latt, longg)
+                        displayfullAddress(latt, longg)
+
+                    }
+//                    else {
+//                        Toast.makeText(requireContext(),"No location",Toast.LENGTH_SHORT).show()
+//
+//
+//                    }
+                }
+
                 fusedLocationProviderClient.removeLocationUpdates(this)
             }
         }
@@ -176,6 +197,8 @@ class HomeFragment : Fragment() {
             Looper.myLooper()
         )
     }
+    //use the geocoder
+
     fun displayAddress(latitude: Double, longitude: Double) {
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
         if (addresses != null) {
@@ -187,14 +210,16 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     fun displayfullAddress(latitude: Double, longitude: Double) {
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
         if (addresses != null) {
             if (addresses.isNotEmpty()) {
                 val address = addresses[0]
                 val locality = address.adminArea // Extract the city from the address
-                binding.tvFullocation.text = locality.toString()
-
+               if (locality.isNotEmpty()) {
+                   binding.tvFullocation.text = locality!!.toString() //TODO null check!!!
+               }
             }
         }
     }
@@ -210,20 +235,28 @@ class HomeFragment : Fragment() {
 //    }
 
     private fun enableLocation() {
-        Toast.makeText(requireContext(),"Turn On location", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Turn On location", Toast.LENGTH_LONG).show()
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)
 
     }
 
 
-        override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
         geocoder = Geocoder(requireContext(), Locale.getDefault())
         remoteDataSource = RemoteDataSourceImp()
-        repository = WeatherRepositoryImpl.getInstance(remoteDataSource)
+//why context??????????????
+        localDataSourceInte = LocalDataSourceImp(requireContext())
+
+
+        repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
+        favviewModelFactory = FavoriteViewModelFactory(repository)
+        favoriteViewModel = ViewModelProvider(this, favviewModelFactory).get(FavoriteViewModel::class.java)
+
         viewModelFactory = HomeFragmentViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
 
@@ -243,74 +276,246 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.todayDetailsRecView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
-        binding.FivedaysRec.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        binding.todayDetailsRecView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.FivedaysRec.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            viewModel.currentWeather.collectLatest { weatherList ->
+//                when (weatherList) {
+//                    is ApiState.Suceess -> {
+//                        binding.tvTemp.text = "${weatherList.data.main?.temp}°C"
+//                        binding.cloudPercent.text = "${weatherList.data.clouds?.all.toString()}%"
+//                        binding.windPercent.text = weatherList.data.wind?.speed.toString()
+////                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
+//                        binding.humidityPercent.text = weatherList.data.main?.humidity.toString()
+//                        binding.pressurePercent.text = weatherList.data.main?.pressure.toString()
+//                        binding.tvStatus.text = weatherList.data.weather[0].description
+//
+//                        val iconId = weatherList.data.weather[0].icon
+//                        if (iconId != null) {
+//                            Utils.getWeatherIcon(iconId, binding.weatherImgView)
+//                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+//                                binding.backGrou.setAnimation(R.raw.rainbackground)
+//                        }
+//
+//                        binding.FivedaysRec.visibility = View.VISIBLE
+//                        binding.todayDetailsRecView.visibility = View.VISIBLE
+//                    }
+//                    is ApiState.Loading -> {
+//                        binding.FivedaysRec.visibility = View.GONE
+//                        binding.todayDetailsRecView.visibility = View.GONE
+//                    }
+//                    else -> {
+//                        binding.tvTemp.visibility = View.GONE
+//                        Log.i("=====error api", "Error in loading api ")
+//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
+
+
+//todo move to alert fragment
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            viewModel.alertsData.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is OneCallState.Suceess -> {
+                        Log.i("==home fragment alert", ""+weatherResponse.data.alerts)
+
+                    }
+
+                    is OneCallState.Loading -> {
+
+                        Log.i("===lodaing in Alerts", "onViewCreated: ")
+
+                    }
+
+                    else -> {
+
+                        Log.i("===error in Alerts", "onViewCreated: ")
+
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
+
+
 
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.currentWeather.collectLatest { weatherList ->
-                when (weatherList) {
-                    is ApiState.Suceess -> {
-                        binding.tvTemp.text = "${weatherList.data.main?.temp}°C"
-                        binding.cloudPercent.text = "${weatherList.data.clouds?.all.toString()}%"
-                        binding.windPercent.text = weatherList.data.wind?.speed.toString()
-//                        binding.tvDayFormat.text = weatherList.data.dtTxt.toString()
-                        binding.humidityPercent.text = weatherList.data.main?.humidity.toString()
-                        binding.pressurePercent.text = weatherList.data.main?.pressure.toString()
-                        binding.tvStatus.text = weatherList.data.weather[0].description
 
-                        val iconId = weatherList.data.weather[0].icon
+            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is ApiState.Suceess -> {
+                        binding.scrollView2.visibility = View.VISIBLE
+//                        binding.backGrou.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
+
+                        binding.tvTemp.visibility = View.VISIBLE
+                        binding.weatherImgView.visibility = View.VISIBLE
+                        Log.i("===succe in home", "onViewCreated: ")
+
+                        binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
+                        binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
+                        binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString()
+                        binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
+                        binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
+                        binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
+                        binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+
+//                        binding.addbtn.setOnClickListener {
+////                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
+//                            CoroutineScope(Dispatchers.IO).launch {
+////                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+//                            favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+//                                Log.i("===db scope", "onViewCreated: ")
+//                        }
+//                        }
+
+
+//                        binding.deletebtn.setOnClickListener {
+//                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
+//                            CoroutineScope(Dispatchers.IO).launch {
+////                                db.getWeatherDAO().deleteFavByIsFav()
+//                                Log.i("d======eeee","onViewCreated")
+//                                db.getWeatherDAO().deleteFavByLonLat(weatherResponse.data.longitude,weatherResponse.data.latitude)
+//
+//                            }
+//                        }
+
+                        val iconId = weatherResponse.data.list[0].weather[0].icon
                         if (iconId != null) {
                             Utils.getWeatherIcon(iconId, binding.weatherImgView)
                             if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
                                 binding.backGrou.setAnimation(R.raw.rainbackground)
                         }
 
-                        binding.FivedaysRec.visibility = View.VISIBLE
-                        binding.todayDetailsRecView.visibility = View.VISIBLE
                     }
+
+                    is ApiState.Loading -> {
+                        binding.tvTemp.visibility = View.GONE
+                        binding.weatherImgView.visibility = View.GONE
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.scrollView2.visibility = View.GONE
+
+//                        binding.backGrou.visibility = View.VISIBLE
+//                        binding.backGrou.setAnimation(R.raw.clouds)
+
+                        Log.i("===lodaing in home", "onViewCreated: ")
+
+                    }
+
+                    else -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.scrollView2.visibility = View.GONE
+
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
+        //todo change the view model name variabl => todaysData
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is ApiState.Suceess -> {
+                        binding.todayDetailsRecView.visibility = View.VISIBLE
+                        binding.todayDetailsRecView.visibility = View.VISIBLE
+
+                        val forecastList = weatherResponse.data.list
+                        val forecastItems = forecastList
+                            .take(8)// Display only the first 5 forecast items
+                        adapter = FiveDaysAdapter(forecastItems)
+                        binding.todayDetailsRecView.adapter = adapter
+                    }
+
                     is ApiState.Loading -> {
                         binding.FivedaysRec.visibility = View.GONE
                         binding.todayDetailsRecView.visibility = View.GONE
                     }
+
                     else -> {
-                        binding.tvTemp.visibility = View.GONE
-                        Log.i("=====error api", "Error in loading api ")
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
                     }
                 }
             }
-        }
-            //todo change the view model name variabl => todaysData
-        viewModel.fiveDaysWeather.observe(viewLifecycleOwner) { weatherResponse ->
-            // Update the UI with the TODAAAY forecast data
-            val forecastList = weatherResponse.list
-            val forecastItems = forecastList
-                .take(8)// Display only the first 5 forecast items
-            adapter = FiveDaysAdapter(forecastItems)
-            binding.todayDetailsRecView.adapter = adapter
-        }
-         ///TODO the rest of the week !!! Only item per week is enough
-             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) {
-                 weatherResponse ->
-                 val date = Utils.getDatefortvDate(weatherResponse.list[0].dt_txt)
-                 binding.tvDayFormat.text = date.toString()
-            // TODO Update the UI with the TODAAAY forecast data
-                 val filteredList = weatherResponse.list.filter { forecastData ->
-                val time = forecastData.dt_txt.split(" ")[1]
-                val hour = time.split(":")[0].toInt()
-                hour == 12
 
+
+        }
+
+
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is ApiState.Suceess -> {
+                        binding.FivedaysRec.visibility = View.VISIBLE
+                        binding.todayDetailsRecView.visibility = View.VISIBLE
+
+                        val date = Utils.getDatefortvDate(weatherResponse.data.list[0].dt_txt)
+
+//            // TODO Update the UI with the TODAAAY forecast data
+                        val filteredList = weatherResponse.data.list.filter { forecastData ->
+                            val time = forecastData.dt_txt.split(" ")[1]
+                            val hour = time.split(":")[0].toInt()
+                            hour == 12
+                        }
+                        todayadapter = TodayDataAdapter(filteredList)
+                        binding.FivedaysRec.adapter = todayadapter
+                    }
+
+                    is ApiState.Loading -> {
+                        binding.FivedaysRec.visibility = View.GONE
+                        binding.todayDetailsRecView.visibility = View.GONE
+                    }
+
+                    else -> {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
             }
 
-            todayadapter = TodayDataAdapter(filteredList)
-            binding.FivedaysRec.adapter = todayadapter
-        }
+
+            ///TODO the rest of the week !!! Only item per week is enough
+
+//             viewModel.fiveDaysWeather.observe(viewLifecycleOwner) {
+//                 weatherResponse ->
+//                 val date = Utils.getDatefortvDate(weatherResponse.list[0].dt_txt)
+//                 binding.tvDayFormat.text = date.toString()
+//            // TODO Update the UI with the TODAAAY forecast data
+//                 val filteredList = weatherResponse.list.filter { forecastData ->
+//                val time = forecastData.dt_txt.split(" ")[1]
+//                val hour = time.split(":")[0].toInt()
+//                hour == 12
+//
+//            }
+
+//            todayadapter = TodayDataAdapter(filteredList)
+//            binding.FivedaysRec.adapter = todayadapter
 
 
 //        viewModel.getCurrentWeather()
 //        viewModel.getFiveDaysWeather()
+        }
     }
 }
+
 
 
 

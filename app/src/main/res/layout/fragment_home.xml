@@ -7,6 +7,18 @@
     android:background="@color/dark_blue"
     tools:context=".view.HomeFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="173dp"
+        android:layout_height="166dp"
+        android:outlineAmbientShadowColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/backGrou"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backGrou" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/backGrou"
         android:layout_width="match_parent"

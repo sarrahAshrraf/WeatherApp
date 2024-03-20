@@ -1,32 +1,44 @@
 package com.example.weatherapppoject.network
 
-import com.example.WeatherAppProject.WeatherList
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface APIService {
-    @GET("weather?")
-    suspend fun getCureentWeather(
-//        @Query("q") city : String,
-        @Query("lat") lat :Double,
-        @Query("lon") long :Double,
-        @Query("units") units : String,
-        @Query("appid") apiKey : String,
+//    @GET("weather?")
+//    suspend fun getCureentWeather(
+////        @Query("q") city : String,
+//        @Query("lat") lat :Double,
+//        @Query("lon") long :Double,
+//        @Query("units") units : String,
+//        @Query("appid") apiKey : String,
+//
+//        ) : WeatherList
 
-        ) : WeatherList
-
-    @GET("forecast?")
+    @GET("2.5/forecast?")
     suspend fun getForeCast(
 //        @Query("q") city : String,
-        @Query("lat") lat :Double,
-        @Query("lon") long :Double,
-        @Query("units") units : String,
-        @Query("appid") apiKey : String,
-        @Query("lang") lang :String
+        @Query("lat") lat: Double,
+        @Query("lon") long: Double,
+        @Query("units") units: String,
+        @Query("appid") apiKey: String,
+        @Query("lang") lang: String
 
-        ) : WeatherResponse
+    ): WeatherResponse
+
+
+    @GET("3.0/onecall")
+    suspend fun getAlerts(
+        @Query("lat") lat: Double,
+        @Query("lon") long: Double,
+        @Query("units") units: String,
+        @Query("appid") apiKey: String,
+        @Query("lang") lang: String
+
+    ): OneApiCall
+
 }
 
 

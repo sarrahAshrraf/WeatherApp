@@ -1,42 +1,44 @@
 package com.example.weatherapppoject.repository
 
 import android.util.Log
-import com.example.WeatherAppProject.WeatherList
+import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 class WeatherRepositoryImpl private constructor(
-    private val remoteDataSource: RemoteDataSource
-    // private val localDataSource: LocalDataSource
+    private val remoteDataSource: RemoteDataSource,
+     private val localDataSource: LocalDataSourceInte
 ) : WeatherRepositoryInter {
 
     companion object {
         private var instance: WeatherRepositoryImpl? = null
 
-        fun getInstance(remoteDataSource: RemoteDataSource): WeatherRepositoryImpl {
+        fun getInstance(remoteDataSource: RemoteDataSource, localDataSource: LocalDataSourceInte): WeatherRepositoryImpl {
             return instance ?: synchronized(this) {
-                val temp = WeatherRepositoryImpl(remoteDataSource)
+                val temp = WeatherRepositoryImpl(remoteDataSource,localDataSource)
                 instance = temp
                 temp
             }
         }
     }
 
-    override suspend fun getCurrentWeather(
-        latitude: Double,
-        longitude: Double,
-        units: String,
-        apiKey: String
-    ): Flow<WeatherList> {
-        return try {
-            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
-        } catch (e: Exception) {
-            Log.i("===Fai Loding", "FAIL to load: Network")
-            flowOf(WeatherList()) // Return an empty WeatherList object
-        }
-    }
+//    override suspend fun getCurrentWeather(
+//        latitude: Double,
+//        longitude: Double,
+//        units: String,
+//        apiKey: String
+//    ): Flow<WeatherList> {
+//        return try {
+//            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
+//        } catch (e: Exception) {
+//            Log.i("===Fai Loding", "FAIL to load: Network")
+//            flowOf(WeatherList()) // Return an empty WeatherList object
+//        }
+//    }
 
     override suspend fun getFiveDaysWeather(
         latitude: Double,
@@ -44,10 +46,54 @@ class WeatherRepositoryImpl private constructor(
         units: String,
         apiKey: String,
         lang: String
-    ): WeatherResponse {
+    ): Flow<WeatherResponse> {
         Log.i("=====23d", "HI: ")
-        return  remoteDataSource.getFiveDaysInfo(latitude,longitude,units, apiKey, lang)
-
+        return  try {
+            remoteDataSource.getFiveDaysInfo(latitude, longitude, units, apiKey, lang)
+        }catch (e: Exception){
+            Log.i("====Error", "getFiveDaysWeather error: "+e)
+           emptyFlow()
+        }
 
     }
+
+    override suspend fun getAlertData(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): Flow<OneApiCall> {
+        Log.i("=====23d", "HI: ")
+        return  try {
+            remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang)
+        }catch (e: Exception){
+            Log.i("====Error", "get alert in repo error: "+e)
+            emptyFlow()
+        }
+
+    }
+
+
+    //Data Base functions
+    override fun getFavoriteData(): Flow<List<WeatherResponse>> {
+      return  localDataSource.displayAllFav()
+    }
+
+    override suspend fun insertfavIntoDB(
+        fav: WeatherResponse,
+        longitude: Double,
+        latitude: Double
+    ) {
+        localDataSource.setFavoriteData(fav,longitude,latitude)
+    }
+
+    override suspend fun deleteFromFav(weatherData: WeatherResponse) {
+        localDataSource.deleteFavData(weatherData)
+    }
+
+    override fun getFavCityInfo(longitude: Double, latitude: Double) :Flow<WeatherResponse> {
+        return localDataSource.getCityData(longitude,latitude)
+    }
+
 }

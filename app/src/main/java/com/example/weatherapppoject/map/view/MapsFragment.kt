@@ -1,30 +1,43 @@
-package com.example.weatherapppoject.view
+package com.example.weatherapppoject.map.view
 
 import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.databinding.ActivityHomeBinding
-import com.example.weatherapppoject.databinding.FragmentHomeBinding
+import com.example.weatherapppoject.database.LocalDataSourceImp
+import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentMapsBinding
+import com.example.weatherapppoject.favorite.view.FavoriteFragment
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
+import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.network.RemoteDataSource
+import com.example.weatherapppoject.network.RemoteDataSourceImp
+import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
+import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.Utils
+import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class MapsFragment : Fragment() {
@@ -32,10 +45,27 @@ class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
     private lateinit var googleMap: GoogleMap
     private lateinit var sharedPrefrencesManager: SharedPrefrencesManager
+    private lateinit var remoteDataSource: RemoteDataSource
+    private lateinit var localDataSourceInte: LocalDataSourceInte
+    private lateinit var favoriteViewModel: FavoriteViewModel
+    private lateinit var repository: WeatherRepositoryImpl
+    private lateinit var viewModelFactory: FavoriteViewModelFactory
+    private lateinit var homeViewModel: HomeFragmentViewModel
+    private lateinit var homeFactory : HomeFragmentViewModelFactory
+//    private lateinit var latLng: LatLng
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPrefrencesManager = SharedPrefrencesManager.getInstance(requireContext())
+        remoteDataSource = RemoteDataSourceImp()
+        localDataSourceInte = LocalDataSourceImp(requireContext())
+        repository= WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
+
+        viewModelFactory = FavoriteViewModelFactory(repository)
+        favoriteViewModel = ViewModelProvider(this, viewModelFactory).get(FavoriteViewModel::class.java)
+
+        homeFactory = HomeFragmentViewModelFactory(repository)
+        homeViewModel = ViewModelProvider(this, homeFactory).get(HomeFragmentViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -68,8 +98,47 @@ class MapsFragment : Fragment() {
         }
         binding.btnSelectOrAddOnMap.setOnClickListener{
 //            binding.btnSelectOrAddOnMap.isEnabled
-            replaceFragments(HomeFragment())
-            Toast.makeText(requireContext(), "click", Toast.LENGTH_SHORT).show()
+//                sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
+//                favoriteViewModel.addToFavorites()
+//                favoriteViewModel.removeFromFavorites()
+
+            val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
+            val longg = longlat!!.first
+            val latt = longlat.second
+            Log.i("==latttt longggg===", ""+ longg+ latt)
+            lifecycleScope.launch(Dispatchers.Main) {
+                homeViewModel.getFiveDaysWeather(latt,longg)
+                homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                    when (weatherResponse) {
+                        is ApiState.Suceess -> {
+                            Log.i("========Su", "Suceeeee: ")
+                            CoroutineScope(Dispatchers.IO).launch {
+//                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                                favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
+                                Log.i("===db add", "onViewCreated: ")
+                            }
+
+                        }
+
+                        is ApiState.Loading -> {
+                            Log.i("======log", "loding: ")
+
+
+                        }
+
+                        else -> {
+                            Log.i("========errorrr", "rrrrr: ")
+
+                        }
+                    }
+                }
+
+
+            }
+
+            replaceFragments(FavoriteFragment())
+
+            Toast.makeText(requireContext(), "added", Toast.LENGTH_SHORT).show()
 
         }
 

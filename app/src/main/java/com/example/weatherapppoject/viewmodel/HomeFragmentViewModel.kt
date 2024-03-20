@@ -5,12 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.WeatherAppProject.Weather
-import com.example.WeatherAppProject.WeatherList
+
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.repository.WeatherRepositoryInter
 import com.example.weatherapppoject.utils.ApiState
+import com.example.weatherapppoject.utils.OneCallState
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,47 +26,81 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     private val _currentWeather = MutableStateFlow<ApiState>(ApiState.Loading())
     val currentWeather: StateFlow<ApiState> = _currentWeather
 
+    private val _alertData = MutableStateFlow<OneCallState>(OneCallState.Loading())
+    val alertsData: StateFlow<OneCallState> = _alertData
 
-    private val _fiveDaysWeather = MutableLiveData<WeatherResponse>()
-    val fiveDaysWeather: LiveData<WeatherResponse> = _fiveDaysWeather
+    private val _fiveDaysWeather = MutableStateFlow<ApiState>(ApiState.Loading())
+    val fiveDaysWeather: StateFlow<ApiState> = _fiveDaysWeather
 
-//    fun getCurrentWeather(latitude: Double, longitude: Double) {
+//
+//    private val _alertData = MutableLiveData<OneApiCall>()
+//    val alertsData: LiveData<OneApiCall> = _alertData
+
+//    fun getalertsInfo(latitude: Double, longitude: Double) {
 //        viewModelScope.launch {
 //          try{  val units = "metric"
 //            val apiKey = Utils.APIKEY
 //
-//            val weatherList = weatherRepository.getCurrentWeather(latitude, longitude, units, apiKey)
-//            _currentWeather.value = weatherList}
+//            val weatherList = weatherRepository.getAlertData(latitude, longitude, units, apiKey,"en")
+//              _alertData.value = weatherList}
+//
 //          catch (e: Exception) {
 //              Log.i("+======", "getFiveDaysWeather: Eroor" +e)
 //          }
 //        }
 //    }
 
-
+//TODo
     fun getCurrentWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             val units = "metric"
             val apiKey = Utils.APIKEY
-            weatherRepository.getCurrentWeather(latitude, longitude, units, apiKey).collect{
-                _currentWeather.value = ApiState.Suceess(it)
+            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey,"en").collect{
+                _fiveDaysWeather.value = ApiState.Suceess(it)
             }
         }
     }
 
-    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
-        viewModelScope.launch {
-            try {
-                val units = "metric"
-                val apiKey = Utils.APIKEY
-                val lang = "ar"
-                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
-                _fiveDaysWeather.value = weatherResponse
-            } catch (e: Exception) {
-                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
+
+    fun getAlertsInfo(latitude: Double, longitude: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val units = "metric"
+            val apiKey = Utils.APIKEY
+            val lang = "en"
+            weatherRepository.getAlertData(latitude, longitude, units, apiKey, lang).collect{
+                _alertData.value = OneCallState.Suceess(it)
             }
         }
     }
+
+    fun getFiveDaysWeather(latitude: Double, longitude: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val units = "metric"
+            val apiKey = Utils.APIKEY
+            val lang = "en"
+            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect{
+                _fiveDaysWeather.value = ApiState.Suceess(it)
+            }
+        }
+    }
+
+
+
+
+
+//    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
+//        viewModelScope.launch {
+//            try {
+//                val units = "metric"
+//                val apiKey = Utils.APIKEY
+//                val lang = "ar"
+//                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
+//                _fiveDaysWeather.value = weatherResponse
+//            } catch (e: Exception) {
+//                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
+//            }
+//        }
+//    }
 }
 
 

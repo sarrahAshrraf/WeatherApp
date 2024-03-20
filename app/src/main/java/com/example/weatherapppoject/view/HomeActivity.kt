@@ -4,18 +4,16 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
+import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.NetworkManager
@@ -50,14 +48,13 @@ class HomeActivity : AppCompatActivity() {
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
             }else {
-                replaceFragments(SettingsFragment())
-
-//                when (item.itemId) {
-////                    R.id.home -> replaceFragments(BlankFragment())
-//                    R.id.notification -> replaceFragments(NotificationFragment())
-//                    R.id.settings -> replaceFragments(SettingsFragment())
-//                    R.id.favorite -> replaceFragments(FavoriteFragment())
-//                }
+//                replaceFragments(SettingsFragment())
+                when (item.itemId) {
+                    R.id.home -> replaceFragments(HomeFragment())
+                    R.id.notification -> replaceFragments(NotificationFragment())
+                    R.id.settings -> replaceFragments(SettingsFragment())
+                    R.id.favorite -> replaceFragments(FavoriteFragment())
+                }
                     Toast.makeText(this, "No network connection available", Toast.LENGTH_SHORT).show()
 
 
@@ -81,7 +78,7 @@ class HomeActivity : AppCompatActivity() {
         isNetworkAvailable = NetworkManager.isNetworkAvailable(this)
         if (isNetworkAvailable) {
             binding.tvNetworkIndicator.visibility = View.GONE
-            replaceFragments(SettingsFragment())
+            replaceFragments(HomeFragment())
         } else {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
             replaceFragments(HomeFragment())
