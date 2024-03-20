@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.network
 
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -46,5 +47,15 @@ class RemoteDataSourceImp : RemoteDataSource {
         val lang = "ar" // Replace with the desired language
 
         return flowOf( weatherApiService.getForeCast(latitude, longitude , units, apiKey, lang))
+    }
+
+    override suspend fun getALerts(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): Flow<OneApiCall> {
+        return flowOf( weatherApiService.getAlerts(latitude, longitude , units, apiKey, lang))
     }
 }

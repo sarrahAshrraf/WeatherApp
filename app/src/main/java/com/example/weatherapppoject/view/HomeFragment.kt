@@ -49,6 +49,7 @@ import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
+import com.example.weatherapppoject.utils.OneCallState
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -154,6 +155,8 @@ class HomeFragment : Fragment() {
                     var lat = location.latitude
                     viewModel.getFiveDaysWeather(long, lat)
                     viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getAlertsInfo(long,lat)
+
                     displayAddress(lat, long)
                     displayfullAddress(lat, long)
                 }
@@ -169,6 +172,7 @@ class HomeFragment : Fragment() {
                         val latt = longlat.second
 
                         viewModel.getFiveDaysWeather(latt, longg)
+                        viewModel.getAlertsInfo(latt,longg)
 //                        viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)
                         displayfullAddress(latt, longg)
@@ -311,6 +315,39 @@ class HomeFragment : Fragment() {
 //                }
 //            }
 //        }
+
+
+//todo move to alert fragment
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            viewModel.alertsData.collectLatest { weatherResponse ->
+                when (weatherResponse) {
+                    is OneCallState.Suceess -> {
+                        Log.i("==home fragment alert", ""+weatherResponse.data.alerts)
+
+                    }
+
+                    is OneCallState.Loading -> {
+
+                        Log.i("===lodaing in Alerts", "onViewCreated: ")
+
+                    }
+
+                    else -> {
+
+                        Log.i("===error in Alerts", "onViewCreated: ")
+
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
+
 
 
         lifecycleScope.launch(Dispatchers.Main) {

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -56,8 +57,25 @@ class WeatherRepositoryImpl private constructor(
 
     }
 
+    override suspend fun getAlertData(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): Flow<OneApiCall> {
+        Log.i("=====23d", "HI: ")
+        return  try {
+            remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang)
+        }catch (e: Exception){
+            Log.i("====Error", "get alert in repo error: "+e)
+            emptyFlow()
+        }
 
-//Data Base functions
+    }
+
+
+    //Data Base functions
     override fun getFavoriteData(): Flow<List<WeatherResponse>> {
       return  localDataSource.displayAllFav()
     }

@@ -15,8 +15,8 @@ import com.example.weatherapppoject.utils.Utils
 
 class FavoritesAdapter (
     private var forecastArray: List<WeatherResponse>,
-    private val onRemoveClick: (WeatherResponse) -> Unit
-
+    private val onRemoveClick: (WeatherResponse, Int) -> Unit,
+    private val onItemClick: (WeatherResponse, Int) -> Unit
 ): RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
         class ViewHolder(val binding: FavoriteItemBinding) : RecyclerView.ViewHolder(binding.root){}
@@ -38,7 +38,10 @@ class FavoritesAdapter (
                 feelslike.text = currentItem.list[0].weather[0].description
                 dayName.text = currentItem.city.name
                 button.setOnClickListener {
-                    onRemoveClick(currentItem)
+                    onRemoveClick(currentItem, holder.adapterPosition)
+                }
+                cardView.setOnClickListener {
+                    onItemClick(currentItem,holder.adapterPosition)
                 }
 
                 tvTimeRec.text = Utils.getDateAndTime(currentItem.list[0].dt_txt)

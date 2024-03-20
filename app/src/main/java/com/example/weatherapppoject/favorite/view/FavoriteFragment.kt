@@ -88,9 +88,29 @@ class FavoriteFragment : Fragment() {
         favLayoutManager = LinearLayoutManager(requireContext())
 //        favAdapter = FavoritesAdapter(emptyList()) // Pass an empty list initially
 
-        favAdapter = FavoritesAdapter(emptyList()) { product ->
-            favoriteViewModel.removeFromFavorites(product)
-        }
+
+//035551414
+
+        favAdapter = FavoritesAdapter(emptyList(),
+            { product, position ->
+                favoriteViewModel.removeFromFavorites(product)
+            },
+            { product, position ->
+                // Navigate to the new fragment
+                Toast.makeText(requireContext(),"on card",Toast.LENGTH_SHORT).show()
+            }
+        )
+
+
+
+
+
+
+
+        //        favAdapter = FavoritesAdapter(emptyList()) { data ->
+        //            favoriteViewModel.removeFromFavorites(data)
+        //
+        //        }
         favRecyclerView.adapter = favAdapter
         favRecyclerView.layoutManager = favLayoutManager
         favoriteViewModel.showFavItems()
