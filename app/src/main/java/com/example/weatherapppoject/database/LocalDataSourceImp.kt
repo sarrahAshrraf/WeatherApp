@@ -30,6 +30,10 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
     override  fun displayAllFav(): Flow<List<WeatherResponse>> {
         return dao.getFav()
     }
+
+    override fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse> {
+        return dao.getSpecificCityData(longitude,latitude)
+    }
 }
 
 

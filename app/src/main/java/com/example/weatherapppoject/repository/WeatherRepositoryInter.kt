@@ -34,5 +34,6 @@ interface WeatherRepositoryInter {
      fun getFavoriteData(): Flow<List<WeatherResponse>>
      suspend fun insertfavIntoDB(fav: WeatherResponse, longitude: Double, latitude: Double)
      suspend fun deleteFromFav(weatherData: WeatherResponse)
+      fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse>
 
 }

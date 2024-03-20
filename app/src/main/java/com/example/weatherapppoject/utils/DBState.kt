@@ -4,6 +4,7 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 
 sealed class DBState {
     class Suceess(val data: List<WeatherResponse>): DBState()
+    class OneCitySucess(val cityData : WeatherResponse): DBState()
     class Failure (val error: Throwable): DBState()
     class Loading: DBState()
 }

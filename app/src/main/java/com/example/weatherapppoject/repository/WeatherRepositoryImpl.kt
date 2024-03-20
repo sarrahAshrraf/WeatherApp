@@ -91,4 +91,9 @@ class WeatherRepositoryImpl private constructor(
     override suspend fun deleteFromFav(weatherData: WeatherResponse) {
         localDataSource.deleteFavData(weatherData)
     }
+
+    override fun getFavCityInfo(longitude: Double, latitude: Double) :Flow<WeatherResponse> {
+        return localDataSource.getCityData(longitude,latitude)
+    }
+
 }

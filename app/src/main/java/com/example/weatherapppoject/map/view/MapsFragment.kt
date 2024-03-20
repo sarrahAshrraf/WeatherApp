@@ -25,7 +25,6 @@ import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.Utils
-import com.example.weatherapppoject.view.HomeFragment
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 

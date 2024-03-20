@@ -52,4 +52,10 @@ interface WeatherDao {
     @Query("SELECT * FROM weather_data WHERE isFav = 1")
      fun getFav(): Flow<List<WeatherResponse>>
 
+
+     //retrive only a specific city weather
+     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+     @Query("SELECT * FROM weather_data WHERE isFav = 1 AND longitude = :longitude AND latitude = :latitude")
+     fun getSpecificCityData(longitude: Double, latitude: Double): Flow<WeatherResponse>
+
 }

@@ -10,7 +10,9 @@ import com.example.weatherapppoject.utils.DBState
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -19,9 +21,12 @@ class FavoriteViewModel (private val weatherRepository: WeatherRepositoryImpl) :
     private val _favData = MutableStateFlow<DBState>(DBState.Loading())
     val currentWeather: StateFlow<DBState> = _favData
 
+//    private val _favCity = MutableStateFlow<DBState>(DBState.Loading())
+//    val currentWeather: StateFlow<DBState> = _favCity
+
     fun addToFavorites(fav: WeatherResponse, long: Double, lat: Double) {
-        viewModelScope.launch (Dispatchers.IO){
-            weatherRepository.insertfavIntoDB(fav,long,lat)
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.insertfavIntoDB(fav, long, lat)
             Log.i("=======", "addToFavorites: done")
 //            withContext(Dispatchers.Main){
 //                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
@@ -29,7 +34,7 @@ class FavoriteViewModel (private val weatherRepository: WeatherRepositoryImpl) :
         }
     }
 
-    fun removeFromFavorites( weatherData: WeatherResponse) {
+    fun removeFromFavorites(weatherData: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepository.deleteFromFav(weatherData)
         }
@@ -46,6 +51,29 @@ class FavoriteViewModel (private val weatherRepository: WeatherRepositoryImpl) :
                 ///edits here==> products.collect
                 .collect { data ->
                     _favData.value = DBState.Suceess(data)
+                }
+        }
+    }
+
+
+//    fun showWeatherDetails(longitude: Double, latitude: Double) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            weatherRepository.getFavCityInfo(longitude, latitude)
+//
+//        }
+//
+//    }
+
+    fun showWeatherDetails(longitude: Double, latitude: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            weatherRepository.getFavCityInfo(longitude,latitude)
+                .catch { exception ->
+                    _favData.value = DBState.Failure(exception)
+                }
+                ///edits here==> products.collect
+                .collect { data ->
+                    _favData.value = DBState.OneCitySucess(data)
                 }
         }
     }

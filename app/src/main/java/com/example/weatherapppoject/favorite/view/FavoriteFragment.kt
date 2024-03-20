@@ -11,15 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.database.AppDB
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
-import com.example.weatherapppoject.databinding.FavoriteItemBinding
 import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
-import com.example.weatherapppoject.databinding.FragmentHomeBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
@@ -28,16 +24,11 @@ import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
-import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.DBState
-import com.example.weatherapppoject.utils.Utils
-import com.example.weatherapppoject.view.FiveDaysAdapter
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
 import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FavoriteFragment : Fragment() {
@@ -91,12 +82,31 @@ class FavoriteFragment : Fragment() {
 
 //035551414
 
+        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+        val longg = longlat!!.first
+        val latt = longlat.second
+        Log.i("==latttt longggg===", ""+ longg+ latt)
+
         favAdapter = FavoritesAdapter(emptyList(),
             { product, position ->
                 favoriteViewModel.removeFromFavorites(product)
             },
             { product, position ->
                 // Navigate to the new fragment
+
+                val bundle = Bundle().apply {
+
+                    putDoubleArray("longlat", doubleArrayOf(product.longitude, product.latitude))
+                }
+                // Navigate to the new fragment
+                val fragment = FavoriteDetailsFragment()
+                fragment.arguments = bundle
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit()
+
+//                replaceFragments(FavoriteDetailsFragment())
                 Toast.makeText(requireContext(),"on card",Toast.LENGTH_SHORT).show()
             }
         )
@@ -145,10 +155,7 @@ class FavoriteFragment : Fragment() {
 
 
 
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
+
 
 
         floatingActionButton.setOnClickListener {
