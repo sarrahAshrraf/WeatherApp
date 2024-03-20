@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeatherAppPoject</string>
+    <string name="today">اليوم</string>
+    <string name="city">الأسكندرية</string>
+    <string name="dayformat">الأحد مارس 11</string>
+    <string name="weatherstatus">غائم جزئيًا</string>
+    <string name="weathertemp">25</string>
+    <string name="cloudpercent">5%</string>
+    <string name="clouds">الغيوم</string>
+    <string name="next5days">الخمس أيام المقبلة</string>
+    <string name="pressure">الضغط</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="english">الأنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="settings">الإعدادات</string>
+    <string name="language">اللغة</string>
+    <string name="winds">سرعة الرياح</string>
+    <string name="networkstatus">لا يوجد أنترنت</string>
+    <string name="gps">الموقع الحالي</string>
+    <string name="map">خريطة</string>
+    <string name="search_map">أبحث في الخريطة..</string>
+
+
+
+
+
+
+
+
+</resources>
