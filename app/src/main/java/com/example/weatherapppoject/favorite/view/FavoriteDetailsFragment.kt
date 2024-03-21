@@ -7,31 +7,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
-import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
 import com.example.weatherapppoject.databinding.FragmentFavoriteDetailsBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
+import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.DBState
 import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.view.FiveDaysAdapter
 import com.example.weatherapppoject.view.TodayDataAdapter
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -82,13 +77,15 @@ class FavoriteDetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val language = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
         val longLatArray = arguments?.getDoubleArray("longlat")
         if (longLatArray != null && longLatArray.size == 2) {
             val longitude = longLatArray[0]
             val latitude = longLatArray[1]
 
 
-            viewModel.getFiveDaysWeather(latitude,longitude)
+            viewModel.getFiveDaysWeather(latitude,longitude,language)
 
             lifecycleScope.launch(Dispatchers.Main) {
 

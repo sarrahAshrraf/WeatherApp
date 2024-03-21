@@ -19,6 +19,8 @@ import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -26,8 +28,7 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.utils.DBState
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

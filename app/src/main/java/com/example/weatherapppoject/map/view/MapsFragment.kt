@@ -18,6 +18,8 @@ import com.example.weatherapppoject.databinding.FragmentMapsBinding
 import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -25,9 +27,6 @@ import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.Utils
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -105,9 +104,11 @@ class MapsFragment : Fragment() {
             val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
             val longg = longlat!!.first
             val latt = longlat.second
+            val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
             Log.i("==latttt longggg===", ""+ longg+ latt)
             lifecycleScope.launch(Dispatchers.Main) {
-                homeViewModel.getFiveDaysWeather(latt,longg)
+                homeViewModel.getFiveDaysWeather(latt,longg,language )
                 homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
                     when (weatherResponse) {
                         is ApiState.Suceess -> {

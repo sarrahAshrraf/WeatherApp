@@ -20,6 +20,18 @@
     <string name="gps">الموقع الحالي</string>
     <string name="map">خريطة</string>
     <string name="search_map">أبحث في الخريطة..</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="startDate">موعد البداية</string>
+    <string name="cancel">إلغاء</string>
+    <string name="selectLocation">أختر مكان</string>
+    <string name="notification">إشعارات</string>
+    <string name="alarm">منبة</string>
+    <string name="save">حفظ</string>
+    <string name="endDate">موعد الأنتهاء</string>
+
+
+
 
 
 

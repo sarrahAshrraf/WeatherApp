@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.view
+package com.example.weatherapppoject.home.view
 
 
 import android.Manifest
@@ -6,12 +6,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.health.connect.datatypes.ExerciseRoute.Location
-import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
-import android.net.http.HttpException
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -25,48 +21,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresExtension
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.database.AppDB
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
-import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
+import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
-import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
-import com.example.weatherapppoject.network.RetrofitInstance
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.OneCallState
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+import com.example.weatherapppoject.view.FiveDaysAdapter
+import com.example.weatherapppoject.view.TodayDataAdapter
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.time.format.TextStyle
 import java.util.Locale
 
 
@@ -145,16 +129,17 @@ class HomeFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
-
+                val language = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default")
                 if (location != null && sharedPreferencesManager.getlocationChoice(
                         SharedKey.GPS.name,
                         ""
                     ) == "gps"
-                ) {
+                    ) {
+
                     var long = location.longitude
                     var lat = location.latitude
-                    viewModel.getFiveDaysWeather(long, lat)
-                    viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getFiveDaysWeather(long, lat,language)
+                    viewModel.getFiveDaysWeather(long, lat,language)
                     viewModel.getAlertsInfo(long,lat)
 
                     displayAddress(lat, long)
@@ -171,7 +156,7 @@ class HomeFragment : Fragment() {
                         val longg = longlat!!.first
                         val latt = longlat.second
 
-                        viewModel.getFiveDaysWeather(latt, longg)
+                        viewModel.getFiveDaysWeather(latt, longg,language)
                         viewModel.getAlertsInfo(latt,longg)
 //                        viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)

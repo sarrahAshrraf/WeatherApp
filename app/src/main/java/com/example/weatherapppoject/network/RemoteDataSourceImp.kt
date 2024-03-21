@@ -44,7 +44,7 @@ class RemoteDataSourceImp : RemoteDataSource {
         val city = "new york" // Replace with the desired city
         val units = "metric" // Replace with the desired units
         val apiKey = Utils.APIKEY // Replace with your API key
-        val lang = "ar" // Replace with the desired language
+//        val lang = "ar" // Replace with the desired language
 
         return flowOf( weatherApiService.getForeCast(latitude, longitude , units, apiKey, lang))
     }

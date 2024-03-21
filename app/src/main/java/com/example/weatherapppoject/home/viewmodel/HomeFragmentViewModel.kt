@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.viewmodel
+package com.example.weatherapppoject.home.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -73,11 +73,11 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
         }
     }
 
-    fun getFiveDaysWeather(latitude: Double, longitude: Double) {
+    fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val units = "metric"
             val apiKey = Utils.APIKEY
-            val lang = "en"
+//            val lang = "en"
             weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect{
                 _fiveDaysWeather.value = ApiState.Suceess(it)
             }
