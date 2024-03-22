@@ -139,7 +139,7 @@ class HomeFragment : Fragment() {
                     var long = location.longitude
                     var lat = location.latitude
                     viewModel.getFiveDaysWeather(long, lat,language)
-                    viewModel.getFiveDaysWeather(long, lat,language)
+//                    viewModel.getFiveDaysWeather(long, lat,language)
                     viewModel.getAlertsInfo(long,lat)
 
                     displayAddress(lat, long)
@@ -150,9 +150,9 @@ class HomeFragment : Fragment() {
                             SharedKey.GPS.name,
                             ""
                         ) == "map"
-                    ) {
+                        && sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,"")=="home") {
                         val longlat =
-                            sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+                            sharedPreferencesManager.getLocationToHOme(SharedKey.Home.name)
                         val longg = longlat!!.first
                         val latt = longlat.second
 
@@ -163,11 +163,11 @@ class HomeFragment : Fragment() {
                         displayfullAddress(latt, longg)
 
                     }
-//                    else {
-//                        Toast.makeText(requireContext(),"No location",Toast.LENGTH_SHORT).show()
-//
-//
-//                    }
+                    else {
+                        Toast.makeText(requireContext(),"No"+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""),Toast.LENGTH_SHORT).show()
+
+
+                    }
                 }
 
                 fusedLocationProviderClient.removeLocationUpdates(this)
@@ -244,6 +244,7 @@ class HomeFragment : Fragment() {
 
         viewModelFactory = HomeFragmentViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+//        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
     }
 
@@ -256,11 +257,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n", "ResourceType")
+    @SuppressLint("SetTextI18n", "ResourceType", "ShowToast")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
         binding.todayDetailsRecView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.FivedaysRec.layoutManager =
@@ -334,27 +335,33 @@ class HomeFragment : Fragment() {
 
 
 
+//            if (sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,"")=="home" ) {
+                Log.i("======home???", "onViewCreated: "+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""))
+                lifecycleScope.launch(Dispatchers.Main) {
 
-        lifecycleScope.launch(Dispatchers.Main) {
-
-            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
-                when (weatherResponse) {
-                    is ApiState.Suceess -> {
-                        binding.scrollView2.visibility = View.VISIBLE
+                    viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                        when (weatherResponse) {
+                            is ApiState.Suceess -> {
+                                binding.scrollView2.visibility = View.VISIBLE
 //                        binding.backGrou.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
+                                binding.progressBar.visibility = View.GONE
 
-                        binding.tvTemp.visibility = View.VISIBLE
-                        binding.weatherImgView.visibility = View.VISIBLE
-                        Log.i("===succe in home", "onViewCreated: ")
+                                binding.tvTemp.visibility = View.VISIBLE
+                                binding.weatherImgView.visibility = View.VISIBLE
+                                Log.i("===succe in home", "onViewCreated: ")
 
-                        binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
-                        binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
-                        binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString()
-                        binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
-                        binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
-                        binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
-                        binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+                                binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
+                                binding.cloudPercent.text =
+                                    "${weatherResponse.data.list[0].clouds?.all.toString()}%"
+                                binding.windPercent.text =
+                                    weatherResponse.data.list[0].wind?.speed.toString()
+                                binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
+                                binding.humidityPercent.text =
+                                    weatherResponse.data.list[0].main.humidity.toString()
+                                binding.pressurePercent.text =
+                                    weatherResponse.data.list[0].main.pressure.toString()
+                                binding.tvStatus.text =
+                                    weatherResponse.data.list[0].weather[0].description
 
 //                        binding.addbtn.setOnClickListener {
 ////                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
@@ -376,38 +383,42 @@ class HomeFragment : Fragment() {
 //                            }
 //                        }
 
-                        val iconId = weatherResponse.data.list[0].weather[0].icon
-                        if (iconId != null) {
-                            Utils.getWeatherIcon(iconId, binding.weatherImgView)
-                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
-                                binding.backGrou.setAnimation(R.raw.rainbackground)
-                        }
+                                val iconId = weatherResponse.data.list[0].weather[0].icon
+                                if (iconId != null) {
+                                    Utils.getWeatherIcon(iconId, binding.weatherImgView)
+                                    if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+                                        binding.backGrou.setAnimation(R.raw.rainbackground)
+                                }
 
-                    }
+                            }
 
-                    is ApiState.Loading -> {
-                        binding.tvTemp.visibility = View.GONE
-                        binding.weatherImgView.visibility = View.GONE
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.scrollView2.visibility = View.GONE
+                            is ApiState.Loading -> {
+                                binding.tvTemp.visibility = View.GONE
+                                binding.weatherImgView.visibility = View.GONE
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.scrollView2.visibility = View.GONE
 
 //                        binding.backGrou.visibility = View.VISIBLE
 //                        binding.backGrou.setAnimation(R.raw.clouds)
 
-                        Log.i("===lodaing in home", "onViewCreated: ")
+                                Log.i("===lodaing in home", "onViewCreated: ")
 
+                            }
+
+                            else -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.scrollView2.visibility = View.GONE
+
+                            }
+                        }
                     }
 
-                    else -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.scrollView2.visibility = View.GONE
 
-                    }
                 }
-            }
-
-
-        }
+//            }else {
+//                Toast.makeText(requireContext(),"ni",10).show()
+//
+//            }
 
 
 

@@ -39,6 +39,27 @@ class SharedPrefrencesManager private constructor(context: Context){
                 return null
             }
 
+                    fun saveLocationToHOme(key: String, longt: Double, lat:Double) {
+                        val editor = sharedPreferences.edit()
+                        editor.putString(key + "_longt", longt.toString())
+                        editor.putString(key + "_lat", lat.toString())
+                        editor.apply()
+                    }
+
+                fun getLocationToHOme(key: String): Pair<Double, Double>? {
+                    val longtKey = key + "_longt"
+                    val latKey = key + "_lat"
+                    val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+                    val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+
+                    if (longt != null && lat != null) {
+                        return Pair(longt, lat)
+                    }
+
+                    return null
+                }
+
+
                 fun getString(key: String, defaultValue: String): String {
                         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
                 }
@@ -46,7 +67,20 @@ class SharedPrefrencesManager private constructor(context: Context){
                 fun removeKey(key: String) {
                         sharedPreferences.edit().remove(key).apply()
                 }
+//                fun setMap(map:String){
+//                   sharedPreferences.edit().putString(SharedKey.MAP.name,"").apply()
+//
+//                }
+//                fun getSavedMap(): String? {
+//                    return sharedPreferences!!.getString(SharedKey.MAP.name,"")
+//                }
 
+                    fun setMap(key: String, value: String) {
+                        sharedPreferences.edit().putString(key, value).apply()
+                    }
+                    fun getSavedMap(key: String, defaultValue: String): String {
+                        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+                    }
                 companion object {
                         private const val PREF_NAME = "MyAppPreferences"
                         private var instance: SharedPrefrencesManager? = null
@@ -63,7 +97,10 @@ class SharedPrefrencesManager private constructor(context: Context){
 
 enum class SharedKey {
         LANGUAGE,
-        GPS
+        GPS, //location choice ==> gps or map
+        MAP, //type of the map ==> home or fav or alert.
+        Home, // save lan and long to home
+        FAV //save lan and long to fave
 
 
 }

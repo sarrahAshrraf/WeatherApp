@@ -84,10 +84,6 @@ class FavoriteFragment : Fragment() {
 
 //035551414
 
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
 
         favAdapter = FavoritesAdapter(emptyList(),
             { product, position ->
@@ -175,8 +171,10 @@ class FavoriteFragment : Fragment() {
         floatingActionButton.setOnClickListener {
 //            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
             Log.i("==set Onclcik===", "")
+            sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
 
             replaceFragments(MapsFragment())
+//            Toast.makeText(requireContext(), "not fav"+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""), Toast.LENGTH_SHORT).show()
 
         }
 
@@ -191,3 +189,7 @@ class FavoriteFragment : Fragment() {
 
 
 }
+//val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.FAV.name)
+//val longg = longlat!!.first
+//val latt = longlat.second
+//Log.i("==latttt longggg===", ""+ longg+ latt)
