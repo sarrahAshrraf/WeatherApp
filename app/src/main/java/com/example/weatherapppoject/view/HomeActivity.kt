@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.alert.NotificationFragment
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
 import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.home.view.HomeFragment

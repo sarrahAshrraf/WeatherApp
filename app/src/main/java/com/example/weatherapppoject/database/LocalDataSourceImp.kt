@@ -3,6 +3,7 @@ package com.example.weatherapppoject.database
 import android.content.Context
 import android.util.Log
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImp(context: Context): LocalDataSourceInte {
@@ -33,6 +34,18 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
 
     override fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse> {
         return dao.getSpecificCityData(longitude,latitude)
+    }
+
+    override suspend fun setALertData(alert: OneApiCall, longitude: Double, latitude: Double) {
+        return dao.setAsAlerted(alert,longitude,latitude)
+    }
+
+    override suspend fun deleteAlertData(weatherAlertedData: OneApiCall) {
+        dao.deleteAlertDataAll(weatherAlertedData)
+    }
+
+    override fun displayAllAlerts(): Flow<List<OneApiCall>> {
+        return dao.getAlertsData()
     }
 }
 

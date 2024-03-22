@@ -1,7 +1,9 @@
 package com.example.weatherapppoject.forecastmodel
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
+import com.example.weatherapppoject.onecall.model.Alert
 
 
 @Entity(tableName = "weather_data", primaryKeys = ["city", "isFav", "isALert"])
@@ -14,5 +16,7 @@ data class WeatherResponse(
     @ColumnInfo(name = "isALert")  var isALert: Int = 0,
     @ColumnInfo(name = "cod")  val cod: String,
     @ColumnInfo(name = "forecastlist")  val list: MutableList<ForeCastData>,
-    @ColumnInfo(name = "message") val message: Int
+    @ColumnInfo(name = "message") val message: Int,
+//    @Embedded val alert: Alert // Embed the Alert object as a column
+
 )

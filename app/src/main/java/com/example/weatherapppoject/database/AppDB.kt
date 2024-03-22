@@ -8,9 +8,10 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.OneApiCall
 
 //Todo update the entities with -> alerts
-@Database(entities = [WeatherResponse::class] ,exportSchema = false, version = 1)
+@Database(entities = [WeatherResponse::class,OneApiCall::class] ,exportSchema = false, version = 1)
 
 @TypeConverters(Converters::class)
 abstract class AppDB : RoomDatabase() {
@@ -25,7 +26,7 @@ abstract class AppDB : RoomDatabase() {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context.applicationContext, AppDB::class.java,
-                    "rr"
+                    "yal"
                 ).build()
                 INSTANCE = instance
                 instance}

@@ -174,7 +174,6 @@ class FavoriteFragment : Fragment() {
             sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
 
             replaceFragments(MapsFragment())
-//            Toast.makeText(requireContext(), "not fav"+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""), Toast.LENGTH_SHORT).show()
 
         }
 

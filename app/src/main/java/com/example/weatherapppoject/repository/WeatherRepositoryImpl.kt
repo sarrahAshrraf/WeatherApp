@@ -96,4 +96,20 @@ class WeatherRepositoryImpl private constructor(
         return localDataSource.getCityData(longitude,latitude)
     }
 
+    override fun getAlertedData(): Flow<List<OneApiCall>> {
+        return  localDataSource.displayAllAlerts()
+    }
+
+    override suspend fun insertAlertIntoDB(
+        alerts: OneApiCall,
+        longitude: Double,
+        latitude: Double
+    ) {
+        localDataSource.setALertData(alerts,longitude,latitude)
+    }
+
+    override suspend fun deleteFromAlerts(alertWeatherData: OneApiCall) {
+        localDataSource.deleteAlertData(alertWeatherData)
+    }
+
 }

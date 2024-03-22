@@ -8,6 +8,9 @@ import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.Main
 import com.example.weatherapppoject.forecastmodel.Weather
 import com.example.weatherapppoject.forecastmodel.Wind
+import com.example.weatherapppoject.onecall.model.Alert
+import com.example.weatherapppoject.onecall.model.Current
+import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -88,6 +91,56 @@ class Converters {
     @TypeConverter
     fun toCityCord(value: String): Coord {
         return Gson().fromJson(value, Coord::class.java)
+    }
+
+
+
+
+    //==========>alert data
+
+    @TypeConverter
+    fun fromALertList(alerts: List<Alert>?): String {
+        return Gson().toJson(alerts)
+    }
+
+    @TypeConverter
+    fun toALertList(value: String?): List<Alert>? {
+        val listType = object : TypeToken<List<Alert>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromAPiList(forecastList: List<OneApiCall>): String {
+        return Gson().toJson(forecastList)
+    }
+
+    @TypeConverter
+    fun toAPiList(value: String): List<OneApiCall> {
+        val listType = object : TypeToken<List<OneApiCall>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+
+
+//    @TypeConverter
+//    fun fromCurrentList(forecastList: List<Current>): String {
+//        return Gson().toJson(forecastList)
+//    }
+//
+//    @TypeConverter
+//    fun toCurrentList(value: String): List<Current> {
+//        val listType = object : TypeToken<List<Current>>() {}.type
+//        return Gson().fromJson(value, listType)
+//    }
+    @TypeConverter
+    fun fromCurrent(current: Current): String {
+        return Gson().toJson(current)
+    }
+
+    @TypeConverter
+    fun toCurrent(json: String): Current {
+        val type = object : TypeToken<Current>() {}.type
+        return Gson().fromJson(json, type)
     }
 
  }

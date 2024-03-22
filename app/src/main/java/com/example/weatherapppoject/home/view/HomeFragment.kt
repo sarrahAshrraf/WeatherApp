@@ -48,6 +48,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -198,6 +199,7 @@ class HomeFragment : Fragment() {
 
     fun displayfullAddress(latitude: Double, longitude: Double) {
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        Log.i("=====long lat", "long lat of alex: " +longitude +"  "+latitude)
         if (addresses != null) {
             if (addresses.isNotEmpty()) {
                 val address = addresses[0]
@@ -303,32 +305,7 @@ class HomeFragment : Fragment() {
 //        }
 
 
-//todo move to alert fragment
-        lifecycleScope.launch(Dispatchers.Main) {
 
-            viewModel.alertsData.collectLatest { weatherResponse ->
-                when (weatherResponse) {
-                    is OneCallState.Suceess -> {
-                        Log.i("==home fragment alert", ""+weatherResponse.data.alerts)
-
-                    }
-
-                    is OneCallState.Loading -> {
-
-                        Log.i("===lodaing in Alerts", "onViewCreated: ")
-
-                    }
-
-                    else -> {
-
-                        Log.i("===error in Alerts", "onViewCreated: ")
-
-                    }
-                }
-            }
-
-
-        }
 
 
 

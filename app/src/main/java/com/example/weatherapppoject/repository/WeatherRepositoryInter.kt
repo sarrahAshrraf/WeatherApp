@@ -36,4 +36,10 @@ interface WeatherRepositoryInter {
      suspend fun deleteFromFav(weatherData: WeatherResponse)
       fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse>
 
+      ////=>local + alert
+
+    fun getAlertedData(): Flow<List<OneApiCall>>
+    suspend fun insertAlertIntoDB(alerts: OneApiCall, longitude: Double, latitude: Double)
+    suspend fun deleteFromAlerts(alertWeatherData: OneApiCall)
+
 }

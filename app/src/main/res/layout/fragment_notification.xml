@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NotificationFragment">
+    tools:context=".alert.NotificationFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -44,6 +44,7 @@
         app:maxImageSize="40dp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alertsRecView"
         android:layout_width="373dp"
         android:layout_height="615dp"
         app:layout_constraintBottom_toBottomOf="parent"

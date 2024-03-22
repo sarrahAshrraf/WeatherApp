@@ -10,7 +10,9 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.repository.WeatherRepositoryInter
+import com.example.weatherapppoject.utils.ALertDBState
 import com.example.weatherapppoject.utils.ApiState
+import com.example.weatherapppoject.utils.DBState
 import com.example.weatherapppoject.utils.OneCallState
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,15 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     private val _fiveDaysWeather = MutableStateFlow<ApiState>(ApiState.Loading())
     val fiveDaysWeather: StateFlow<ApiState> = _fiveDaysWeather
 
+
+
+////alert
+//    private val _alerts = MutableStateFlow<ALertDBState>(ALertDBState.Loading())
+//    val AlertData: StateFlow<ALertDBState> = _alerts
+
+
+
+
 //
 //    private val _alertData = MutableLiveData<OneApiCall>()
 //    val alertsData: LiveData<OneApiCall> = _alertData
@@ -50,12 +61,12 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //        }
 //    }
 
-//TODo
+    //TODo
     fun getCurrentWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             val units = "metric"
             val apiKey = Utils.APIKEY
-            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey,"en").collect{
+            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, "en").collect {
                 _fiveDaysWeather.value = ApiState.Suceess(it)
             }
         }
@@ -67,7 +78,8 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
             val units = "metric"
             val apiKey = Utils.APIKEY
             val lang = "en"
-            weatherRepository.getAlertData(latitude, longitude, units, apiKey, lang).collect{
+            weatherRepository.getAlertData(46.8182, 8.2275, units, apiKey, lang).collect {
+//            weatherRepository.getAlertData(31.2683793, 30.006182, units, apiKey, lang).collect {
                 _alertData.value = OneCallState.Suceess(it)
             }
         }
@@ -78,11 +90,57 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
             val units = "metric"
             val apiKey = Utils.APIKEY
 //            val lang = "en"
-            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect{
+            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect {
                 _fiveDaysWeather.value = ApiState.Suceess(it)
             }
         }
     }
+
+//insert alert data
+
+
+
+
+//    private val _favCity = MutableStateFlow<DBState>(DBState.Loading())
+//    val currentWeather: StateFlow<DBState> = _favCity
+
+    fun addToAlerts(alerts: OneApiCall, long: Double, lat: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.insertAlertIntoDB(alerts, long, lat)
+            Log.i("=======", "addToFavorites: done")
+//            withContext(Dispatchers.Main){
+//                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
+//            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -101,8 +159,6 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //            }
 //        }
 //    }
-}
-
 
 
 //class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl) : ViewModel()  {
@@ -118,3 +174,5 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //        }
 //    }
 //}
+
+}
