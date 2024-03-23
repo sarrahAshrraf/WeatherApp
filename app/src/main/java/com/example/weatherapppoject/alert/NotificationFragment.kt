@@ -1,11 +1,21 @@
 package com.example.weatherapppoject.alert
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.PendingIntent
+import android.app.TimePickerDialog
+import android.content.DialogInterface
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +41,7 @@ import com.example.weatherapppoject.utils.ALertDBState
 import com.example.weatherapppoject.utils.DBState
 import com.example.weatherapppoject.utils.OneCallState
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.timepicker.MaterialTimePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +62,13 @@ class NotificationFragment : Fragment() {
     private lateinit var alertRecyclerView: RecyclerView
     private lateinit var alertLayoutManager: LinearLayoutManager
     private lateinit var binding: FragmentNotificationBinding
+    private var datePickerDialog: DatePickerDialog?= null
+    private var timePicker: TimePickerDialog?= null
+
+    private lateinit var picker : MaterialTimePicker
+    private lateinit var calendar : Calendar
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var pendingIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +81,10 @@ class NotificationFragment : Fragment() {
         alertViewModel = ViewModelProvider(this, alertViewModelFactory).get(AlertViewModel::class.java)
         alertLayoutManager = LinearLayoutManager(requireContext())
     }
+
+
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNotificationBinding.inflate(inflater, container, false)
@@ -103,7 +125,7 @@ class NotificationFragment : Fragment() {
             alertViewModel.AlertData.collect { state ->
                 when (state) {
                     is ALertDBState.Loading -> {
-                        Toast.makeText(requireContext(),"loadi ",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "loadi ", Toast.LENGTH_SHORT).show()
 
                     }
 
@@ -119,30 +141,249 @@ class NotificationFragment : Fragment() {
                     }
 
                     else -> {
-                        Toast.makeText(requireContext(),"else ", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "else ", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
 
-        // Click listener for FloatingActionButton
-//        binding.AddAlertfloatingActionButton.setOnClickListener {
-//            // Perform network call and insert data into the database
-//            lifecycleScope.launch {
-//                try {
-//                    val weatherResponse = alertViewModel.makeNetworkCall()
-//                    if (weatherResponse != null) {
-//                        alertViewModel.addToAlerts(weatherResponse, weatherResponse.lon, weatherResponse.lat)
-//                        Log.i("===db add", "onViewCreated: ")
-//                    }
-//                } catch (e: Exception) {
-//                    // Handle network call or insertion error
-//                    Log.e("===error in Alerts", "onViewCreated: ", e)
-//                }
-//            }
-//        }
+
+        binding.AddAlertfloatingActionButton.setOnClickListener {
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+            alertDialogBuilder.setTitle("Alert Setup")
+
+            val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null)
+            alertDialogBuilder.setView(dialogView)
+            val alertDialog = alertDialogBuilder.create()
+
+            val tvStart = dialogView.findViewById<TextView>(R.id.tv_start_date)
+            val tvEnd = dialogView.findViewById<TextView>(R.id.tv_end_date)
+            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancelAlert)
+            val btnConfirm = dialogView.findViewById<Button>(R.id.btnSaveAlert)
+            tvStart.setOnClickListener {
+                openDatepicker()
+            }
+            btnCancel.setOnClickListener {
+                alertDialog.dismiss()
+            }
+            btnConfirm.setOnClickListener {
+//             TODO   saveData(txt,txt)
+            }
+
+            alertDialog.show()
+
+        }
+
     }
+
+private fun openDatepicker(){
+    val cldr = Calendar.getInstance()
+    val day= cldr[Calendar.DAY_OF_MONTH]
+    val month = cldr[Calendar.MONTH]
+    val year = cldr[Calendar.YEAR]
+    datePickerDialog = DatePickerDialog(
+        requireContext(),
+        { view, year, monthOfYear, dayOfMonth ->
+            val month = monthOfYear + 1
+            var strMonth = "" + month
+            var strDayOfMonth = "" + dayOfMonth
+            if (month < 10) {
+                strMonth = "0$strMonth"
+            }
+            if (dayOfMonth < 10) {
+                strDayOfMonth = "0$strDayOfMonth"
+            }
+            val date = "$strDayOfMonth / $strMonth /$year"
+            Log.i("======Date" ,"openDatepicker: "+date)
+        } , year, month, day
+    )
+    datePickerDialog!!.setTitle("select date")
+    datePickerDialog!!.setButton(DialogInterface.BUTTON_POSITIVE, "Save") { _, _ ->
+        openTimepicker()
+    }
+    datePickerDialog!!.show()
+//    datePickerDialog.po
 }
+
+
+
+    private fun openTimepicker(){
+        val selectedTime = Calendar.getInstance()
+        val hour= selectedTime[Calendar.HOUR_OF_DAY]
+        val minute = selectedTime[Calendar.MINUTE]
+
+        timePicker = TimePickerDialog(
+            requireContext(),
+            { view, hourOfDay, minuteOfHour ->
+                var hour = "" + hourOfDay
+                var minute = "" + minuteOfHour
+                if (hourOfDay < 10) {
+                    hour = "0$hour"
+                }
+                if (minuteOfHour < 10) {
+                    minute = "0$minute"
+                }
+                val time = "$hour : $minute"
+                Log.i("======Date" ,"openDatepicker: "+time)
+            } , hour, minute, false
+        )
+        timePicker!!.setTitle("select date")
+        timePicker!!.show()
+
+    }
+
+}
+
+
+
+//        binding.AddAlertfloatingActionButton.setOnClickListener {
+//            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+//            alertDialogBuilder.setTitle("Alert Setup")
+//
+//            // Create a custom layout for the AlertDialog
+//            val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null)
+//            alertDialogBuilder.setView(dialogView)
+//
+//            // Get references to the views in the custom layout
+//            val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
+//            val startTimePicker = dialogView.findViewById<TimePicker>(R.id.startTimePicker)
+//            val endTimePicker = dialogView.findViewById<TimePicker>(R.id.endTimePicker)
+//            val tvStart = dialogView.findViewById<TextView>(R.id.tv_start_date)
+//            val tvEnd = dialogView.findViewById<TextView>(R.id.tv_end_date)
+//            datePicker.visibility = View.GONE
+//            startTimePicker.visibility = View.GONE
+//            endTimePicker.visibility = View.GONE
+//
+//            tvStart.setOnClickListener {
+////                datePicker.visibility = View.VISIBLE
+//
+//                startTimePicker.visibility = View.VISIBLE
+//                endTimePicker.visibility = View.GONE
+//            }
+//
+//            tvEnd.setOnClickListener {
+//                startTimePicker.visibility = View.GONE
+//                endTimePicker.visibility = View.VISIBLE
+//            }
+//
+//            alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+//                // Get the selected date from the DatePicker
+//                val year = datePicker.year
+//                val month = datePicker.month
+//                val day = datePicker.dayOfMonth
+//
+//                // Get the selected start time from the TimePicker
+//                val startHour = startTimePicker.hour
+//                val startMinute = startTimePicker.minute
+//
+//                // Get the selected end time from the TimePicker
+//                val endHour = endTimePicker.hour
+//                val endMinute = endTimePicker.minute
+//
+//                // Perform the necessary actions with the selected date and times
+//                // You can access the values using the variables `year`, `month`, `day`, `startHour`, `startMinute`, `endHour`, `endMinute`
+//
+//                // Format the selected date and times as desired
+//                val startDate = String.format("%02d/%02d/%d", day, month + 1, year)
+//                val startTime = String.format("%02d:%02d", startHour, startMinute)
+//                val endTime = String.format("%02d:%02d", endHour, endMinute)
+//
+//                // Display the selected date and times in the main dialog
+//                tvStart.text = startDate + " " + startTime
+//                tvEnd.text = startDate + " " + endTime
+//
+//                dialog.dismiss()
+//            }
+//
+//            alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//
+//            val alertDialog = alertDialogBuilder.create()
+//            alertDialog.show()
+//        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        binding.AddAlertfloatingActionButton.setOnClickListener {
+//
+//            val alertDialogBuilder = AlertDialog.Builder(context)
+//            alertDialogBuilder.setTitle("Alert setup")
+//            alertDialogBuilder.setMessage("setup your alert")
+//            alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+////                alertViewModel.removeFromALerts(product)
+////                dialog.dismiss()
+//            }
+//            alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//            val alertDialog = alertDialogBuilder.create()
+//            alertDialog.show()
+//
+//
+//
+//
+//
+//
+//
+//            // Perform network call and insert data into the database
+////            lifecycleScope.launch {
+////                try {
+////                    val weatherResponse = alertViewModel.makeNetworkCall()
+////                    if (weatherResponse != null) {
+////                        alertViewModel.addToAlerts(weatherResponse, weatherResponse.lon, weatherResponse.lat)
+////                        Log.i("===db add", "onViewCreated: ")
+////                    }
+////                } catch (e: Exception) {
+////                    // Handle network call or insertion error
+////                    Log.e("===error in Alerts", "onViewCreated: ", e)
+////                }
+////            }
+//        }
+
 
 
 

@@ -45,12 +45,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alertsRecView"
-        android:layout_width="373dp"
-        android:layout_height="615dp"
+        android:layout_width="409dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301" />
+        tools:listitem="@layout/alert_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
