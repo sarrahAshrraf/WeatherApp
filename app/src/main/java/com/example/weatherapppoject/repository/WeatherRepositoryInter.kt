@@ -1,5 +1,6 @@
 package com.example.weatherapppoject.repository
 
+import com.example.weatherapppoject.alert.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
@@ -38,8 +39,11 @@ interface WeatherRepositoryInter {
 
       ////=>local + alert
 
-    fun getAlertedData(): Flow<List<OneApiCall>>
-    suspend fun insertAlertIntoDB(alerts: OneApiCall, longitude: Double, latitude: Double)
-    suspend fun deleteFromAlerts(alertWeatherData: OneApiCall)
+//    fun getAlertedData(): Flow<List<OneApiCall>>
+    fun getAlertedData(): Flow<List<AlertData>>
+
+    suspend fun insertAlertIntoDB(alerts: AlertData, longitude: Double, latitude: Double)
+    suspend fun insertAlerts(alert : AlertData)
+    suspend fun deleteFromAlerts(alertWeatherData: AlertData)
 
 }

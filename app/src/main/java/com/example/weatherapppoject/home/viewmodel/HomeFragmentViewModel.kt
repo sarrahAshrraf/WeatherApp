@@ -104,14 +104,14 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //    private val _favCity = MutableStateFlow<DBState>(DBState.Loading())
 //    val currentWeather: StateFlow<DBState> = _favCity
 
-    fun addToAlerts(alerts: OneApiCall, long: Double, lat: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
-            weatherRepository.insertAlertIntoDB(alerts, long, lat)
-            Log.i("=======", "addToFavorites: done")
-//            withContext(Dispatchers.Main){
-//                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
-//            }
-        }
+//    fun addToAlerts(alerts: OneApiCall, long: Double, lat: Double) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            weatherRepository.insertAlertIntoDB(alerts, long, lat)
+//            Log.i("=======", "addToFavorites: done")
+////            withContext(Dispatchers.Main){
+////                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
+////            }
+//        }
     }
 
 
@@ -175,4 +175,3 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
 //    }
 //}
 
-}

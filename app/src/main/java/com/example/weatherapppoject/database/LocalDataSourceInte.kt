@@ -5,7 +5,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.weatherapppoject.alert.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.onecall.model.Alert
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
 
@@ -17,9 +19,10 @@ interface LocalDataSourceInte {
 
      //================ALerts
 
-    suspend fun setALertData (alert: OneApiCall,longitude: Double,latitude: Double)
-    suspend fun deleteAlertData (weatherAlertedData: OneApiCall)
-    fun displayAllAlerts(): Flow<List<OneApiCall>>
+    suspend fun setALertData (alert: AlertData,longitude: Double,latitude: Double)
+    suspend fun deleteAlertData (weatherAlertedData: AlertData)
+    fun displayAllAlerts(): Flow<List<AlertData>>
+    suspend fun insertAlert(alert: AlertData)
 
 
 }

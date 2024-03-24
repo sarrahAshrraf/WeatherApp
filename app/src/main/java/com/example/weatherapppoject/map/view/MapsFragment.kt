@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.alert.view.Alert
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentMapsBinding
@@ -91,6 +92,8 @@ class MapsFragment : Fragment() {
                 addMarkerToMap(latLng, locationName)
             }
         }
+        Log.i("=====maps", " "+sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, ""))
+
 
 //
 //        val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
@@ -115,7 +118,7 @@ class MapsFragment : Fragment() {
 
 //            Log.i("==latttt longggg===", "" + longg + latt)
             if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "fav") {
-
+                    binding.btnSelectOrAddOnMap.text="Add to favorite"
                 val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.FAV.name)
                 val longg = longlat!!.first
                 val latt = longlat.second
@@ -163,6 +166,8 @@ class MapsFragment : Fragment() {
             }
 
             else  if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "home"){
+                binding.btnSelectOrAddOnMap.text="Make current location"
+
 
 //            val ll = sharedPrefrencesManager.getLocationToHOme(SharedKey.GPS.name)
                 val ll = sharedPrefrencesManager.getLocationToHOme(SharedKey.Home.name)
@@ -175,6 +180,20 @@ class MapsFragment : Fragment() {
                 sharedPrefrencesManager.saveLocationToHOme(SharedKey.Home.name, hh,lakktt)
                 replaceFragments(HomeFragment())
 
+
+
+            }
+            else {
+                binding.btnSelectOrAddOnMap.text="Add to alerts"
+
+                val alertLongLat = sharedPrefrencesManager.getLocationToAlert(SharedKey.ALERT.name)
+                val hh = alertLongLat!!.first
+                val lakktt = alertLongLat.second
+//                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
+
+                sharedPrefrencesManager.saveLocationToAlert(SharedKey.ALERT.name, hh,lakktt)
+                replaceFragments(Alert())
 
 
             }
@@ -214,8 +233,12 @@ class MapsFragment : Fragment() {
             Log.i("=====23low", "getAddressFromLatLng: "+sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,""))
             sharedPrefrencesManager.saveLocationToHOme(SharedKey.Home.name, latLng.longitude,latLng.latitude)
         }
-        else{
+        else if(sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,"")=="fav"){
             sharedPrefrencesManager.saveLocationFromMap(SharedKey.FAV.name, latLng.longitude,latLng.latitude)
+        }
+        else{
+            sharedPrefrencesManager.saveLocationToAlert(SharedKey.ALERT.name, latLng.longitude,latLng.latitude)
+
         }
 
 

@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.alert
+package com.example.weatherapppoject.alerts
 
 import android.app.AlarmManager
 import android.app.AlertDialog
@@ -6,6 +6,7 @@ import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.TextView
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,28 +22,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.alerts.service.AlarmReciver
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
-import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
 import com.example.weatherapppoject.databinding.FragmentNotificationBinding
-import com.example.weatherapppoject.favorite.view.FavoriteDetailsFragment
-import com.example.weatherapppoject.favorite.view.FavoritesAdapter
-import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
-import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
-import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ALertDBState
-import com.example.weatherapppoject.utils.DBState
-import com.example.weatherapppoject.utils.OneCallState
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.timepicker.MaterialTimePicker
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -54,9 +43,9 @@ class NotificationFragment : Fragment() {
     private lateinit var floatingActionButton: FloatingActionButton
     private lateinit var remoteDataSource: RemoteDataSource
     private lateinit var localDataSourceInte: LocalDataSourceInte
-    private lateinit var alertViewModel: AlertViewModel
+//    private lateinit var alertViewModel: AlertViewModel
     private lateinit var repository: WeatherRepositoryImpl
-    private lateinit var alertViewModelFactory: AlertViewModelFactory
+//    private lateinit var alertViewModelFactory: AlertViewModelFactory
     private lateinit var sharedPreferencesManager: SharedPrefrencesManager
     private lateinit var alertsAdapter: AlertsAdapter
     private lateinit var alertRecyclerView: RecyclerView
@@ -64,11 +53,13 @@ class NotificationFragment : Fragment() {
     private lateinit var binding: FragmentNotificationBinding
     private var datePickerDialog: DatePickerDialog?= null
     private var timePicker: TimePickerDialog?= null
+    var forgroundServiceIntent: Intent?=null
 
     private lateinit var picker : MaterialTimePicker
     private lateinit var calendar : Calendar
     private lateinit var alarmManager: AlarmManager
     private lateinit var pendingIntent: PendingIntent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +68,12 @@ class NotificationFragment : Fragment() {
         localDataSourceInte = LocalDataSourceImp(requireContext())
         repository = WeatherRepositoryImpl.getInstance(remoteDataSource, localDataSourceInte)
 
-        alertViewModelFactory = AlertViewModelFactory(repository)
-        alertViewModel = ViewModelProvider(this, alertViewModelFactory).get(AlertViewModel::class.java)
+//        alertViewModelFactory = AlertViewModelFactory(repository)
+//        alertViewModel = ViewModelProvider(this, alertViewModelFactory).get(AlertViewModel::class.java)
         alertLayoutManager = LinearLayoutManager(requireContext())
+        forgroundServiceIntent = Intent(requireContext(),AlarmReciver::class.java)
+        //foreground service class
+
     }
 
 
@@ -96,83 +90,83 @@ class NotificationFragment : Fragment() {
 
         binding.alertsRecView.layoutManager = alertLayoutManager
 
-        alertsAdapter = AlertsAdapter(emptyList(),
-            { product, position ->
-                // Delete confirmation dialog
+//        alertsAdapter = AlertsAdapter(emptyList(),
+//            { product, position ->
+//                // Delete confirmation dialog
                 val alertDialogBuilder = AlertDialog.Builder(context)
-                alertDialogBuilder.setTitle("Delete Confirmation")
-                alertDialogBuilder.setMessage("Are you sure you want to remove this item?")
-                alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-                    alertViewModel.removeFromALerts(product)
-                    dialog.dismiss()
-                }
-                alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                val alertDialog = alertDialogBuilder.create()
-                alertDialog.show()
-            },
-            { product, position ->
-                // On card click listener
-                Toast.makeText(requireContext(), "on card", Toast.LENGTH_SHORT).show()
-            }
-        )
+//                alertDialogBuilder.setTitle("Delete Confirmation")
+//                alertDialogBuilder.setMessage("Are you sure you want to remove this item?")
+//                alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+//                    alertViewModel.removeFromALerts(product)
+//                    dialog.dismiss()
+//                }
+//                alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+//                    dialog.dismiss()
+//                }
+//                val alertDialog = alertDialogBuilder.create()
+//                alertDialog.show()
+//            },
+//            { product, position ->
+//                // On card click listener
+//                Toast.makeText(requireContext(), "on card", Toast.LENGTH_SHORT).show()
+//            }
+//        )
+//
+//        binding.alertsRecView.adapter = alertsAdapter
+//        alertViewModel.showAlertsItems()
+//        lifecycleScope.launch(Dispatchers.Main) {
+//
+//            alertViewModel.AlertData.collect { state ->
+//                when (state) {
+//                    is ALertDBState.Loading -> {
+//                        Toast.makeText(requireContext(), "loadi ", Toast.LENGTH_SHORT).show()
+//
+//                    }
+//
+//                    is ALertDBState.Suceess -> {
+//                        val alertData = state.alertdata
+//                        alertsAdapter.submitList(alertData)
+//                        if (alertData.isEmpty()) {
+//                            binding.animationView.visibility = View.VISIBLE
+//                            binding.AddAlertfloatingActionButton.visibility = View.GONE
+//                        } else {
+//                            binding.animationView.visibility = View.GONE
+//                        }
+//                    }
+//
+//                    else -> {
+//                        Toast.makeText(requireContext(), "else ", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
 
-        binding.alertsRecView.adapter = alertsAdapter
-        alertViewModel.showAlertsItems()
-        lifecycleScope.launch(Dispatchers.Main) {
 
-            alertViewModel.AlertData.collect { state ->
-                when (state) {
-                    is ALertDBState.Loading -> {
-                        Toast.makeText(requireContext(), "loadi ", Toast.LENGTH_SHORT).show()
-
-                    }
-
-                    is ALertDBState.Suceess -> {
-                        val alertData = state.alertdata
-                        alertsAdapter.submitList(alertData)
-                        if (alertData.isEmpty()) {
-                            binding.animationView.visibility = View.VISIBLE
-                            binding.AddAlertfloatingActionButton.visibility = View.GONE
-                        } else {
-                            binding.animationView.visibility = View.GONE
-                        }
-                    }
-
-                    else -> {
-                        Toast.makeText(requireContext(), "else ", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-
-
-        binding.AddAlertfloatingActionButton.setOnClickListener {
-            val alertDialogBuilder = AlertDialog.Builder(requireContext())
-            alertDialogBuilder.setTitle("Alert Setup")
-
-            val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null)
-            alertDialogBuilder.setView(dialogView)
-            val alertDialog = alertDialogBuilder.create()
-
-            val tvStart = dialogView.findViewById<TextView>(R.id.tv_start_date)
-            val tvEnd = dialogView.findViewById<TextView>(R.id.tv_end_date)
-            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancelAlert)
-            val btnConfirm = dialogView.findViewById<Button>(R.id.btnSaveAlert)
-            tvStart.setOnClickListener {
-                openDatepicker()
-            }
-            btnCancel.setOnClickListener {
-                alertDialog.dismiss()
-            }
-            btnConfirm.setOnClickListener {
-//             TODO   saveData(txt,txt)
-            }
-
-            alertDialog.show()
-
-        }
+//        binding.AddAlertfloatingActionButton.setOnClickListener {
+//            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+//            alertDialogBuilder.setTitle("Alert Setup")
+//
+//            val dialogView = layoutInflater.inflate(R.layout.alert_dialog, null)
+//            alertDialogBuilder.setView(dialogView)
+//            val alertDialog = alertDialogBuilder.create()
+//
+//            val tvStart = dialogView.findViewById<TextView>(R.id.tv_start_date)
+//            val tvEnd = dialogView.findViewById<TextView>(R.id.tv_end_date)
+//            val btnCancel = dialogView.findViewById<Button>(R.id.btnCancelAlert)
+//            val btnConfirm = dialogView.findViewById<Button>(R.id.btnSaveAlert)
+//            tvStart.setOnClickListener {
+//                openDatepicker()
+//            }
+//            btnCancel.setOnClickListener {
+//                alertDialog.dismiss()
+//            }
+//            btnConfirm.setOnClickListener {
+////             TODO   saveData(txt,txt)
+//            }
+//
+//            alertDialog.show()
+//
+//        }
 
     }
 
@@ -231,6 +225,8 @@ private fun openDatepicker(){
         timePicker!!.show()
 
     }
+
+
 
 }
 

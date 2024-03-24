@@ -2,6 +2,7 @@ package com.example.weatherapppoject.database
 
 import android.content.Context
 import android.util.Log
+import com.example.weatherapppoject.alert.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
@@ -36,16 +37,20 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
         return dao.getSpecificCityData(longitude,latitude)
     }
 
-    override suspend fun setALertData(alert: OneApiCall, longitude: Double, latitude: Double) {
+    override suspend fun setALertData(alert: AlertData, longitude: Double, latitude: Double) {
         return dao.setAsAlerted(alert,longitude,latitude)
     }
 
-    override suspend fun deleteAlertData(weatherAlertedData: OneApiCall) {
+    override suspend fun deleteAlertData(weatherAlertedData: AlertData) {
         dao.deleteAlertDataAll(weatherAlertedData)
     }
 
-    override fun displayAllAlerts(): Flow<List<OneApiCall>> {
+    override fun displayAllAlerts(): Flow<List<AlertData>> {
         return dao.getAlertsData()
+    }
+
+    override suspend fun insertAlert(alert: AlertData) {
+        dao.insertAlert(alert)
     }
 }
 

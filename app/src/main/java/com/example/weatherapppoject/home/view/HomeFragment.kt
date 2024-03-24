@@ -145,6 +145,8 @@ class HomeFragment : Fragment() {
 
                     displayAddress(lat, long)
                     displayfullAddress(lat, long)
+                    sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, long,lat)
+
                 }
                 else {
                     if (sharedPreferencesManager.getlocationChoice(
@@ -162,6 +164,8 @@ class HomeFragment : Fragment() {
 //                        viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)
                         displayfullAddress(latt, longg)
+                        sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, longg,latt)
+
 
                     }
                     else {

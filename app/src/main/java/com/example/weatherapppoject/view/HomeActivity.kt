@@ -12,7 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.alert.NotificationFragment
+import com.example.weatherapppoject.alert.view.Alert
+import com.example.weatherapppoject.alerts.NotificationFragment
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
 import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.home.view.HomeFragment
@@ -45,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
             if (isNetworkAvailable) {
                 when (item.itemId) {
                     R.id.home -> replaceFragments(HomeFragment())
-                    R.id.notification -> replaceFragments(NotificationFragment())
+                    R.id.Alert -> replaceFragments(Alert())
                     R.id.settings -> replaceFragments(SettingsFragment())
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }
@@ -53,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
 //                replaceFragments(SettingsFragment())
                 when (item.itemId) {
                     R.id.home -> replaceFragments(HomeFragment())
-                    R.id.notification -> replaceFragments(NotificationFragment())
+                    R.id.Alert -> replaceFragments(Alert())
                     R.id.settings -> replaceFragments(SettingsFragment())
                     R.id.favorite -> replaceFragments(FavoriteFragment())
                 }

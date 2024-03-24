@@ -60,6 +60,32 @@ class SharedPrefrencesManager private constructor(context: Context){
                 }
 
 
+
+
+
+
+    fun saveLocationToAlert(key: String, longt: Double, lat:Double) {
+        val editor = sharedPreferences.edit()
+        editor.putString(key + "_longt", longt.toString())
+        editor.putString(key + "_lat", lat.toString())
+        editor.apply()
+    }
+
+    fun getLocationToAlert(key: String): Pair<Double, Double>? {
+        val longtKey = key + "_longt"
+        val latKey = key + "_lat"
+        val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+        val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+
+        if (longt != null && lat != null) {
+            return Pair(longt, lat)
+        }
+
+        return null
+    }
+
+
+
                 fun getString(key: String, defaultValue: String): String {
                         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
                 }
@@ -100,7 +126,8 @@ enum class SharedKey {
         GPS, //location choice ==> gps or map
         MAP, //type of the map ==> home or fav or alert.
         Home, // save lan and long to home
-        FAV //save lan and long to fave
+        FAV, //save lan and long to fave
+        ALERT
 
 
 }

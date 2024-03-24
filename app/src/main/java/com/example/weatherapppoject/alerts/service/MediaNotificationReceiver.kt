@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.alert.service
+package com.example.weatherapppoject.alerts.service
 
 import android.content.BroadcastReceiver
 import android.content.Context

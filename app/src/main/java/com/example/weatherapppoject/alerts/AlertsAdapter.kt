@@ -1,8 +1,7 @@
-package com.example.weatherapppoject.alert
+package com.example.weatherapppoject.alerts
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi

@@ -29,15 +29,9 @@
     <string name="alarm">منبة</string>
     <string name="save">حفظ</string>
     <string name="endDate">موعد الأنتهاء</string>
-
-
-
-
-
-
-
-
-
+    <string name="addAlertFrom">أحفظ تنبيه من</string>
+    <string name="completeDetails">Compelete alert setup</string>
+    <string name="currentLocation">Current location</string>
 
 
 </resources>

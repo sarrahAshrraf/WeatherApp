@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
+import com.example.weatherapppoject.alert.AlertData
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
@@ -65,20 +66,20 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertALertData(weatherData: OneApiCall)
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * FROM alert_data")
-    fun getAlertsData(): Flow<List<OneApiCall>>
+    @Query("SELECT * FROM datay")
+    fun getAlertsData(): Flow<List<AlertData>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAlert(favorite: OneApiCall)
+    suspend fun insertAlert(favorite: AlertData)
     @Transaction
-    suspend fun setAsAlerted(alert: OneApiCall, longitude: Double, latitude: Double) {
-        alert.isALert = 1
-        alert.lat = latitude
-        alert.lon = longitude
+    suspend fun setAsAlerted(alert: AlertData, longitude: Double, latitude: Double) {
+//        alert.isALert = 1
+//        alert.lat = latitude
+//        alert.lon = longitude
         Log.i("====db set", "setAsFavorite: ")
         insertAlert(alert)
     }
 
     @Delete
-    suspend fun deleteAlertDataAll(weatherData: OneApiCall)
+    suspend fun deleteAlertDataAll(weatherData: AlertData)
 }

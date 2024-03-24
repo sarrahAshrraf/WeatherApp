@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.repository
 
 import android.util.Log
+import com.example.weatherapppoject.alert.AlertData
 import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
@@ -96,19 +97,23 @@ class WeatherRepositoryImpl private constructor(
         return localDataSource.getCityData(longitude,latitude)
     }
 
-    override fun getAlertedData(): Flow<List<OneApiCall>> {
+    override fun getAlertedData(): Flow<List<AlertData>> {
         return  localDataSource.displayAllAlerts()
     }
 
     override suspend fun insertAlertIntoDB(
-        alerts: OneApiCall,
+        alerts: AlertData,
         longitude: Double,
         latitude: Double
     ) {
         localDataSource.setALertData(alerts,longitude,latitude)
     }
 
-    override suspend fun deleteFromAlerts(alertWeatherData: OneApiCall) {
+    override suspend fun insertAlerts(alert: AlertData) {
+        localDataSource.insertAlert(alert)
+    }
+
+    override suspend fun deleteFromAlerts(alertWeatherData: AlertData) {
         localDataSource.deleteAlertData(alertWeatherData)
     }
 

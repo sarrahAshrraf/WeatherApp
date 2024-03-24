@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.alert.service
+package com.example.weatherapppoject.alerts.service
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -10,7 +10,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.alert.NotificationFragment
+import com.example.weatherapppoject.alerts.NotificationFragment
 
 class AlarmReciver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent1: Intent?) {

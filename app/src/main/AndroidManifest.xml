@@ -6,15 +6,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-                                <!--ALARM-->
-
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- ALARM -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -26,7 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherAppPoject"
         tools:targetApi="31">
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -40,9 +38,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyATC4Zk0_xofsFUTm0GRIyNej3syHx5oro" />
-
-        <!-- <meta-data -->
+            android:value="AIzaSyATC4Zk0_xofsFUTm0GRIyNej3syHx5oro" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.maps.v2.AIzaSyBJ_XlxltqRMHEaqUxKak6LkIb0jt4qRWM" -->
         <!-- android:value="AIzaSyBJ_XlxltqRMHEaqUxKak6LkIb0jt4qRWM" /> -->
         <activity
@@ -57,7 +53,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <receiver android:name=".alert.service.AlarmReciver"/>-->
+
+        <receiver android:name=".alert.view.AlarmReceiver"
+            android:exported="true"
+            android:enabled="true"
+            />
+
     </application>
 
 </manifest>
