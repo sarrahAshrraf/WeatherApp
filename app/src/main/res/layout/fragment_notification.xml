@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NotificationFragment">
+    tools:context=".alerts.NotificationFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -23,13 +23,34 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/nonotification" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/AddAlertfloatingActionButton"
+        android:layout_width="69dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="307dp"
+        android:layout_marginTop="586dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="70dp"
+        android:clickable="true"
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/alert"
+        app:fabCustomSize="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:maxImageSize="40dp" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="373dp"
-        android:layout_height="615dp"
+        android:id="@+id/alertsRecView"
+        android:layout_width="409dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301" />
+        tools:listitem="@layout/alert_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

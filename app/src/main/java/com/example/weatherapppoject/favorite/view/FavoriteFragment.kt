@@ -19,6 +19,8 @@ import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -26,8 +28,7 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.utils.DBState
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,10 +84,6 @@ class FavoriteFragment : Fragment() {
 
 //035551414
 
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
 
         favAdapter = FavoritesAdapter(emptyList(),
             { product, position ->
@@ -174,6 +171,7 @@ class FavoriteFragment : Fragment() {
         floatingActionButton.setOnClickListener {
 //            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
             Log.i("==set Onclcik===", "")
+            sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
 
             replaceFragments(MapsFragment())
 
@@ -190,3 +188,7 @@ class FavoriteFragment : Fragment() {
 
 
 }
+//val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.FAV.name)
+//val longg = longlat!!.first
+//val latt = longlat.second
+//Log.i("==latttt longggg===", ""+ longg+ latt)

@@ -34,6 +34,8 @@ class FavoriteViewModel (private val weatherRepository: WeatherRepositoryImpl) :
         }
     }
 
+//    fun addToALert
+
     fun removeFromFavorites(weatherData: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepository.deleteFromFav(weatherData)

@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.view
+package com.example.weatherapppoject.home.view
 
 
 import android.Manifest
@@ -6,12 +6,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.health.connect.datatypes.ExerciseRoute.Location
-import android.location.Address
 import android.location.Geocoder
 import android.location.LocationManager
-import android.net.http.HttpException
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
@@ -25,48 +21,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresExtension
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.database.AppDB
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
-import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.databinding.FragmentHomeBinding
+import com.example.weatherapppoject.utils.Utils
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
-import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
-import com.example.weatherapppoject.network.RetrofitInstance
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.OneCallState
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+import com.example.weatherapppoject.view.FiveDaysAdapter
+import com.example.weatherapppoject.view.TodayDataAdapter
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.time.format.TextStyle
 import java.util.Locale
 
 
@@ -145,44 +130,49 @@ class HomeFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
-
+                val language = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default")
                 if (location != null && sharedPreferencesManager.getlocationChoice(
                         SharedKey.GPS.name,
                         ""
                     ) == "gps"
-                ) {
+                    ) {
+
                     var long = location.longitude
                     var lat = location.latitude
-                    viewModel.getFiveDaysWeather(long, lat)
-                    viewModel.getFiveDaysWeather(long, lat)
+                    viewModel.getFiveDaysWeather(long, lat,language)
+//                    viewModel.getFiveDaysWeather(long, lat,language)
                     viewModel.getAlertsInfo(long,lat)
 
                     displayAddress(lat, long)
                     displayfullAddress(lat, long)
+                    sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, long,lat)
+
                 }
                 else {
                     if (sharedPreferencesManager.getlocationChoice(
                             SharedKey.GPS.name,
                             ""
                         ) == "map"
-                    ) {
+                        && sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,"")=="home") {
                         val longlat =
-                            sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
+                            sharedPreferencesManager.getLocationToHOme(SharedKey.Home.name)
                         val longg = longlat!!.first
                         val latt = longlat.second
 
-                        viewModel.getFiveDaysWeather(latt, longg)
+                        viewModel.getFiveDaysWeather(latt, longg,language)
                         viewModel.getAlertsInfo(latt,longg)
 //                        viewModel.getFiveDaysWeather(latt, longg)
                         displayAddress(latt, longg)
                         displayfullAddress(latt, longg)
+                        sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, longg,latt)
+
 
                     }
-//                    else {
-//                        Toast.makeText(requireContext(),"No location",Toast.LENGTH_SHORT).show()
-//
-//
-//                    }
+                    else {
+                        Toast.makeText(requireContext(),"No"+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""),Toast.LENGTH_SHORT).show()
+
+
+                    }
                 }
 
                 fusedLocationProviderClient.removeLocationUpdates(this)
@@ -213,6 +203,7 @@ class HomeFragment : Fragment() {
 
     fun displayfullAddress(latitude: Double, longitude: Double) {
         val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+        Log.i("=====long lat", "long lat of alex: " +longitude +"  "+latitude)
         if (addresses != null) {
             if (addresses.isNotEmpty()) {
                 val address = addresses[0]
@@ -259,6 +250,7 @@ class HomeFragment : Fragment() {
 
         viewModelFactory = HomeFragmentViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+//        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
     }
 
@@ -271,11 +263,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n", "ResourceType")
+    @SuppressLint("SetTextI18n", "ResourceType", "ShowToast")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
         binding.todayDetailsRecView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.FivedaysRec.layoutManager =
@@ -317,32 +309,6 @@ class HomeFragment : Fragment() {
 //        }
 
 
-//todo move to alert fragment
-        lifecycleScope.launch(Dispatchers.Main) {
-
-            viewModel.alertsData.collectLatest { weatherResponse ->
-                when (weatherResponse) {
-                    is OneCallState.Suceess -> {
-                        Log.i("==home fragment alert", ""+weatherResponse.data.alerts)
-
-                    }
-
-                    is OneCallState.Loading -> {
-
-                        Log.i("===lodaing in Alerts", "onViewCreated: ")
-
-                    }
-
-                    else -> {
-
-                        Log.i("===error in Alerts", "onViewCreated: ")
-
-                    }
-                }
-            }
-
-
-        }
 
 
 
@@ -350,26 +316,33 @@ class HomeFragment : Fragment() {
 
 
 
-        lifecycleScope.launch(Dispatchers.Main) {
+//            if (sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,"")=="home" ) {
+                Log.i("======home???", "onViewCreated: "+sharedPreferencesManager.getSavedMap(SharedKey.MAP.name,""))
+                lifecycleScope.launch(Dispatchers.Main) {
 
-            viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
-                when (weatherResponse) {
-                    is ApiState.Suceess -> {
-                        binding.scrollView2.visibility = View.VISIBLE
+                    viewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                        when (weatherResponse) {
+                            is ApiState.Suceess -> {
+                                binding.scrollView2.visibility = View.VISIBLE
 //                        binding.backGrou.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
+                                binding.progressBar.visibility = View.GONE
 
-                        binding.tvTemp.visibility = View.VISIBLE
-                        binding.weatherImgView.visibility = View.VISIBLE
-                        Log.i("===succe in home", "onViewCreated: ")
+                                binding.tvTemp.visibility = View.VISIBLE
+                                binding.weatherImgView.visibility = View.VISIBLE
+                                Log.i("===succe in home", "onViewCreated: ")
 
-                        binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
-                        binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
-                        binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString()
-                        binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
-                        binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
-                        binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
-                        binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+                                binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
+                                binding.cloudPercent.text =
+                                    "${weatherResponse.data.list[0].clouds?.all.toString()}%"
+                                binding.windPercent.text =
+                                    weatherResponse.data.list[0].wind?.speed.toString()
+                                binding.tvDayFormat.text = weatherResponse.data.list[0].dt_txt
+                                binding.humidityPercent.text =
+                                    weatherResponse.data.list[0].main.humidity.toString()
+                                binding.pressurePercent.text =
+                                    weatherResponse.data.list[0].main.pressure.toString()
+                                binding.tvStatus.text =
+                                    weatherResponse.data.list[0].weather[0].description
 
 //                        binding.addbtn.setOnClickListener {
 ////                            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
@@ -391,38 +364,42 @@ class HomeFragment : Fragment() {
 //                            }
 //                        }
 
-                        val iconId = weatherResponse.data.list[0].weather[0].icon
-                        if (iconId != null) {
-                            Utils.getWeatherIcon(iconId, binding.weatherImgView)
-                            if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
-                                binding.backGrou.setAnimation(R.raw.rainbackground)
-                        }
+                                val iconId = weatherResponse.data.list[0].weather[0].icon
+                                if (iconId != null) {
+                                    Utils.getWeatherIcon(iconId, binding.weatherImgView)
+                                    if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
+                                        binding.backGrou.setAnimation(R.raw.rainbackground)
+                                }
 
-                    }
+                            }
 
-                    is ApiState.Loading -> {
-                        binding.tvTemp.visibility = View.GONE
-                        binding.weatherImgView.visibility = View.GONE
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.scrollView2.visibility = View.GONE
+                            is ApiState.Loading -> {
+                                binding.tvTemp.visibility = View.GONE
+                                binding.weatherImgView.visibility = View.GONE
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.scrollView2.visibility = View.GONE
 
 //                        binding.backGrou.visibility = View.VISIBLE
 //                        binding.backGrou.setAnimation(R.raw.clouds)
 
-                        Log.i("===lodaing in home", "onViewCreated: ")
+                                Log.i("===lodaing in home", "onViewCreated: ")
 
+                            }
+
+                            else -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.scrollView2.visibility = View.GONE
+
+                            }
+                        }
                     }
 
-                    else -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.scrollView2.visibility = View.GONE
 
-                    }
                 }
-            }
-
-
-        }
+//            }else {
+//                Toast.makeText(requireContext(),"ni",10).show()
+//
+//            }
 
 
 

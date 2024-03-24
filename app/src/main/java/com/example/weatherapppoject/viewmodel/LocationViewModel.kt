@@ -1,6 +1,7 @@
 package com.example.weatherapppoject.viewmodel
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
@@ -17,7 +18,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import java.util.Locale
 
-class LocationViewModel(private val context: Context) : ViewModel() {
+class LocationViewModel(@SuppressLint("StaticFieldLeak") private val context: Context) : ViewModel() {
     private val _currentLocation = MutableLiveData<Location>()
     val currentLocation: LiveData<Location> = _currentLocation
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient

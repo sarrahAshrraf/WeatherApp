@@ -12,12 +12,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherapppoject.R
+import com.example.weatherapppoject.alert.view.Alert
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentMapsBinding
 import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.home.view.HomeFragment
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -25,9 +29,6 @@ import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ApiState
 import com.example.weatherapppoject.utils.Utils
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -53,6 +54,8 @@ class MapsFragment : Fragment() {
     private lateinit var homeViewModel: HomeFragmentViewModel
     private lateinit var homeFactory : HomeFragmentViewModelFactory
 //    private lateinit var latLng: LatLng
+    private var lati = 0.0
+    private var longgi =0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +92,16 @@ class MapsFragment : Fragment() {
                 addMarkerToMap(latLng, locationName)
             }
         }
+        Log.i("=====maps", " "+sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, ""))
+
+
+//
+//        val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
+//        val longg = longlat!!.first
+//        val latt = longlat.second
+//        val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
+
 
         binding.imgSearchIcon.setOnClickListener {
             val searchQuery = binding.etSearchMap.text.toString()
@@ -96,50 +109,94 @@ class MapsFragment : Fragment() {
                 searchLocation(searchQuery)
             }
         }
-        binding.btnSelectOrAddOnMap.setOnClickListener{
+        binding.btnSelectOrAddOnMap.setOnClickListener {
 //            binding.btnSelectOrAddOnMap.isEnabled
 //                sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
 //                favoriteViewModel.addToFavorites()
 //                favoriteViewModel.removeFromFavorites()
 
-            val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.GPS.name)
-            val longg = longlat!!.first
-            val latt = longlat.second
-            Log.i("==latttt longggg===", ""+ longg+ latt)
-            lifecycleScope.launch(Dispatchers.Main) {
-                homeViewModel.getFiveDaysWeather(latt,longg)
-                homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
-                    when (weatherResponse) {
-                        is ApiState.Suceess -> {
-                            Log.i("========Su", "Suceeeee: ")
-                            CoroutineScope(Dispatchers.IO).launch {
+
+//            Log.i("==latttt longggg===", "" + longg + latt)
+            if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "fav") {
+                    binding.btnSelectOrAddOnMap.text="Add to favorite"
+                val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.FAV.name)
+                val longg = longlat!!.first
+                val latt = longlat.second
+                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
+
+                lifecycleScope.launch(Dispatchers.Main) {
+                    homeViewModel.getFiveDaysWeather(latt, longg, language)
+                    homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
+                        when (weatherResponse) {
+                            is ApiState.Suceess -> {
+                                Log.i("========Su", "Suceeeee: ")
+                                CoroutineScope(Dispatchers.IO).launch {
 //                                db.getWeatherDAO().setAsFavorite(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
-                                favoriteViewModel.addToFavorites(weatherResponse.data,weatherResponse.data.city.coord.lon,weatherResponse.data.city.coord.lat)
-                                Log.i("===db add", "onViewCreated: ")
+                                    favoriteViewModel.addToFavorites(
+                                        weatherResponse.data,
+                                        weatherResponse.data.city.coord.lon,
+                                        weatherResponse.data.city.coord.lat
+                                    )
+                                    Log.i("===db add", "onViewCreated: ")
+                                }
+
                             }
 
-                        }
-
-                        is ApiState.Loading -> {
-                            Log.i("======log", "loding: ")
+                            is ApiState.Loading -> {
+                                Log.i("======log", "loding: ")
 
 
-                        }
+                            }
 
-                        else -> {
-                            Log.i("========errorrr", "rrrrr: ")
+                            else -> {
+                                Log.i("========errorrr", "rrrrr: ")
 
+                            }
                         }
                     }
+
+
                 }
 
+                replaceFragments(FavoriteFragment())
+
+                Toast.makeText(requireContext(), "added", Toast.LENGTH_SHORT).show()
 
             }
 
-            replaceFragments(FavoriteFragment())
+            else  if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "home"){
+                binding.btnSelectOrAddOnMap.text="Make current location"
 
-            Toast.makeText(requireContext(), "added", Toast.LENGTH_SHORT).show()
 
+//            val ll = sharedPrefrencesManager.getLocationToHOme(SharedKey.GPS.name)
+                val ll = sharedPrefrencesManager.getLocationToHOme(SharedKey.Home.name)
+                val hh = ll!!.first
+                val lakktt = ll.second
+                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
+
+
+                sharedPrefrencesManager.saveLocationToHOme(SharedKey.Home.name, hh,lakktt)
+                replaceFragments(HomeFragment())
+
+
+
+            }
+            else {
+                binding.btnSelectOrAddOnMap.text="Add to alerts"
+
+                val alertLongLat = sharedPrefrencesManager.getLocationToAlert(SharedKey.ALERT.name)
+                val hh = alertLongLat!!.first
+                val lakktt = alertLongLat.second
+//                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+
+
+                sharedPrefrencesManager.saveLocationToAlert(SharedKey.ALERT.name, hh,lakktt)
+                replaceFragments(Alert())
+
+
+            }
         }
 
         binding.imgClearSearch.setOnClickListener {
@@ -171,14 +228,28 @@ class MapsFragment : Fragment() {
         googleMap.addMarker(MarkerOptions().position(latLng).title(title))
         val locationFromMark = getAddressFromLatLng(latLng)
         binding.etSearchMap.setText(locationFromMark)
-        sharedPrefrencesManager.savelocationChoice(SharedKey.GPS.name , "map")
-        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
+//        sharedPrefrencesManager.savelocationChoice(SharedKey.GPS.name , "map")
+        if(sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,"")=="home"){
+            Log.i("=====23low", "getAddressFromLatLng: "+sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,""))
+            sharedPrefrencesManager.saveLocationToHOme(SharedKey.Home.name, latLng.longitude,latLng.latitude)
+        }
+        else if(sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,"")=="fav"){
+            sharedPrefrencesManager.saveLocationFromMap(SharedKey.FAV.name, latLng.longitude,latLng.latitude)
+        }
+        else{
+            sharedPrefrencesManager.saveLocationToAlert(SharedKey.ALERT.name, latLng.longitude,latLng.latitude)
+
+        }
+
+
+
+//        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
 
     }
 
     private fun getAddressFromLatLng(latLng: LatLng): String {
         val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
+//        sharedPrefrencesManager.saveLocationFromMap(SharedKey.GPS.name, latLng.longitude,latLng.latitude)
         return if (addresses!!.isNotEmpty()) {
             addresses[0]!!.getAddressLine(0)
         } else {

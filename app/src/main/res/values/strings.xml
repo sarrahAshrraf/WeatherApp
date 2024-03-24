@@ -20,6 +20,18 @@
     <string name="gps">GPS</string>
     <string name="map">Map</string>
     <string name="search_map">Search…</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="startDate">start Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="selectLocation">Select Location</string>
+    <string name="notification">Notification</string>
+    <string name="alarm">Alarm</string>
+    <string name="save">Save</string>
+    <string name="endDate">End Date</string>
+    <string name="addAlertFrom">Add alert from </string>
+    <string name="completeDetails">Compelete alert setup</string>
+    <string name="currentLocation">Current location</string>
 
 
 </resources>

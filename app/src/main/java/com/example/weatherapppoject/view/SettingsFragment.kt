@@ -33,6 +33,7 @@ class SettingsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         // Get the SharedPreferencesManager instance
         sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
+        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
           }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,8 +47,10 @@ class SettingsFragment : Fragment() {
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "map")
+                        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
-//                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
+
+                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
                         replaceFragments(MapsFragment())
                         //TODO open map view
                     } else {
@@ -59,6 +62,8 @@ class SettingsFragment : Fragment() {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "gps")
+                        sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
+
 
                     } else {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)

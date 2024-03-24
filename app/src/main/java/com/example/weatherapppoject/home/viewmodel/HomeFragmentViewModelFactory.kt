@@ -1,9 +1,8 @@
-package com.example.weatherapppoject.viewmodel
+package com.example.weatherapppoject.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
-import com.example.weatherapppoject.repository.WeatherRepositoryInter
 
 class HomeFragmentViewModelFactory (
     val weathRepo: WeatherRepositoryImpl
