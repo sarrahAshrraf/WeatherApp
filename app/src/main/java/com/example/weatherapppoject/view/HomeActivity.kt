@@ -13,10 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.alert.view.Alert
-import com.example.weatherapppoject.alerts.NotificationFragment
 import com.example.weatherapppoject.databinding.ActivityHomeBinding
 import com.example.weatherapppoject.favorite.view.FavoriteFragment
 import com.example.weatherapppoject.home.view.HomeFragment
+import com.example.weatherapppoject.settings.SettingsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.NetworkManager

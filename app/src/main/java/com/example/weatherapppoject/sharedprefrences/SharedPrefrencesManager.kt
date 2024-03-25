@@ -11,9 +11,19 @@ class SharedPrefrencesManager private constructor(context: Context){
                 private val sharedPreferences: SharedPreferences =
                         context.applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-                fun saveString(key: String, value: String) {
+                fun saveLanguage(key: String, value: String) {
                         sharedPreferences.edit().putString(key, value).apply()
                 }
+
+
+
+    fun getLanguae(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+
+    fun removeKey(key: String) {
+        sharedPreferences.edit().remove(key).apply()
+    }
                 fun saveLocationFromMap(key: String, longt: Double, lat:Double) {
                     val editor = sharedPreferences.edit()
                     editor.putString(key + "_longt", longt.toString())
@@ -85,14 +95,6 @@ class SharedPrefrencesManager private constructor(context: Context){
     }
 
 
-
-                fun getString(key: String, defaultValue: String): String {
-                        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
-                }
-
-                fun removeKey(key: String) {
-                        sharedPreferences.edit().remove(key).apply()
-                }
 //                fun setMap(map:String){
 //                   sharedPreferences.edit().putString(SharedKey.MAP.name,"").apply()
 //

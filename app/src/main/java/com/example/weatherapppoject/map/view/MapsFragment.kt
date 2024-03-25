@@ -122,7 +122,7 @@ class MapsFragment : Fragment() {
                 val longlat = sharedPrefrencesManager.getLocationFromMap(SharedKey.FAV.name)
                 val longg = longlat!!.first
                 val latt = longlat.second
-                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+                val language = sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
 
 
                 lifecycleScope.launch(Dispatchers.Main) {
@@ -173,7 +173,7 @@ class MapsFragment : Fragment() {
                 val ll = sharedPrefrencesManager.getLocationToHOme(SharedKey.Home.name)
                 val hh = ll!!.first
                 val lakktt = ll.second
-                val language = sharedPrefrencesManager.getString(SharedKey.LANGUAGE.name, "default")
+                val language = sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
 
 
 

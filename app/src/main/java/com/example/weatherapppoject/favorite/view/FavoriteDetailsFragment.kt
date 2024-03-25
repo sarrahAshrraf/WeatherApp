@@ -45,6 +45,7 @@ class FavoriteDetailsFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
     lateinit var HomeviewModelFactory: HomeFragmentViewModelFactory
     private lateinit var fuoadapter : FavoritesAdapter
+    private var language : String ="default"
 
 
 
@@ -77,7 +78,7 @@ class FavoriteDetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val language = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default")
+        language = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
 
         val longLatArray = arguments?.getDoubleArray("longlat")
         if (longLatArray != null && longLatArray.size == 2) {
@@ -97,7 +98,7 @@ class FavoriteDetailsFragment : Fragment() {
                             val forecastList = weatherResponse.data.list
                             val forecastItems = forecastList
                                 .take(8)// Display only the first 5 forecast items
-                            adapter = FiveDaysAdapter(forecastItems)
+                            adapter = FiveDaysAdapter(forecastItems,language)
                             binding.todayDetailsRecView.adapter = adapter
                         }
 
@@ -171,7 +172,7 @@ class FavoriteDetailsFragment : Fragment() {
                                 val hour = time.split(":")[0].toInt()
                                 hour == 12
                             }
-                            todayadapter = TodayDataAdapter(filteredList)
+                            todayadapter = TodayDataAdapter(filteredList,language)
                             binding.FivedaysRec.adapter = todayadapter
                         }
 

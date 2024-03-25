@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.view
+package com.example.weatherapppoject.settings
 
 import android.content.Context
 import android.content.res.Configuration
@@ -38,7 +38,7 @@ class SettingsFragment : Fragment() {
           }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setLocale(sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "default"))
+        setLocale(sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default"))
 
         binding.locationToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
             when (checkedId) {
@@ -50,7 +50,7 @@ class SettingsFragment : Fragment() {
                         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
 
-                        sharedPreferencesManager.saveString(SharedKey.GPS.name, "map")
+                        sharedPreferencesManager.saveLanguage(SharedKey.GPS.name, "map")
                         replaceFragments(MapsFragment())
                         //TODO open map view
                     } else {
@@ -83,13 +83,13 @@ class SettingsFragment : Fragment() {
                         Toast.makeText(requireContext(),"en", Toast.LENGTH_SHORT).show()
                         setLocale("ar")
                         // Save data
-                        sharedPreferencesManager.saveString(SharedKey.LANGUAGE.name, "ar")
+                        sharedPreferencesManager.saveLanguage(SharedKey.LANGUAGE.name, "ar")
 
                     }
                     R.id.enRdiobtn -> {
                         binding.arRdiobtn.isChecked = false
                         Toast.makeText(requireContext(),"ar",Toast.LENGTH_SHORT).show()
-                        sharedPreferencesManager.saveString(SharedKey.LANGUAGE.name, "en")
+                        sharedPreferencesManager.saveLanguage(SharedKey.LANGUAGE.name, "en")
 
                         setLocale("en")
                     }
@@ -117,7 +117,7 @@ class SettingsFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        val selectedLanguage = sharedPreferencesManager.getString(SharedKey.LANGUAGE.name, "en")
+        val selectedLanguage = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "en")
         when (selectedLanguage) {
             "ar" -> binding.arRdiobtn.isChecked = true
             "en" -> binding.enRdiobtn.isChecked = true

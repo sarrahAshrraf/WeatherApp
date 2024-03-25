@@ -15,7 +15,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 //this is the week adapter
-class TodayDataAdapter (private val forecastArray: List<ForeCastData>): RecyclerView.Adapter<TodayDataAdapter.ViewHolder>() {
+class TodayDataAdapter (private val forecastArray: List<ForeCastData>, private val language: String): RecyclerView.Adapter<TodayDataAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: WeekDaysItemBinding) : RecyclerView.ViewHolder(binding.root){}
 
@@ -41,7 +41,11 @@ class TodayDataAdapter (private val forecastArray: List<ForeCastData>): Recycler
 //                currentItem.weather[0].description
 //            currentItem.main
 //                Utils.getDateAndTime(currentItem.dt_txt)
-            tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+""
+            if(language=="ar"){
+            tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+""}
+            else{
+                tvTempRec.text= currentItem.main.temp.toString()
+            }
 //                currentItem.main.temp.toString()+"°C"
             Log.i("====RECy", "onBindViewHolder: "+currentItem.weather[0].description)
 

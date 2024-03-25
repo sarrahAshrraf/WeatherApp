@@ -12,7 +12,7 @@ import com.example.weatherapppoject.databinding.ItemDetailsCardBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.squareup.picasso.Picasso
 
-class FiveDaysAdapter(private val forecastArray: List<ForeCastData>): RecyclerView.Adapter<FiveDaysAdapter.ViewHolder>() {
+class FiveDaysAdapter(private val forecastArray: List<ForeCastData>,private val language :String): RecyclerView.Adapter<FiveDaysAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemDetailsCardBinding ) : RecyclerView.ViewHolder(binding.root){}
 
@@ -28,30 +28,20 @@ class FiveDaysAdapter(private val forecastArray: List<ForeCastData>): RecyclerVi
         val currentItem = forecastArray[position]
         holder.binding.apply {
            val imageIcon = currentItem.weather[0].icon
-            //           val imageIcon =  currentItem.time[0].symbol.symbolVar
             Utils.getWeatherIcon(imageIcon,holder.binding.weatherImgView)
-
-
             tvTimeRec.text = Utils.getTime(currentItem.dt_txt)
-//                currentItem.weather[0].description
-//            currentItem.main
-//                Utils.getDateAndTime(currentItem.dt_txt)
-            tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+".س"
-//                currentItem.main.temp.toString()+"°C"
+
+            if(language=="ar"){
+                tvTempRec.text =  Utils.convertToArabicNumber(currentItem.main.temp.toString())+""}
+            else{
+                tvTempRec.text= currentItem.main.temp.toString()
+            }
             Log.i("====RECy", "onBindViewHolder: "+currentItem.weather[0].description)
 
 
         }
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun getDateAndTime(dtTxt :String): CharSequence?{
-//        val input = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//        val output = DateTimeFormatter.ofPattern("MM-dd HH:mm")
-//        val dateTime = LocalDateTime.parse(dtTxt,input)
-//        return output.format(dateTime)
-//
-//    }
     override fun getItemCount(): Int {
         return forecastArray.size
     }
