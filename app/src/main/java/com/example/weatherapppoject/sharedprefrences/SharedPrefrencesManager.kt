@@ -21,6 +21,16 @@ class SharedPrefrencesManager private constructor(context: Context){
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
+    fun saveUnitsType(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+
+
+
+    fun getUnitsType(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+
     fun removeKey(key: String) {
         sharedPreferences.edit().remove(key).apply()
     }
@@ -129,7 +139,8 @@ enum class SharedKey {
         MAP, //type of the map ==> home or fav or alert.
         Home, // save lan and long to home
         FAV, //save lan and long to fave
-        ALERT
+        ALERT,
+    UNITS
 
 
 }

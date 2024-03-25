@@ -72,6 +72,8 @@ class HomeFragment : Fragment() {
     private var mainLongitude:Double =0.0
     private var mainLatitude: Double =0.0
     private var language : String = "default"
+    private var units : String = "metric" //"metric" celisuc
+    //default -> kalvin ,,,, imperial: F
 
     override fun onStart() {
         super.onStart()
@@ -142,11 +144,12 @@ class HomeFragment : Fragment() {
                             if (iconId == "09d" || iconId == "09n" || iconId == "10d" || iconId == "10n")
                                 binding.backGrou.setAnimation(R.raw.rainbackground)
                         }
+//                            "${}°C"
 
                         if(sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name,"")=="ar"){
-
+//                           if(sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name,"")=="metric"){ }
+//                            else{ }
                             binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString())
-//                            "${}°C"
 
                             binding.cloudPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].clouds?.all.toString()+"%")
                             binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString())
@@ -154,7 +157,10 @@ class HomeFragment : Fragment() {
                             binding.humidityPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.humidity.toString())
                             binding.pressurePercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.pressure.toString())
                             binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+
                         }else {
+//                            if(sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name,"")=="metric"){}
+//                            else{}
                             binding.tvTemp.text = "${weatherResponse.data.list[0].main.temp}°C"
                             binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
                             binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString()
@@ -276,12 +282,13 @@ class HomeFragment : Fragment() {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
                 language = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
+                units= sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "")
                 if (location != null && sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name, "") == "gps") {
 
                     mainLongitude = location.longitude
                     mainLatitude = location.latitude
 
-                    viewModel.getFiveDaysWeather(mainLatitude,mainLongitude ,language)
+                    viewModel.getFiveDaysWeather(mainLatitude,mainLongitude ,language,units)
                     viewModel.getAlertsInfo(mainLatitude,mainLongitude)
 
                     displayAddress(mainLatitude, mainLongitude)
@@ -297,7 +304,7 @@ class HomeFragment : Fragment() {
                         mainLongitude = longlat!!.first
                         mainLatitude = longlat.second
 
-                        viewModel.getFiveDaysWeather(mainLatitude, mainLongitude,language)
+                        viewModel.getFiveDaysWeather(mainLatitude, mainLongitude,language,"imperial")
                         viewModel.getAlertsInfo(mainLatitude,mainLongitude)
                         displayAddress(mainLatitude, mainLongitude)
                         displayfullAddress(mainLatitude, mainLongitude)

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
+    android:background="@color/screenscolor"
     tools:context=".settings.SettingsFragment">
 
     <TextView
@@ -99,6 +99,48 @@
             android:text="@string/gps" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
+    <RadioGroup
+        android:id="@+id/unitsRadioGrop"
+        android:layout_width="283dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146">
+
+        <TextView
+            android:id="@+id/textVies10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/myfont"
+            android:text="@string/units"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/matricRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="59dp"
+            android:layout_weight="1"
+            android:text="@string/metricUnits"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/buttons"
+            android:textColorLink="#F6B5B5"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/impRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/impUnits"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </RadioGroup>
 
 
     <androidx.constraintlayout.widget.Guideline

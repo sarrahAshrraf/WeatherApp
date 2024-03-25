@@ -32,6 +32,9 @@
     <string name="addAlertFrom">أحفظ تنبيه من</string>
     <string name="completeDetails">Compelete alert setup</string>
     <string name="currentLocation">Current location</string>
+    <string name="units">Units</string>
+    <string name="metricUnits">Metric</string>
+    <string name="impUnits">Imparial</string>
 
 
 </resources>

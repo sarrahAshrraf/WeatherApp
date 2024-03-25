@@ -85,9 +85,9 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
         }
     }
 
-    fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String) {
+    fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String,units:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val units = "metric"
+//            val units = "metric"
             val apiKey = Utils.APIKEY
 //            val lang = "en"
             weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect {

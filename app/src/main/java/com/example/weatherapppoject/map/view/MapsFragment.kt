@@ -56,6 +56,7 @@ class MapsFragment : Fragment() {
 //    private lateinit var latLng: LatLng
     private var lati = 0.0
     private var longgi =0.0
+    private var units : String =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,10 +124,11 @@ class MapsFragment : Fragment() {
                 val longg = longlat!!.first
                 val latt = longlat.second
                 val language = sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
+                units = sharedPrefrencesManager.getUnitsType(SharedKey.UNITS.name,"")
 
 
                 lifecycleScope.launch(Dispatchers.Main) {
-                    homeViewModel.getFiveDaysWeather(latt, longg, language)
+                    homeViewModel.getFiveDaysWeather(latt, longg, language,units)
                     homeViewModel.fiveDaysWeather.collectLatest { weatherResponse ->
                         when (weatherResponse) {
                             is ApiState.Suceess -> {

@@ -97,6 +97,29 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        binding.unitsRadioGrop.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
+            if (!checkedRadioButton.isChecked) {
+                checkedRadioButton.isChecked = true
+            } else {
+                when (checkedId) {
+                    R.id.matricRdiobtn -> {
+                        binding.impRdiobtn.isChecked = false
+                        Toast.makeText(requireContext(),"metric", Toast.LENGTH_SHORT).show()
+                        // Save data
+                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "metric")
+
+                    }
+                    R.id.impRdiobtn -> {
+                        binding.matricRdiobtn.isChecked = false
+                        Toast.makeText(requireContext(),"impa",Toast.LENGTH_SHORT).show()
+                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "imperial")
+
+                    }
+                }
+            }
+        }
+
     }
     private fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
@@ -111,8 +134,6 @@ class SettingsFragment : Fragment() {
 
         binding.tvSettings.text = translatedSettingsText
         binding.textView10.text = translatedLanguageText
-
-//        requireActivity().recreate()
 
     }
     override fun onResume() {

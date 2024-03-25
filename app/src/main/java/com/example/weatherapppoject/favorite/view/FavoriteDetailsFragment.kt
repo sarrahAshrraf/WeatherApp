@@ -46,6 +46,7 @@ class FavoriteDetailsFragment : Fragment() {
     lateinit var HomeviewModelFactory: HomeFragmentViewModelFactory
     private lateinit var fuoadapter : FavoritesAdapter
     private var language : String ="default"
+    private var units : String ="default"
 
 
 
@@ -79,14 +80,14 @@ class FavoriteDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         language = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
-
+        units= sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name,"")
         val longLatArray = arguments?.getDoubleArray("longlat")
         if (longLatArray != null && longLatArray.size == 2) {
             val longitude = longLatArray[0]
             val latitude = longLatArray[1]
 
 
-            viewModel.getFiveDaysWeather(latitude,longitude,language)
+            viewModel.getFiveDaysWeather(latitude,longitude,language,units)
 
             lifecycleScope.launch(Dispatchers.Main) {
 
