@@ -29,12 +29,26 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
 //        dao.deleteFavByLonLat(longitude,latitude)
     }
 
+    override suspend fun deleteHomeData() {
+        Log.i("d======eeee","local data sour4e")
+        dao.deleteFavByIsNotFav()
+//        dao.deleteFavByLonLat(longitude,latitude)
+    }
+
     override  fun displayAllFav(): Flow<List<WeatherResponse>> {
         return dao.getFav()
     }
 
     override fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse> {
         return dao.getSpecificCityData(longitude,latitude)
+    }
+
+    override suspend fun insertHomeData(weatherData: WeatherResponse, longitude: Double, latitude: Double) {
+        return dao.setHomeStore(weatherData, longitude,latitude)
+    }
+
+    override fun getCityDataHome(): Flow<WeatherResponse> {
+        return dao.getWeatherData()
     }
 
     override suspend fun setALertData(alert: AlertData, longitude: Double, latitude: Double) {

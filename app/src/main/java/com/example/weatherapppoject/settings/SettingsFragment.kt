@@ -65,6 +65,7 @@ class SettingsFragment : Fragment() {
                         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
 
+
                     } else {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
@@ -115,6 +116,34 @@ class SettingsFragment : Fragment() {
                         Toast.makeText(requireContext(),"impa",Toast.LENGTH_SHORT).show()
                         sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "imperial")
 
+                    }
+                }
+            }
+        }
+
+
+        binding.tempUnitsRadioGrop.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
+            if (!checkedRadioButton.isChecked) {
+                checkedRadioButton.isChecked = true
+            } else {
+                when (checkedId) {//c
+                    R.id.CRdiobtn -> {
+                        binding.KRdiobtn.isChecked = false
+                        binding.FRdiobtn.isChecked = false
+
+                        sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "metric")
+
+                    }
+                    R.id.KRdiobtn -> {///k
+                        binding.CRdiobtn.isChecked = false
+                        binding.FRdiobtn.isChecked = false
+                        sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "default")
+                    }
+                    R.id.FRdiobtn -> {///k
+                        binding.KRdiobtn.isChecked = false
+                        binding.CRdiobtn.isChecked = false
+                        sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "imperial")
                     }
                 }
             }

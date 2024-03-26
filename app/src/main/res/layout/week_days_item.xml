@@ -3,20 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="70dp"
-    android:layout_margin="8dp"
-    app:cardBackgroundColor="@android:color/transparent">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="352dp"
-        android:layout_height="64dp"
+        android:layout_width="328dp"
+        android:layout_height="98dp"
         android:layout_margin="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
-        android:padding="16dp"
-        app:cardCornerRadius="10dp"
+        android:background="#00FFFFFF"
+        app:cardElevation="0dp"
+        android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -26,69 +23,86 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/black"
-            android:backgroundTint="#F0144761">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:backgroundTint="#00FFFFFF">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="329dp"
+                android:layout_height="96dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/widget3" />
 
             <TextView
                 android:id="@+id/dayName"
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:text="Day"
                 android:textColor="@color/white"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.049"
+                app:layout_constraintHorizontal_bias="0.053"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.637" />
 
             <TextView
                 android:id="@+id/tvTempRec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
                 android:layout_marginStart="8dp"
+                android:fontFamily="@font/myfont"
+                android:gravity="left"
                 android:text="TextView"
                 android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintHorizontal_bias="0.034"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.644" />
+                app:layout_constraintVertical_bias="0.231" />
 
             <TextView
                 android:id="@+id/tvTimeRec"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif"
+
                 android:text="TextView"
-
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/tvTempRec"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintHorizontal_bias="0.03"
+
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dayName" />
 
-                />
-
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/imgeViewRec"
-                android:layout_width="95dp"
-                android:layout_height="65dp"
+                android:layout_width="98dp"
+                android:layout_height="81dp"
                 android:layout_marginStart="19dp"
                 android:layout_marginEnd="19dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.301"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true" />
+                app:layout_constraintVertical_bias="0.533"
+            />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

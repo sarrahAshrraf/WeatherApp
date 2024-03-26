@@ -6,7 +6,7 @@
     <string name="weatherstatus">Partly Cloudy</string>
     <string name="weathertemp">25</string>
     <string name="cloudpercent">5%</string>
-    <string name="clouds">Clouds</string>
+    <string name="clouds">Cloud</string>
     <string name="next5days">Next 5 days</string>
     <string name="pressure">Pressure</string>
     <string name="humidity">Humidity</string>
@@ -35,6 +35,14 @@
     <string name="units">Units</string>
     <string name="metricUnits">Metric</string>
     <string name="impUnits">Imparial</string>
+    <string name="saveAlertData">Save</string>
+    <string name="toDate">To</string>
+    <string name="fromDate">From</string>
+    <string name="tempUnits">Temperature</string>
+    <string name="kalvin">Kelvin</string>
+    <string name="c">Celsius</string>
+    <string name="fahrenhiet">Fahrenheit</string>
+    <string name="appname">Weather Alerts</string>
 
 
 </resources>

@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardBackgroundColor="@android:color/transparent">
+    android:layout_margin="5dp">
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="74dp"
-        android:layout_height="149dp"
-        android:background="@color/backgroundlayout"
-        android:backgroundTint="#C9D4EDFA"
+        android:layout_width="73dp"
+        android:layout_height="153dp"
+        android:backgroundTint="#00FFFFFF"
         android:foreground="?selectableItemBackground"
+
         app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,8 +39,19 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="64dp"
+            android:layout_height="135dp"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="51dp"
+                android:layout_height="147dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/itemwidget" />
 
             <TextView
                 android:id="@+id/tvTimeRec"
@@ -59,7 +70,7 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/weatherImgView"
-                android:layout_width="50dp"
+                android:layout_width="53dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="19dp"
@@ -75,18 +86,18 @@
 
             <TextView
                 android:id="@+id/tvTempRec"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="58dp"
+                android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="50kf"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.937" />
+                app:layout_constraintVertical_bias="0.863" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -61,18 +61,7 @@ class Utils {
             return output.format(dateTime)
         }
 
-        //TODO convert from c to klv
-        fun celsiusToKelvin(celsius: Double): Double {
-            return celsius + 273.15
-        }
 
-        fun kelvinToFahrenheit(temp: Double): Double {
-            return temp * 9 / 5 - 459.67
-        }
-
-        fun meterPerSecondToMilePerHour(speed: Double): Double {
-            return speed * 2.237
-        }
 
         fun convertToArabicNumber(englishNumberInput: String): String {
             val arabicNumbers = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
@@ -98,26 +87,53 @@ class Utils {
         fun getWeatherIcon(iconId: String, animationView: LottieAnimationView) {
             val animationResId =
                 when (iconId) {
-                    "01d" -> R.raw.clearsunny
+                    "01d" -> R.raw.clearsunnyy
                     "01n" -> R.raw.clearnight
                     "02d" -> R.raw.sunnywithclouds
                     "02n" -> R.raw.cloudynight
-                    "03d", "03n" -> R.raw.cloudywithwind
-                    "04d", "04n" -> R.raw.cloudywithwind
-                    "09d" -> R.raw.rain
-                    "09n" -> R.raw.rain
-                    "10d" -> R.raw.sunnyrain
-                    "10n" -> R.raw.nightrain
+                    "03d","03n"-> R.raw.cloudywithwind// clod wa7da sada
+                    "04d","04n"-> R.raw.cloudswhitandgray// etnen cloud wa7da soda wa7da byda
+                    "09d","09n" -> R.raw.basicrain
+                    "10d" -> R.raw.sunnyrain//? clod + sunny+ rain
+                    "10n" -> R.raw.nightrain //=>dark cloud night +rain
                     "11d" -> R.raw.sunnythunder
                     "11n" -> R.raw.thunder
                     "13d" -> R.raw.sunnysnow
                     "13n" -> R.raw.nightsnow
                     //Todo update
-                    else -> R.raw.cloudywithwind
+                    else -> R.raw.windyclouds
                 }
 
             animationView.setAnimation(animationResId)
             animationView.playAnimation()
+
+        }
+
+
+
+        @SuppressLint("ResourceType")
+        fun getWeatherIconForRecyclerView(iconId: String, img: ImageView) {
+               val drawableRes =
+                when (iconId) {
+                    "01d" -> R.drawable.clearsunny
+                    "01n" -> R.drawable.clearnigth
+                    "02d" -> R.drawable.ddsunny
+                    "02n" -> R.drawable.darkcloudynightpng
+                    "03d", "03n" -> R.drawable.cloudyempty
+                    "04d", "04n" -> R.drawable.cloudywithwind
+                    "09d" -> R.drawable.ddrainy
+                    "09n" -> R.drawable.simplwnightrainy
+                    "10d" -> R.drawable.heavyddrainy
+                    "10n" -> R.drawable.rainnight
+                    "11d" -> R.drawable.thunderstorm
+                    "11n" -> R.drawable.nightthunder
+                    "13d" -> R.drawable.ddsnow
+                    "13n" -> R.drawable.nnsnow
+                    else -> R.drawable.cloudyempty
+                }
+
+            img.setImageResource(drawableRes)
+
 
         }
 

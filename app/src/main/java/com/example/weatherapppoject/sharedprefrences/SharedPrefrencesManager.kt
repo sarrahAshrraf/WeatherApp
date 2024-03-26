@@ -2,6 +2,7 @@ package com.example.weatherapppoject.sharedprefrences
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
@@ -21,6 +22,16 @@ class SharedPrefrencesManager private constructor(context: Context){
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
+    fun saveTempUnit(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+
+
+
+    fun getTempUnit(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+
     fun saveUnitsType(key: String, value: String) {
         sharedPreferences.edit().putString(key, value).apply()
     }
@@ -31,6 +42,15 @@ class SharedPrefrencesManager private constructor(context: Context){
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
+    fun saveCountryName(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+
+
+
+    fun getCountryName(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
     fun removeKey(key: String) {
         sharedPreferences.edit().remove(key).apply()
     }
@@ -105,6 +125,28 @@ class SharedPrefrencesManager private constructor(context: Context){
     }
 
 
+
+    fun savecurrentLocationToMap(key: String, latlang: LatLng) {
+        val editor = sharedPreferences.edit()
+        editor.putString(key + "_longt", latlang.latitude.toString())
+        editor.putString(key + "_lat", latlang.longitude.toString())
+        editor.apply()
+    }
+
+    fun getcurrentLocationToMap(key: String): LatLng? {
+        val longtKey = key + "_longt"
+        val latKey = key + "_lat"
+        val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+        val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+
+        if (longt != null && lat != null) {
+            return LatLng(lat,longt)
+        }
+
+        return null
+    }
+
+
 //                fun setMap(map:String){
 //                   sharedPreferences.edit().putString(SharedKey.MAP.name,"").apply()
 //
@@ -140,7 +182,10 @@ enum class SharedKey {
         Home, // save lan and long to home
         FAV, //save lan and long to fave
         ALERT,
-    UNITS
+    UNITS,
+    CURMAP,
+    TEMP_UNIT,
+    ALERT_TYPE
 
 
 }

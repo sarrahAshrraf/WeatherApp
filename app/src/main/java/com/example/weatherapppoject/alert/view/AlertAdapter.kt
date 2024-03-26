@@ -1,5 +1,7 @@
 package com.example.weatherapppoject.alert.view
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.util.Log
@@ -17,6 +19,7 @@ import java.util.Calendar
 class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClickLinsterInterface): RecyclerView.Adapter<AlertAdapter.myViewHolder>() {
     lateinit var context: Context
     lateinit var alertBinding: AlertRecycleviewLayoutBinding
+    class myViewHolder(val viewBinding: AlertRecycleviewLayoutBinding): RecyclerView.ViewHolder(viewBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -27,11 +30,9 @@ class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClick
 
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
         var alertItem = alertList[position]
-        //val endTime = alertItem.milleDateTo + (alertItem.milleTimeTo - alertItem.milleTimeFrom)
         val endTime = trigerTime(alertItem.milleDateTo,alertItem.milleTimeTo)
-        Log.i("essama", "end time : ${endTime.timeInMillis}")
-        if(Calendar.getInstance().timeInMillis > endTime.timeInMillis)
-            onClick.cancleAlarm(alertItem)
+//        if(Calendar.getInstance().timeInMillis > endTime.timeInMillis)
+//            onClick.cancleAlarm(alertItem)
         holder.viewBinding.fromTimeCard.text = alertItem.fromTime
         holder.viewBinding.fromDateCard.text = alertItem.fromDate
         holder.viewBinding.toTimeCard.text = alertItem.toTime
@@ -57,33 +58,26 @@ class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClick
         trigerCalender.set(Calendar.MINUTE,testCanlender.get(Calendar.MINUTE))
         return trigerCalender
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun setList(List: List<AlertData>){
         alertList = List
         notifyDataSetChanged()
     }
     fun dialogDeleteConfirmation(alertItem: AlertData) {
-        var dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.delete_dialog)
-        val window: Window? = dialog.getWindow()
-        window?.setLayout(
-            Constraints.LayoutParams.MATCH_PARENT,
-            Constraints.LayoutParams.WRAP_CONTENT
-
-        )
-        window?.setBackgroundDrawableResource(R.color.white);
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.show()
 
 
-        dialog.findViewById<Button>(R.id.warn_deletBtn).setOnClickListener {
+        val alertDialogBuilder = AlertDialog.Builder(context)
+        alertDialogBuilder.setTitle("Delete Confirmation")
+        alertDialogBuilder.setMessage("Are you sure you want to remove this alert?")
+        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
             onClick.cancleAlarm(alertItem)
-            notifyDataSetChanged()
             dialog.dismiss()
         }
-        dialog.findViewById<Button>(R.id.warn_cancelBtn).setOnClickListener() {
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+
     }
-    class myViewHolder(val viewBinding: AlertRecycleviewLayoutBinding): RecyclerView.ViewHolder(viewBinding.root)
 }

@@ -99,7 +99,7 @@ class FavoriteDetailsFragment : Fragment() {
                             val forecastList = weatherResponse.data.list
                             val forecastItems = forecastList
                                 .take(8)// Display only the first 5 forecast items
-                            adapter = FiveDaysAdapter(forecastItems,language)
+                            adapter = FiveDaysAdapter(forecastItems,language,units)
                             binding.todayDetailsRecView.adapter = adapter
                         }
 
@@ -173,7 +173,7 @@ class FavoriteDetailsFragment : Fragment() {
                                 val hour = time.split(":")[0].toInt()
                                 hour == 12
                             }
-                            todayadapter = TodayDataAdapter(filteredList,language)
+                            todayadapter = TodayDataAdapter(filteredList,language,units)
                             binding.FivedaysRec.adapter = todayadapter
                         }
 

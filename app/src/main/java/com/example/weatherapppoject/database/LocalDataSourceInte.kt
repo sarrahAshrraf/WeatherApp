@@ -16,7 +16,9 @@ interface LocalDataSourceInte {
     suspend fun deleteFavData (weatherData: WeatherResponse)
      fun displayAllFav(): Flow<List<WeatherResponse>>
      fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse>
-
+     suspend fun insertHomeData(weatherData: WeatherResponse,longitude: Double, latitude: Double)
+    fun getCityDataHome ():  Flow<WeatherResponse>
+    suspend fun deleteHomeData()
      //================ALerts
 
     suspend fun setALertData (alert: AlertData,longitude: Double,latitude: Double)
