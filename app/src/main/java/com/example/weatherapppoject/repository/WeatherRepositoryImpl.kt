@@ -6,9 +6,16 @@ import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.onecall.model.OneApiCall
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.shareIn
 
 class WeatherRepositoryImpl private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -27,19 +34,6 @@ class WeatherRepositoryImpl private constructor(
         }
     }
 
-//    override suspend fun getCurrentWeather(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String
-//    ): Flow<WeatherList> {
-//        return try {
-//            remoteDataSource.getWeatherINfo(latitude,longitude,units,apiKey)
-//        } catch (e: Exception) {
-//            Log.i("===Fai Loding", "FAIL to load: Network")
-//            flowOf(WeatherList()) // Return an empty WeatherList object
-//        }
-//    }
 
     override suspend fun getFiveDaysWeather(
         latitude: Double,
@@ -69,11 +63,27 @@ class WeatherRepositoryImpl private constructor(
         return  try {
             remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang)
         }catch (e: Exception){
-            Log.i("====Error", "get alert in repo error: "+e)
             emptyFlow()
         }
 
     }
+
+//    override fun getAlertData(
+//        latitude: Double,
+//        longitude: Double,
+//        units: String,
+//        apiKey: String,
+//        lang: String
+//    ): SharedFlow<Flow<OneApiCall>> {
+//        return flow {
+//            emit(remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang))
+//        }.catch { e ->
+//            Log.e("Error", "Error fetching alert data: ${e.message}")
+//        }.shareIn(
+//            scope = CoroutineScope(Dispatchers.IO),
+//            started = SharingStarted.WhileSubscribed()
+//        )
+//    }
 
 
     //Data Base functions
@@ -95,6 +105,18 @@ class WeatherRepositoryImpl private constructor(
 
     override fun getFavCityInfo(longitude: Double, latitude: Double) :Flow<WeatherResponse> {
         return localDataSource.getCityData(longitude,latitude)
+    }
+
+    override suspend fun insertHomeData(weatherData: WeatherResponse, longitude: Double, latitude: Double) {
+        return localDataSource.insertHomeData(weatherData, longitude,latitude)
+    }
+
+    override fun getFavCityInfoHome(): Flow<WeatherResponse> {
+        return localDataSource.getCityDataHome()
+    }
+
+    override suspend fun deleteHome() {
+        localDataSource.deleteHomeData()
     }
 
     override fun getAlertedData(): Flow<List<AlertData>> {

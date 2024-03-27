@@ -44,7 +44,7 @@ class FavoritesAdapter (
                     onItemClick(currentItem,holder.adapterPosition)
                 }
 
-                tvTimeRec.text = Utils.getDateAndTime(currentItem.list[0].dt_txt)
+//                    Utils.getDateAndTime(currentItem.list[0].dt_txt)
 
                 tvTempRec.text =  Utils.convertToArabicNumber(currentItem.list[0].main.temp.toString())+".س"
 //                currentItem.main.temp.toString()+"°C"

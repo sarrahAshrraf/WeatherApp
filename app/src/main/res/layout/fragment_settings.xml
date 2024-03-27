@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
-    tools:context=".view.SettingsFragment">
+    android:background="#0E3245"
+    tools:context=".settings.SettingsFragment">
 
     <TextView
         android:id="@+id/tvSettings"
@@ -25,8 +25,9 @@
 
     <RadioGroup
         android:id="@+id/langueRadioGrop"
-        android:layout_width="283dp"
-        android:layout_height="151dp"
+        android:layout_width="231dp"
+        android:layout_height="138dp"
+        android:background="@drawable/alertwidget"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +41,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/myfont"
             android:text="@string/language"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <RadioButton
@@ -49,7 +50,7 @@
             android:layout_height="59dp"
             android:layout_weight="1"
             android:text="@string/arabic"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textColorHighlight="@color/buttons"
             android:textColorLink="#F6B5B5"
             android:textSize="16sp" />
@@ -60,25 +61,144 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/english"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
     </RadioGroup>
 
+
+    <RadioGroup
+        android:id="@+id/unitsRadioGrop"
+        android:layout_width="254dp"
+        android:layout_height="158dp"
+        android:layout_marginTop="180dp"
+        android:background="@drawable/alertwidget"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.236">
+
+        <TextView
+            android:id="@+id/textVies10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/myfont"
+            android:text="@string/winds"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/matricRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="59dp"
+            android:layout_weight="1"
+            android:text="@string/metricUnits"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/buttons"
+            android:textColorLink="#F6B5B5"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/impRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/impUnits"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </RadioGroup>
+
+
+    <RadioGroup
+        android:id="@+id/tempUnitsRadioGrop"
+        android:layout_width="268dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="410dp"
+        android:background="@drawable/alertwidget"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.236">
+
+        <TextView
+            android:id="@+id/textViewes10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/myfont"
+            android:text="@string/tempUnits"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/CRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="59dp"
+            android:layout_weight="1"
+            android:text="@string/c"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/buttons"
+            android:textColorLink="#F6B5B5"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/KRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/kalvin"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/FRdiobtn"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fahrenhiet"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="254dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.754" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/locationToggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="58dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.792"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="0.383"
+        app:layout_constraintVertical_bias="0.829"
         tools:ignore="MissingConstraints">
 
         <Button
@@ -98,29 +218,6 @@
             android:backgroundTint="@color/buttons"
             android:text="@string/gps" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
-
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="254dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintHorizontal_bias="0.017"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="0.575" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

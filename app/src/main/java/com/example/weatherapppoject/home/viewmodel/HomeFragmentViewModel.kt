@@ -18,6 +18,7 @@ import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 
@@ -34,7 +35,41 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
     private val _fiveDaysWeather = MutableStateFlow<ApiState>(ApiState.Loading())
     val fiveDaysWeather: StateFlow<ApiState> = _fiveDaysWeather
 
+    private val _favData = MutableStateFlow<DBState>(DBState.Loading())
+    val favDataHome: StateFlow<DBState> = _favData
 
+
+
+    fun addToFavorites(fav: WeatherResponse, long: Double, lat: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.insertHomeData(fav, long, lat)
+            Log.i("=======", "addToFavorites: done")
+//            withContext(Dispatchers.Main){
+//                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
+//            }
+        }
+    }
+
+
+    fun showWeatherDetails() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            weatherRepository.getFavCityInfoHome()
+                .catch { exception ->
+                    _favData.value = DBState.Failure(exception)
+                }
+                ///edits here==> products.collect
+                .collect { data ->
+                    _favData.value = DBState.OneCitySucess(data)
+                }
+        }
+    }
+
+    fun removeFromDataBase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.deleteHome()
+        }
+    }
 
 ////alert
 //    private val _alerts = MutableStateFlow<ALertDBState>(ALertDBState.Loading())
@@ -85,9 +120,9 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
         }
     }
 
-    fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String) {
+    fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String,units:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val units = "metric"
+//            val units = "metric"
             val apiKey = Utils.APIKEY
 //            val lang = "en"
             weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, lang).collect {

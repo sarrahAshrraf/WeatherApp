@@ -16,7 +16,9 @@ data class AlertData(
     var milleDateFrom: Long,
     var milleTimeTo: Long,
     var milleDateTo: Long,
-    var requestCode:Long
+    var requestCode:Long,
+    var lontitude: String,
+    var lattiude: String
 
 
 ) {
@@ -29,8 +31,9 @@ data class AlertData(
         milleDateFrom: Long,
         milleTimeTo: Long,
         milleDateTo: Long,
-        requestCode: Long
-    )
+        requestCode: Long,
+        lontitude : String,
+        lattiude :String)
             : this(
         null,
         fromTime,
@@ -41,6 +44,8 @@ data class AlertData(
         milleDateFrom,
         milleTimeTo,
         milleDateTo,
-        requestCode
+        requestCode,
+      lontitude ,
+      lattiude
     )
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
+    android:background="#0E3245"
     tools:context=".home.view.HomeFragment">
 
     <ProgressBar
@@ -34,6 +34,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +127,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="67dp"
                         android:layout_height="match_parent"
                         android:layout_margin="16dp"
                         android:layout_weight="0.333"
@@ -159,7 +160,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="79dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:layout_weight="0.333"
@@ -167,15 +168,16 @@
 
                         <ImageView
                             android:id="@+id/imageView37"
-                            android:layout_width="60dp"
+                            android:layout_width="48dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/windicon" />
 
                         <TextView
                             android:id="@+id/windPercent"
-                            android:layout_width="match_parent"
+                            android:layout_width="71dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="12km/h"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -185,6 +187,7 @@
                             android:id="@+id/tvWind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="@string/winds"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -192,7 +195,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="72dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:layout_weight="0.333"
@@ -200,15 +203,16 @@
 
                         <ImageView
                             android:id="@+id/imageView38"
-                            android:layout_width="63dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="27dp"
                             android:layout_gravity="center"
                             android:src="@drawable/humiditypercent" />
 
                         <TextView
                             android:id="@+id/humidityPercent"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="20%"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -216,8 +220,9 @@
 
                         <TextView
                             android:id="@+id/tvHumidity"
-                            android:layout_width="match_parent"
+                            android:layout_width="65dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="@string/humidity"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -225,7 +230,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:layout_weight="0.333"
@@ -240,8 +245,10 @@
 
                         <TextView
                             android:id="@+id/pressurePercent"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:text="997hPa"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -249,8 +256,10 @@
 
                         <TextView
                             android:id="@+id/tvPressure"
-                            android:layout_width="match_parent"
+                            android:layout_width="74dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:text="@string/pressure"
                             android:textAlignment="center"
                             android:textColor="@color/white"

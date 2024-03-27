@@ -1,11 +1,11 @@
 package com.example.weatherapppoject.alert.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.media.MediaPlayer
@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapppoject.R
 
 import com.example.weatherapppoject.database.LocalDataSourceImp
@@ -29,8 +30,8 @@ import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
+import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.utils.Utils
-import com.example.weatherapppoject.view.HomeActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,43 +40,42 @@ import kotlinx.coroutines.withContext
 class AlarmReceiver : BroadcastReceiver(){
 
     private lateinit var CHANEL:String
-    private lateinit var what:String
-    private lateinit var  repo: WeatherRepositoryImpl
-    private lateinit var result:OneApiCall //result response
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var type:String
+    private lateinit var  repository: WeatherRepositoryImpl
+    private lateinit var alertResults:OneApiCall //result response
     lateinit var remoteDataSource: RemoteDataSource
     lateinit var localDataSourceInte: LocalDataSourceInte
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onReceive(context: Context?, intent: Intent?) {
-        CHANEL = intent?.getStringExtra("ess").toString()
-        what = intent?.getStringExtra("what").toString()
+        CHANEL = intent?.getStringExtra("channel").toString()
+        type = intent?.getStringExtra(SharedKey.ALERT_TYPE.name).toString()
         remoteDataSource = RemoteDataSourceImp()
         localDataSourceInte = context?.let { LocalDataSourceImp(it) }!!
 
-        sharedPreferences = context?.getSharedPreferences("mapData", Context.MODE_PRIVATE) as SharedPreferences
         val lat = intent?.getStringExtra("lat").toString().toDouble()
         val lon = intent?.getStringExtra("lon").toString().toDouble()
-        var msg="Every thing is okay"
-        repo = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
+        var alertMessage="There are no warnings"
+        repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            repo.getAlertData(lat,lon,"metric",Utils.APIKEY,"metric").collect{
-                result = it!! //body????
+            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,"metric").collect{
+                alertResults = it!!
             }
-            if(!result.alerts.isNullOrEmpty())
-                msg = (result.alerts!!.get(0).event).toString()
 
-            if (what.equals("notification")){
-                val intent2 = Intent(context, Alert::class.java) //main activity/??????TODO
+            if(!alertResults.alerts.isNullOrEmpty())
+                alertMessage = (alertResults.alerts!!.get(0).event)
+
+            if (type.equals("notification")){
+                val intent2 = Intent(context, AlertFragment::class.java)
                 intent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val pendingIntent = PendingIntent.getActivity(context, 0,intent2,
                     PendingIntent.FLAG_IMMUTABLE)
                 val builder = NotificationCompat.Builder(context!!, CHANEL)
                     .setSmallIcon(R.drawable.alert)
-                    .setContentTitle(result.timezone)
-                    .setContentText(msg)
+                    .setContentTitle(alertResults.timezone)
+                    .setContentText(alertMessage)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setAutoCancel(true)
@@ -90,13 +90,14 @@ class AlarmReceiver : BroadcastReceiver(){
                 notificationManager.notify(1, builder.build())
             }
             else{
-                alarm(context,msg)
+                alarm(context,alertMessage)
             }
 
         }
 
     }
-    private suspend fun alarm(context: Context, msg:String) {
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
+    private suspend fun alarm(context: Context, msgInfo:String) {
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         else
@@ -106,10 +107,10 @@ class AlarmReceiver : BroadcastReceiver(){
 
         val view = LayoutInflater.from(context).inflate(R.layout.alarm_window, null, false)
         val message = view.findViewById<TextView>(R.id.message)
-        val dismissBtn = view.findViewById<Button>(R.id.dismissBtn)
-
-        val layoutParams =
-            WindowManager.LayoutParams(
+        val btnDimiss = view.findViewById<Button>(R.id.btnDismiss)
+        val animation = view.findViewById<LottieAnimationView>(R.id.animationAlert)
+        val description = view.findViewById<TextView>(R.id.descAlert)
+        val layoutParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 LAYOUT_FLAG,
@@ -123,12 +124,23 @@ class AlarmReceiver : BroadcastReceiver(){
 
         withContext(Dispatchers.Main) {
             windowManager.addView(view, layoutParams)
+            if (msgInfo == "There are no warnings"){
+                animation.setAnimation(R.raw.goodalarm)
+                animation.playAnimation()
+
+            }
+            else {
+                animation.setAnimation(R.raw.warningalarm)
+                animation.playAnimation()
+            }
+            message.text = msgInfo
+            description.text =  "Current State: ${alertResults.current.weather[0].description}"
             view.visibility = View.VISIBLE
-            message.text = msg
+
         }
         mediaPlayer.start()
         mediaPlayer.isLooping = true
-        dismissBtn.setOnClickListener {
+        btnDimiss.setOnClickListener {
             mediaPlayer?.release()
             windowManager.removeView(view)
         }
