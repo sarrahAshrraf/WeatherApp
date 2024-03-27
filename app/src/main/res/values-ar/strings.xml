@@ -43,6 +43,7 @@
     <string name="c">Celsius</string>
     <string name="fahrenhiet">Fahrenheit</string>
     <string name="appname">Weather Alerts</string>
+    <string name="delete">Delete</string>
 
 
 </resources>

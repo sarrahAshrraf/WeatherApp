@@ -36,3 +36,113 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+class AlarmReceiver : BroadcastReceiver(){
+
+    private lateinit var CHANEL:String
+    private lateinit var type:String
+    private lateinit var  repository: WeatherRepositoryImpl
+    private lateinit var alertResults:OneApiCall //result response
+    lateinit var remoteDataSource: RemoteDataSource
+    lateinit var localDataSourceInte: LocalDataSourceInte
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onReceive(context: Context?, intent: Intent?) {
+        CHANEL = intent?.getStringExtra("channel").toString()
+        type = intent?.getStringExtra(SharedKey.ALERT_TYPE.name).toString()
+        remoteDataSource = RemoteDataSourceImp()
+        localDataSourceInte = context?.let { LocalDataSourceImp(it) }!!
+
+        val lat = intent?.getStringExtra("lat").toString().toDouble()
+        val lon = intent?.getStringExtra("lon").toString().toDouble()
+        var alertMessage="There are no warnings"
+        repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,"metric").collect{
+                alertResults = it!!
+            }
+
+            if(!alertResults.alerts.isNullOrEmpty())
+                alertMessage = (alertResults.alerts!!.get(0).event)
+
+            if (type.equals("notification")){
+                val intent2 = Intent(context, AlertFragment::class.java)
+                intent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                val pendingIntent = PendingIntent.getActivity(context, 0,intent2,
+                    PendingIntent.FLAG_IMMUTABLE)
+                val builder = NotificationCompat.Builder(context!!, CHANEL)
+                    .setSmallIcon(R.drawable.alert)
+                    .setContentTitle(alertResults.timezone)
+                    .setContentText(alertMessage)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                val notificationManager = NotificationManagerCompat.from(context)
+
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {}
+                notificationManager.notify(1, builder.build())
+            }
+            else{
+                alarm(context,alertMessage)
+            }
+
+        }
+
+    }
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
+    private suspend fun alarm(context: Context, msgInfo:String) {
+        val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        else
+            WindowManager.LayoutParams.TYPE_PHONE
+
+        val mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI)
+
+        val view = LayoutInflater.from(context).inflate(R.layout.alarm_window, null, false)
+        val message = view.findViewById<TextView>(R.id.message)
+        val btnDimiss = view.findViewById<Button>(R.id.btnDismiss)
+        val animation = view.findViewById<LottieAnimationView>(R.id.animationAlert)
+        val description = view.findViewById<TextView>(R.id.descAlert)
+        val layoutParams = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                LAYOUT_FLAG,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+            )
+
+        layoutParams.gravity = Gravity.TOP
+
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        withContext(Dispatchers.Main) {
+            windowManager.addView(view, layoutParams)
+            if (msgInfo == "There are no warnings"){
+                animation.setAnimation(R.raw.goodalarm)
+                animation.playAnimation()
+
+            }
+            else {
+                animation.setAnimation(R.raw.warningalarm)
+                animation.playAnimation()
+            }
+            message.text = msgInfo
+            description.text =  "Current State: ${alertResults.current.weather[0].description}"
+            view.visibility = View.VISIBLE
+
+        }
+        mediaPlayer.start()
+        mediaPlayer.isLooping = true
+        btnDimiss.setOnClickListener {
+            mediaPlayer?.release()
+            windowManager.removeView(view)
+        }
+    }
+}
