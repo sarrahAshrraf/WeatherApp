@@ -38,28 +38,18 @@
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
                     android:src="@drawable/whitefavicon" />
 
                 <TextView
                     android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:text="@string/city"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="23sp" />
-
-                <TextView
-                    android:id="@+id/tvFullocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/dayformat"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
 
 
                 <LinearLayout
@@ -110,7 +100,6 @@
                         android:id="@+id/tvDayFormat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="H:27 L:19"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="16sp" />

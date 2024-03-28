@@ -79,12 +79,6 @@ class FavoriteFragment : Fragment() {
         floatingActionButton  = view.findViewById(R.id.floatingActionButton)
         favRecyclerView = view.findViewById(R.id.favRecView)
         favLayoutManager = LinearLayoutManager(requireContext())
-//        favAdapter = FavoritesAdapter(emptyList()) // Pass an empty list initially
-
-
-//035551414
-
-
         favAdapter = FavoritesAdapter(emptyList(),
             { product, position ->
                 val alertDialogBuilder = AlertDialog.Builder(context)
@@ -101,11 +95,7 @@ class FavoriteFragment : Fragment() {
                 alertDialog.show()
             },
             { product, position ->
-
-                // Navigate to the new fragment
-
                 val bundle = Bundle().apply {
-
                     putDoubleArray("longlat", doubleArrayOf(product.longitude, product.latitude))
                 }
                 // Navigate to the new fragment
@@ -116,7 +106,6 @@ class FavoriteFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
 
-//                replaceFragments(FavoriteDetailsFragment())
                 Toast.makeText(requireContext(),"on card",Toast.LENGTH_SHORT).show()
             }
         )

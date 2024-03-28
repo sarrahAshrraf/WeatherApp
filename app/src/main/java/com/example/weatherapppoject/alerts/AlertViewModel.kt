@@ -1,19 +1,5 @@
 package com.example.weatherapppoject.alerts
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.weatherapppoject.onecall.model.OneApiCall
-import com.example.weatherapppoject.repository.WeatherRepositoryImpl
-import com.example.weatherapppoject.utils.ALertDBState
-import com.example.weatherapppoject.utils.OneCallState
-import com.example.weatherapppoject.utils.Utils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-
 //class AlertViewModel(private val weathRepo: WeatherRepositoryImpl): ViewModel() {
 //    //alert
 //    private val _alerts = MutableStateFlow<ALertDBState>(ALertDBState.Loading())

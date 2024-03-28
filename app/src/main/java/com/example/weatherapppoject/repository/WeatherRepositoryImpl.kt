@@ -68,22 +68,6 @@ class WeatherRepositoryImpl private constructor(
 
     }
 
-//    override fun getAlertData(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String,
-//        lang: String
-//    ): SharedFlow<Flow<OneApiCall>> {
-//        return flow {
-//            emit(remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang))
-//        }.catch { e ->
-//            Log.e("Error", "Error fetching alert data: ${e.message}")
-//        }.shareIn(
-//            scope = CoroutineScope(Dispatchers.IO),
-//            started = SharingStarted.WhileSubscribed()
-//        )
-//    }
 
 
     //Data Base functions

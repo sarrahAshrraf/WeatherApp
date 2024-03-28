@@ -7,13 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
 interface WeatherRepositoryInter {
-//    suspend fun getCurrentWeather(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String
-//    ): Flow<WeatherList>
-
     //network opreation
     suspend fun getFiveDaysWeather(
         latitude: Double,
@@ -31,14 +24,6 @@ interface WeatherRepositoryInter {
         lang: String
     ): Flow<OneApiCall>
 
-//    fun getAlertData(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String,
-//        lang: String
-//    ): SharedFlow<Flow<OneApiCall>>
-
 
     //database operation
      fun getFavoriteData(): Flow<List<WeatherResponse>>
@@ -48,7 +33,6 @@ interface WeatherRepositoryInter {
       suspend fun insertHomeData(weatherData: WeatherResponse,longitude: Double, latitude: Double)
     fun getFavCityInfoHome(): Flow<WeatherResponse>
     suspend fun deleteHome()
-
 
     ////=>local + alert
 

@@ -1,0 +1,114 @@
+package com.example.weatherapppoject.repository
+
+import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.forecastmodel.City
+import com.example.weatherapppoject.forecastmodel.Clouds
+import com.example.weatherapppoject.forecastmodel.Coord
+import com.example.weatherapppoject.forecastmodel.ForeCastData
+import com.example.weatherapppoject.forecastmodel.Main
+import com.example.weatherapppoject.forecastmodel.Weather
+import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.forecastmodel.Wind
+import com.example.weatherapppoject.onecall.model.OneApiCall
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+
+class FakeRepository :WeatherRepositoryInter{
+
+    var home : MutableList<WeatherResponse> = mutableListOf()
+    var favorite : MutableList<WeatherResponse> = mutableListOf()
+    var alert : MutableList<AlertData> = mutableListOf()
+
+    val city = City(Coord(12.345, 67.890), "Country", 123, "City", 100000, 123456, 789012, 3600)
+    val forecastList = mutableListOf(
+        ForeCastData(
+            Clouds(0),
+            1658886000,
+            "2024-03-26 12:00:00",
+            Main(25.0, 15, 20, 1902, 30, 22.0, 90.0, 100.0, 10.0),
+            10000,
+            mutableListOf(Weather("Clear", "01d", 800, "Clear Sky")),
+            Wind(10, 2.5, 3.4)
+        )
+    )
+    val data = WeatherResponse(
+        city,
+        123.456,
+        78.90,
+        5,
+        1,
+        0,
+        "200",
+        forecastList,
+        0
+    )
+
+
+    override suspend fun getFiveDaysWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): Flow<WeatherResponse> {
+        return  flowOf(WeatherResponse(city, 0.0,0.0,0,0,0,"0",forecastList,0))
+    }
+
+    override suspend fun getAlertData(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        apiKey: String,
+        lang: String
+    ): Flow<OneApiCall> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFavoriteData(): Flow<List<WeatherResponse>> = flowOf(favorite)
+
+    override suspend fun insertfavIntoDB(
+        fav: WeatherResponse,
+        longitude: Double,
+        latitude: Double
+    ) {
+       favorite.add(fav)
+    }
+
+    override suspend fun deleteFromFav(weatherData: WeatherResponse) {
+        favorite.remove(weatherData)
+    }
+
+    override fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertHomeData(
+        weatherData: WeatherResponse,
+        longitude: Double,
+        latitude: Double
+    ) {
+        home.add(weatherData)
+    }
+
+    override fun getFavCityInfoHome(): Flow<WeatherResponse> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteHome() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAlertedData(): Flow<List<AlertData>> = flowOf(alert)
+
+    override suspend fun insertAlertIntoDB(alerts: AlertData, longitude: Double, latitude: Double) {
+        alert.add(alerts)
+    }
+
+    override suspend fun insertAlerts(alertData: AlertData) {
+        alert.add(alertData)
+    }
+
+    override suspend fun deleteFromAlerts(alertWeatherData: AlertData) {
+        alert.remove(alertWeatherData)
+    }
+}

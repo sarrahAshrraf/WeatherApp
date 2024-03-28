@@ -14,11 +14,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="358dp"
-        android:layout_height="153dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/card"
-        android:foregroundGravity="center">
+        android:background="@drawable/mainwidgetbig">
 
         <TextView
             android:id="@+id/fromTimeCard"
@@ -76,18 +76,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.328" />
 
-        <Button
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/alertCardDeleteBtn"
-            android:layout_width="41dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/deleteicon"
-            android:backgroundTint="@color/white"
+            android:layout_width="54dp"
+            android:layout_height="62dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="19dp"
+            android:layout_marginEnd="19dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/bin" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/imgeViewRec"

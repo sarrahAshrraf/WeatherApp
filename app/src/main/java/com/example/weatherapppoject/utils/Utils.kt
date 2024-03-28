@@ -18,18 +18,8 @@ class Utils {
     companion object {
         const val BASE_URL = "https://api.openweathermap.org/data/"
         const val APIKEY = "3f2c5a9a086fa7d7056043da97b35aae"
-
-//
-//                             3f2c5a9a086fa7d7056043da97b35aae
-//        32860e9888c9f07e4c3912d64cab8a03
-//        32860e9888c9f07e4c3912d64cab8a03"
-
-        //       "32860e9888c9f07e4c3912d64cab8a03"
         const val MAPS_KEY ="AIzaSyATC4Zk0_xofsFUTm0GRIyNej3syHx5oro"
-//            "AIzaSyBJ_XlxltqRMHEaqUxKak6LkIb0jt4qRWM"
-
         const val IMG_URL = "https://openweathermap.org/img/w/"
-
         @RequiresApi(Build.VERSION_CODES.O)
         private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
@@ -110,7 +100,6 @@ class Utils {
         }
 
 
-
         @SuppressLint("ResourceType")
         fun getWeatherIconForRecyclerView(iconId: String, img: ImageView) {
                val drawableRes =
@@ -134,104 +123,6 @@ class Utils {
 
             img.setImageResource(drawableRes)
 
-
         }
-
-
-//        @SuppressLint("ResourceType")
-//        fun getWeatherIconBackground(iconId: String, animationView: LottieAnimationView) {
-//            val animationResId =
-//                when (iconId) {
-//                    "09d" -> R.raw.rainbackground
-//                    "09n" -> R.raw.rainbackground
-//                    "10d" -> R.raw.rainbackground
-//                    "10n" -> R.raw.rainbackground
-//                    else -> null
-//                }
-//
-//            if (animationResId != null) {
-//                animationView.setAnimation(animationResId)
-//            }
-//            animationView.playAnimation()
-//
-//        }
-
-
     }
-
         }
-
-
-
-
-
-
-
-
-
-//
-//val iconId = weatherList!!.weather[0].icon
-//val imgURL = "https://openweathermap.org/img/w/$iconId.png"
-//
-//when (iconId) {
-//    "01d" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.ddsunny)
-//            .into(binding.weatherImgView)
-//    }
-//    "01n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.sunny)
-//            .into(binding.weatherImgView)
-//    }
-//    "02d" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.partlycloudy)
-//            .into(binding.weatherImgView)
-//    }
-//    "02n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.cloudynight)
-//            .into(binding.weatherImgView)
-//    }
-//    "03d", "03n", "04d", "04n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.cloudy)
-//            .into(binding.weatherImgView)
-//    }
-//    "09d", "09n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.ddrainy)
-//            .into(binding.weatherImgView)
-//    }
-//    "10d", "10n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.rainy)
-//            .into(binding.weatherImgView)
-//    }
-//    "11d", "11n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.thunderstorm)
-//            .into(binding.weatherImgView)
-//    }
-//    "13d", "13n" -> {
-//        Glide.with(requireContext())
-//            .load(R.drawable.snow)
-//            .into(binding.weatherImgView)
-//    }
-//    "50d", "50n" -> {
-//        Glide.with(requireContext())
-////                        .load(R.drawable.mist)
-////                        .into(binding.weatherImgView)
-//    }
-//    else -> {
-//        Glide.with(requireContext())
-//            .load(imgURL)
-//            .into(binding.weatherImgView)
-//    }
-//}
-//
-//
-//
-//
-//}

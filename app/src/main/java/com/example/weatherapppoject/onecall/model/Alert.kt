@@ -7,8 +7,6 @@ data class Alert(
     val event: String ="",
     val sender_name: String ="",
     val start: Int =0,
-    //TODO new attributes save them on the dialoggggggggggggggg
     val startDate: Int =0,
     val endDate :Int =0,
-//    val tags: List<Any>
 )

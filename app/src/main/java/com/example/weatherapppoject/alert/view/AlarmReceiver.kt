@@ -42,7 +42,7 @@ class AlarmReceiver : BroadcastReceiver(){
     private lateinit var CHANEL:String
     private lateinit var type:String
     private lateinit var  repository: WeatherRepositoryImpl
-    private lateinit var alertResults:OneApiCall //result response
+    private lateinit var alertResults:OneApiCall 
     lateinit var remoteDataSource: RemoteDataSource
     lateinit var localDataSourceInte: LocalDataSourceInte
 

@@ -31,7 +31,6 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Get the SharedPreferencesManager instance
         sharedPreferencesManager = SharedPrefrencesManager.getInstance(requireContext())
         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
@@ -48,11 +47,8 @@ class SettingsFragment : Fragment() {
                         binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "map")
                         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
-
-
                         sharedPreferencesManager.saveLanguage(SharedKey.GPS.name, "map")
                         replaceFragments(MapsFragment())
-                        //TODO open map view
                     } else {
                         binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
@@ -83,7 +79,6 @@ class SettingsFragment : Fragment() {
                         binding.enRdiobtn.isChecked = false
                         Toast.makeText(requireContext(),"en", Toast.LENGTH_SHORT).show()
                         setLocale("ar")
-                        // Save data
                         sharedPreferencesManager.saveLanguage(SharedKey.LANGUAGE.name, "ar")
 
                     }
@@ -107,7 +102,6 @@ class SettingsFragment : Fragment() {
                     R.id.matricRdiobtn -> {
                         binding.impRdiobtn.isChecked = false
                         Toast.makeText(requireContext(),"metric", Toast.LENGTH_SHORT).show()
-                        // Save data
                         sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "metric")
 
                     }

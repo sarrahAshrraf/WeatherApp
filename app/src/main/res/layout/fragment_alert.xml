@@ -110,26 +110,29 @@
 
     </RadioGroup>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/alertRV"
-            android:layout_width="413dp"
-            android:layout_height="389dp"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.871">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
     <!--                app:lottie_rawRes="@raw/alarm" />-->
 
-        <com.airbnb.lottie.LottieAnimationView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alertRV"
+        android:layout_width="388dp"
+        android:layout_height="405dp"
+        android:layout_margin="5dp"
+        android:clipToPadding="false"
+        android:foregroundGravity="center"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.914"
+        tools:listitem="@layout/alert_recycleview_layout">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_layer_name"
             android:layout_width="340dp"
             android:layout_height="409dp"

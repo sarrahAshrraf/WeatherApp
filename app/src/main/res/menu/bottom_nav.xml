@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/home"
-        android:id="@+id/home"
         android:title="Home" />
     <item
+        android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/favorite"
-        android:id="@+id/favorite"
         android:title="Favorite" />
     <item
+        android:id="@+id/Alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/alert"
-        android:id="@+id/Alert"
         android:title="Notification" />
     <item
+        android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/settings"
-        android:id="@+id/settings"
         android:title="Settings" />
 </menu>
