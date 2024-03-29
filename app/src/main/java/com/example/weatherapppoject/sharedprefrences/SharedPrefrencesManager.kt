@@ -12,6 +12,12 @@ class SharedPrefrencesManager private constructor(context: Context){
    fun saveLanguage(key: String, value: String) { sharedPreferences.edit().putString(key, value).apply() }
     fun getLanguae(key: String, defaultValue: String): String { return sharedPreferences.getString(key, defaultValue) ?: defaultValue }
 
+    fun saveWindUnit(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply() }
+    fun getWindUnit(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+
     fun saveTempUnit(key: String, value: String) {
         sharedPreferences.edit().putString(key, value).apply() }
     fun getTempUnit(key: String, defaultValue: String): String {
@@ -152,7 +158,8 @@ enum class SharedKey {
         UNITS,
         CURMAP,
         TEMP_UNIT,
-        ALERT_TYPE
+        ALERT_TYPE,
+    WIND
 
 
 }

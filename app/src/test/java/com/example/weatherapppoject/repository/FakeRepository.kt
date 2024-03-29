@@ -54,6 +54,35 @@ class FakeRepository :WeatherRepositoryInter{
         return  flowOf(WeatherResponse(city, 0.0,0.0,0,0,0,"0",forecastList,0))
     }
 
+    override fun getFavoriteData(): Flow<List<WeatherResponse>> = flowOf(favorite)
+
+    override suspend fun insertfavIntoDB(
+        fav: WeatherResponse,
+        longitude: Double,
+        latitude: Double
+    ) {
+        favorite.add(fav)
+    }
+
+    override suspend fun deleteFromFav(weatherData: WeatherResponse) {
+        favorite.remove(weatherData)
+    }
+
+    override fun getAlertedData(): Flow<List<AlertData>> = flowOf(alert)
+
+    override suspend fun insertAlertIntoDB(alerts: AlertData, longitude: Double, latitude: Double) {
+        alert.add(alerts)
+    }
+
+    override suspend fun insertAlerts(alert: AlertData) {
+        this.alert.add(alert)
+    }
+
+    override suspend fun deleteFromAlerts(alertWeatherData: AlertData) {
+        alert.remove(alertWeatherData)
+    }
+
+
     override suspend fun getAlertData(
         latitude: Double,
         longitude: Double,
@@ -64,19 +93,6 @@ class FakeRepository :WeatherRepositoryInter{
         TODO("Not yet implemented")
     }
 
-    override fun getFavoriteData(): Flow<List<WeatherResponse>> = flowOf(favorite)
-
-    override suspend fun insertfavIntoDB(
-        fav: WeatherResponse,
-        longitude: Double,
-        latitude: Double
-    ) {
-       favorite.add(fav)
-    }
-
-    override suspend fun deleteFromFav(weatherData: WeatherResponse) {
-        favorite.remove(weatherData)
-    }
 
     override fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse> {
         TODO("Not yet implemented")
@@ -98,17 +114,5 @@ class FakeRepository :WeatherRepositoryInter{
         TODO("Not yet implemented")
     }
 
-    override fun getAlertedData(): Flow<List<AlertData>> = flowOf(alert)
 
-    override suspend fun insertAlertIntoDB(alerts: AlertData, longitude: Double, latitude: Double) {
-        alert.add(alerts)
-    }
-
-    override suspend fun insertAlerts(alertData: AlertData) {
-        alert.add(alertData)
-    }
-
-    override suspend fun deleteFromAlerts(alertWeatherData: AlertData) {
-        alert.remove(alertWeatherData)
-    }
 }

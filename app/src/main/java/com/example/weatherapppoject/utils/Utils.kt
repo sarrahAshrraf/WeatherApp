@@ -73,6 +73,23 @@ class Utils {
             return numberFormat.format(number)
         }
 
+        fun convertToMeterPerSec(speed: Double): Double {
+            return speed / 2.237
+        }
+
+        fun convertToMilePerHour(speed: Double): Double {
+            return speed * 2.237
+
+        }
+
+        fun getTempSymbol(unit : String) :String{
+            return when(unit){
+                "metric" -> "C"
+                "standard" -> "K"
+                else -> "F"
+            }
+        }
+
         @SuppressLint("ResourceType")
         fun getWeatherIcon(iconId: String, animationView: LottieAnimationView) {
             val animationResId =
@@ -125,4 +142,8 @@ class Utils {
 
         }
     }
+
+
+
+
         }

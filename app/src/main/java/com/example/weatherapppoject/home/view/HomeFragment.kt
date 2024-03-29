@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.location.Geocoder
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -179,121 +180,146 @@ class HomeFragment : Fragment() {
                                 binding.backGrou.setAnimation(R.raw.rainbackground)
                         }
 
-                        if (sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "") == "ar") {
-                            setLocale("ar")
-                            if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "metric") {
-                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
-                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
+                        val tempUnit = sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "")
 
-                                } else {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
-                                }
+                        val temperature = weatherResponse.data.list[0].main.temp
+                        val windSpeed = weatherResponse.data.list[0].wind?.speed
+                        val clouds = weatherResponse.data.list[0].clouds?.all.toString()
+                        val dateTime = weatherResponse.data.list[0].dt_txt
+                        val humidity = weatherResponse.data.list[0].main.humidity.toString()
+                        val pressure = weatherResponse.data.list[0].main.pressure.toString()
+                        val description = weatherResponse.data.list[0].weather[0].description
 
-                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "م/ث "
+                        val isArabicLanguage = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "") == "ar"
+                        val isMetricUnits = sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "")
 
-                            } else if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "imperial") {
-                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
+                        setLocale(if (isArabicLanguage) "ar" else "en")
 
-                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
+                        binding.tvTemp.text = buildTemperatureText(temperature, tempUnit, isArabicLanguage)
+                        binding.windPercent.text = buildWindSpeedText(windSpeed, isMetricUnits,tempUnit, isArabicLanguage)
+                        binding.cloudPercent.text = buildCloudsText(clouds, isArabicLanguage)
+                        binding.tvDayFormat.text = Utils.getDate(dateTime).toString()
+                        binding.humidityPercent.text = humidity
+                        binding.pressurePercent.text = pressure
+                        binding.tvStatus.text = description
 
-                                } else {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
-                                }
-                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "ميل/س "
 
-                            } else { //k default
 
-                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
-
-                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
-
-                                } else {
-                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
-                                }
-                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "م/ث "
-                            }
-
-                            binding.cloudPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].clouds?.all.toString() + "%")
-                            binding.tvDayFormat.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].dt_txt)
-                            binding.humidityPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.humidity.toString())
-                            binding.pressurePercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.pressure.toString())
-                            binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
-
-                        } else {
-                            setLocale("en")
-                            if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "metric") {
-                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
-                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°C"
-
-                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
-                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°K"
-
-                                } else {
-                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°F"
-                                }
-
-                                binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString() + " m/s"
-
-                            } else if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "imperial") {
-
-                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
-                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°C"
-
-                                } else if (sharedPreferencesManager.getTempUnit(
-                                        SharedKey.TEMP_UNIT.name,
-                                        ""
-                                    ) == "default"
-                                ) {
-                                    binding.tvTemp.text =
-                                        weatherResponse.data.list[0].main.temp.toString() + "°K"
-
-                                } else {
-                                    binding.tvTemp.text =
-                                        weatherResponse.data.list[0].main.temp.toString() + "°F"
-                                }
-
-                                binding.windPercent.text =
-                                    weatherResponse.data.list[0].wind?.speed.toString() + " m/h "
-
-                            } else { //default
-                                if (sharedPreferencesManager.getTempUnit(
-                                        SharedKey.TEMP_UNIT.name,
-                                        ""
-                                    ) == "metric"
-                                ) {
-                                    binding.tvTemp.text =
-                                        weatherResponse.data.list[0].main.temp.toString() + "°C"
-
-                                } else if (sharedPreferencesManager.getTempUnit(
-                                        SharedKey.TEMP_UNIT.name,
-                                        ""
-                                    ) == "default"
-                                ) {
-                                    binding.tvTemp.text =
-                                        weatherResponse.data.list[0].main.temp.toString() + "°K"
-
-                                } else {
-                                    binding.tvTemp.text =
-                                        weatherResponse.data.list[0].main.temp.toString() + "°F"
-                                }
-
-                                binding.windPercent.text =
-                                    weatherResponse.data.list[0].wind?.speed.toString() + " m/s "
-                            }
-
-                            binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
-                            binding.tvDayFormat.text = Utils.getDate(weatherResponse.data.list[0].dt_txt).toString()
-                            binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
-                            binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
-                            binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
-
-                        }
+//                        if (sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "") == "ar") {
+//                            setLocale("ar")
+//                            if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "metric") {
+//                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
+//                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
+//
+//                                } else {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
+//                                }
+//
+//                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "م/ث "
+//
+//                            } else if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "imperial") {
+//                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
+//
+//                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
+//
+//                                } else {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
+//                                }
+//                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "ميل/س "
+//
+//                            } else { //k default
+//
+//                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°م"
+//
+//                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ك"
+//
+//                                } else {
+//                                    binding.tvTemp.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.temp.toString()) + "°ف"
+//                                }
+//                                binding.windPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].wind?.speed.toString()) + "م/ث "
+//                            }
+//
+//                            binding.cloudPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].clouds?.all.toString() + "%")
+//                            binding.tvDayFormat.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].dt_txt)
+//                            binding.humidityPercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.humidity.toString())
+//                            binding.pressurePercent.text = Utils.convertToArabicNumber(weatherResponse.data.list[0].main.pressure.toString())
+//                            binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+//
+//                        } else {
+//                            setLocale("en")
+//                            if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "metric") {
+//                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
+//                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°C"
+//
+//                                } else if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "default") {
+//                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°K"
+//
+//                                } else {
+//                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°F"
+//                                }
+//
+//                                binding.windPercent.text = weatherResponse.data.list[0].wind?.speed.toString() + " m/s"
+//
+//                            } else if (sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "") == "imperial") {
+//
+//                                if (sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "") == "metric") {
+//                                    binding.tvTemp.text = weatherResponse.data.list[0].main.temp.toString() + "°C"
+//
+//                                } else if (sharedPreferencesManager.getTempUnit(
+//                                        SharedKey.TEMP_UNIT.name,
+//                                        ""
+//                                    ) == "default"
+//                                ) {
+//                                    binding.tvTemp.text =
+//                                        weatherResponse.data.list[0].main.temp.toString() + "°K"
+//
+//                                } else {
+//                                    binding.tvTemp.text =
+//                                        weatherResponse.data.list[0].main.temp.toString() + "°F"
+//                                }
+//
+//                                binding.windPercent.text =
+//                                    weatherResponse.data.list[0].wind?.speed.toString() + " m/h "
+//
+//                            } else { //default
+//                                if (sharedPreferencesManager.getTempUnit(
+//                                        SharedKey.TEMP_UNIT.name,
+//                                        ""
+//                                    ) == "metric"
+//                                ) {
+//                                    binding.tvTemp.text =
+//                                        weatherResponse.data.list[0].main.temp.toString() + "°C"
+//
+//                                } else if (sharedPreferencesManager.getTempUnit(
+//                                        SharedKey.TEMP_UNIT.name,
+//                                        ""
+//                                    ) == "default"
+//                                ) {
+//                                    binding.tvTemp.text =
+//                                        weatherResponse.data.list[0].main.temp.toString() + "°K"
+//
+//                                } else {
+//                                    binding.tvTemp.text =
+//                                        weatherResponse.data.list[0].main.temp.toString() + "°F"
+//                                }
+//
+//                                binding.windPercent.text =
+//                                    weatherResponse.data.list[0].wind?.speed.toString() + " m/s "
+//                            }
+//
+//                            binding.cloudPercent.text = "${weatherResponse.data.list[0].clouds?.all.toString()}%"
+//                            binding.tvDayFormat.text = Utils.getDate(weatherResponse.data.list[0].dt_txt).toString()
+//                            binding.humidityPercent.text = weatherResponse.data.list[0].main.humidity.toString()
+//                            binding.pressurePercent.text = weatherResponse.data.list[0].main.pressure.toString()
+//                            binding.tvStatus.text = weatherResponse.data.list[0].weather[0].description
+//
+//                        }
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.addWeatherDataIntoDB(
                                 weatherResponse.data,
@@ -365,6 +391,54 @@ class HomeFragment : Fragment() {
             }
         }
 
+    private fun buildTemperatureText(temperature: Double, tempUnit: String, isArabicLanguage: Boolean): String {
+        val temperatureText = if (isArabicLanguage) {
+            Utils.convertToArabicNumber(temperature.toString())
+        } else {
+            temperature.toString()
+        }
+        val unitText = when {
+            tempUnit == "metric" -> if (isArabicLanguage) "°م" else "°C"
+            tempUnit == "standard" -> if (isArabicLanguage) "°ك" else "°K"
+            else -> if (isArabicLanguage) "°ف" else "°F"
+        }
+        return "$temperatureText$unitText"
+    }
+
+    private fun buildWindSpeedText(windSpeed: Double?, windSpeedUnit: String, tempUnit: String, isArabicLanguage: Boolean): String {
+        val convertedWindSpeed: Double? = when {
+            windSpeedUnit == "metric" && (tempUnit == "metric" || tempUnit == "standard") -> windSpeed
+            windSpeedUnit == "metric" && tempUnit == "imperial" -> windSpeed?.let { Utils.convertToMeterPerSec(it) }
+            windSpeedUnit == "imperial" && (tempUnit == "metric" || tempUnit == "standard") -> windSpeed?.let { Utils.convertToMilePerHour(it) }
+            windSpeedUnit == "imperial" && (tempUnit == "imperial") -> windSpeed
+            else -> 0.0
+
+        }
+
+        val speedText = if (isArabicLanguage) {
+            Utils.convertToArabicNumber(convertedWindSpeed?.toString() ?: "")
+        } else {
+            convertedWindSpeed?.toString() ?: ""
+        }
+
+        val unitText = when (windSpeedUnit) {
+            "metric" -> if (isArabicLanguage) "م/ث" else "m/s"
+            "imperial" -> if (isArabicLanguage) "ميل/س" else "m/h"
+            else -> ""
+        }
+
+        return "$speedText $unitText"
+    }
+
+    private fun buildCloudsText(clouds: String, isArabicLanguage: Boolean): String {
+        val cloudsText = if (isArabicLanguage) {
+            Utils.convertToArabicNumber(clouds)
+        } else {
+            clouds
+        }
+        val unitText = if (isArabicLanguage) "%" else "%"
+        return "$cloudsText$unitText"
+    }
 
     fun getFiveDaysData() {
         lifecycleScope.launch(Dispatchers.Main) {
@@ -484,12 +558,12 @@ class HomeFragment : Fragment() {
                 super.onLocationResult(locationResult)
                 val location: android.location.Location? = locationResult.lastLocation
                 language = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default")
-                units= sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "")
-                tempUnit= sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "")
+                units= sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "")//wind
+                tempUnit= sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "")//temp
                 if (location != null && sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name, "") == "gps") {
                     mainLongitude = location.longitude
                     mainLatitude = location.latitude
-                    viewModel.getFiveDaysWeather(mainLatitude,mainLongitude ,language,units)
+                    viewModel.getFiveDaysWeather(mainLatitude,mainLongitude ,language,tempUnit)
                     displayAddress(mainLatitude, mainLongitude)
                     displayfullAddress(mainLatitude, mainLongitude)
                     sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, mainLongitude,mainLatitude)
@@ -502,7 +576,7 @@ class HomeFragment : Fragment() {
                             sharedPreferencesManager.getLocationToHOme(SharedKey.Home.name)
                         mainLongitude = longlat!!.first
                         mainLatitude = longlat.second
-                        viewModel.getFiveDaysWeather(mainLatitude, mainLongitude,language,units)
+                        viewModel.getFiveDaysWeather(mainLatitude, mainLongitude,language,tempUnit)
                         displayAddress(mainLatitude, mainLongitude)
                         displayfullAddress(mainLatitude, mainLongitude)
                         sharedPreferencesManager.saveLocationToAlert(SharedKey.ALERT.name, mainLongitude,mainLatitude)
@@ -594,26 +668,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun setLocale(languageCode: String) {
+        val resources = requireContext().resources
+        val config = Configuration(resources.configuration)
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
-        val resources = requireContext().resources
-
-        val config = Configuration(resources.configuration)
         config.setLocale(locale)
-        val context= ContextUtils.wrapContext(requireContext(), locale)
-        val translatecloudsText = context.getString(R.string.clouds)
-        val translatedwindText = context.getString(R.string.winds)
-        val translatedhumidityText = context.getString(R.string.humidity)
-        val translatedpressureText = context.getString(R.string.pressure)
-        val translatedtodayRecText = context.getString(R.string.today)
-        val translatedDayRecText = context.getString(R.string.next5days)
+        resources.updateConfiguration(config,resources.displayMetrics)
 
-        binding.tvclouds.text = translatecloudsText
-        binding.tvWind.text = translatedwindText
-        binding.tvHumidity.text = translatedhumidityText
-        binding.tvPressure.text = translatedpressureText
-        binding.tvTodayRecTxt.text = translatedtodayRecText
-        binding.textDays.text = translatedDayRecText
+//        val context= ContextUtils.wrapContext(requireContext(), locale)
+//        val translatecloudsText = context.getString(R.string.clouds)
+//        val translatedwindText = context.getString(R.string.winds)
+//        val translatedhumidityText = context.getString(R.string.humidity)
+//        val translatedpressureText = context.getString(R.string.pressure)
+//        val translatedtodayRecText = context.getString(R.string.today)
+//        val translatedDayRecText = context.getString(R.string.next5days)
+//
+//        binding.tvclouds.text = translatecloudsText
+//        binding.tvWind.text = translatedwindText
+//        binding.tvHumidity.text = translatedhumidityText
+//        binding.tvPressure.text = translatedpressureText
+//        binding.tvTodayRecTxt.text = translatedtodayRecText
+//        binding.textDays.text = translatedDayRecText
 
     }
 

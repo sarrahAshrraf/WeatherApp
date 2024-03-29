@@ -102,13 +102,13 @@ class SettingsFragment : Fragment() {
                     R.id.matricRdiobtn -> {
                         binding.impRdiobtn.isChecked = false
                         Toast.makeText(requireContext(),"metric", Toast.LENGTH_SHORT).show()
-                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "metric")
+                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "metric") //m/s
 
                     }
                     R.id.impRdiobtn -> {
                         binding.matricRdiobtn.isChecked = false
                         Toast.makeText(requireContext(),"impa",Toast.LENGTH_SHORT).show()
-                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "imperial")
+                        sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "imperial") // miles/hrs
 
                     }
                 }
@@ -132,7 +132,7 @@ class SettingsFragment : Fragment() {
                     R.id.KRdiobtn -> {///k
                         binding.CRdiobtn.isChecked = false
                         binding.FRdiobtn.isChecked = false
-                        sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "default")
+                        sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "standard")
                     }
                     R.id.FRdiobtn -> {///k
                         binding.KRdiobtn.isChecked = false

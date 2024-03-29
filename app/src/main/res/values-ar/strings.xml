@@ -30,20 +30,24 @@
     <string name="save">حفظ</string>
     <string name="endDate">موعد الأنتهاء</string>
     <string name="addAlertFrom">أحفظ تنبيه من</string>
-    <string name="completeDetails">Compelete alert setup</string>
-    <string name="currentLocation">Current location</string>
-    <string name="units">Units</string>
-    <string name="metricUnits">متري</string>
-    <string name="impUnits">Imparial</string>
+    <string name="completeDetails">أكمل أعدادات المنبه</string>
+    <string name="currentLocation">الموقع الحالي</string>
+    <string name="units">الوحدات</string>
+    <string name="metricUnits">المتري</string>
+    <string name="impUnits">الامبراطوري</string>
     <string name="saveAlertData">حفظ</string>
     <string name="toDate">إلى</string>
     <string name="fromDate">من</string>
-    <string name="tempUnits">Temperature</string>
-    <string name="kalvin">Kelvin</string>
-    <string name="c">Celsius</string>
-    <string name="fahrenhiet">Fahrenheit</string>
-    <string name="appname">Weather Alerts</string>
-    <string name="delete">Delete</string>
+    <string name="tempUnits">درجة الحرارة</string>
+    <string name="kalvin">كلفن</string>
+    <string name="c">مئوي</string>
+    <string name="fahrenhiet"> فهرنهايت</string>
+    <string name="appname">منبه الطقس</string>
+    <string name="delete">حذف</string>
+    <string name="location">الموقع</string>
+    <string name="dismiss">تجاهل</string>
+    <string name="alertnotification">تنبيه إشعارات</string>
+    <string name="alertalarm">تنبيه منبه</string>
 
 
 </resources>
