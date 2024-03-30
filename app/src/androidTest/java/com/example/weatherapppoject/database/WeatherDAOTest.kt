@@ -66,6 +66,7 @@ class WeatherDAOTest {
             )
         )
         val weatherResponse = WeatherResponse(
+            1,
             city,
             123.456,
             78.90,
@@ -164,7 +165,7 @@ class WeatherDAOTest {
             )
         )
         val weatherResponse = WeatherResponse(
-            city,
+            1,city,
             123.456,
             78.90,
             5,
@@ -190,7 +191,7 @@ class WeatherDAOTest {
             )
         )
         val weatherResponse = WeatherResponse(
-            city,
+            1,city,
             123.456,
             78.90,
             5,

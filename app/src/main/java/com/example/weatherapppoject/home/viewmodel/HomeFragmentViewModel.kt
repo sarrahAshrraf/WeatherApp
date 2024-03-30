@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
+import com.example.weatherapppoject.repository.WeatherRepositoryInter
 import com.example.weatherapppoject.utils.ForeCastApiState
 import com.example.weatherapppoject.utils.DBState
 import com.example.weatherapppoject.utils.Utils
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 
-class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl) : ViewModel() {
+class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryInter) : ViewModel() {
 //    private val _alertData = MutableStateFlow<OneCallState>(OneCallState.Loading())
 //    val alertsData: StateFlow<OneCallState> = _alertData
 

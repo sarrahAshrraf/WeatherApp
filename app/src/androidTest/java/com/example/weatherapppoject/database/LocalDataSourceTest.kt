@@ -200,6 +200,7 @@ class LocalDataSourceTest {
             )
         )
         val favorite = WeatherResponse(
+            1,
             city,
             123.456,
             78.90,
@@ -237,6 +238,7 @@ class LocalDataSourceTest {
             )
         )
         val favorite = WeatherResponse(
+            1,
             city,
             123.456,
             78.90,

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
+import com.example.weatherapppoject.repository.WeatherRepositoryInter
 import com.example.weatherapppoject.utils.DBState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FavoriteViewModel (private val weatherRepository: WeatherRepositoryImpl) : ViewModel() {
+class FavoriteViewModel (private val weatherRepository: WeatherRepositoryInter) : ViewModel() {
     private val _favData = MutableStateFlow<DBState>(DBState.Loading())
     val currentWeather: StateFlow<DBState> = _favData
     fun addToFavorites(fav: WeatherResponse, long: Double, lat: Double) {

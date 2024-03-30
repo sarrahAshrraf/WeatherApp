@@ -11,6 +11,7 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.forecastmodel.Wind
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeRepository :WeatherRepositoryInter{
@@ -108,11 +109,36 @@ class FakeRepository :WeatherRepositoryInter{
     }
 
     override fun getFavCityInfoHome(): Flow<WeatherResponse> {
-        TODO("Not yet implemented")
+        return flow {
+            if (home.isNotEmpty()) {
+                emit(home.first())
+            } else {
+                home.clear()
+                emit(home.first())
+            }
+        }
+
+
+
+//        return flowOf(home.first())
     }
 
+
+
+
+
+
+//    override fun getFavCityInfoHome(): Flow<WeatherResponse> = flow {
+//        if (home.isNotEmpty()) {
+//            emit(home.first())
+//        } else {
+//            throw NoSuchElementException("No favorite cities found.")
+//        }
+//    }
+
     override suspend fun deleteHome() {
-        TODO("Not yet implemented")
+        home.clear()
+//        remove(home.first())
     }
 
 
