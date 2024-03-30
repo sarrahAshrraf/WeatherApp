@@ -48,6 +48,9 @@
     <string name="dismiss">تجاهل</string>
     <string name="alertnotification">تنبيه إشعارات</string>
     <string name="alertalarm">تنبيه منبه</string>
+    <string name="favoritemenu">المفضلة</string>
+    <string name="home">الرئيسية</string>
+    <string name="notifications">الأشعارات</string>
 
 
 </resources>

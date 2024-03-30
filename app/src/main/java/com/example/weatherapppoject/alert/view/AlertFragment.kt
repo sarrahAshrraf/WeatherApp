@@ -38,6 +38,7 @@ import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
+import com.example.weatherapppoject.view.HomeActivity
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -287,13 +288,12 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         dialog.show()
     }
 
-      private fun replaceFragments(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+    private fun replaceFragments(fragment: Fragment) {
+        val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
     // picker time and picker date
     private fun pickTime(dialogBinding: AlertDialogBinding, choose: Int) {
         val calendarTime = Calendar.getInstance()

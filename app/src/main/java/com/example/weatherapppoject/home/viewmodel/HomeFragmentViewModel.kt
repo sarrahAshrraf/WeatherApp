@@ -40,7 +40,14 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl
                     _favData.value = DBState.Failure(exception)
                 }
                 .collect { data ->
-                    _favData.value = DBState.OneCitySucess(data)
+                    if (checkNotNull(false)){
+                        _favData.value = DBState.Failure(Throwable())
+                }else {
+                        _favData.value = DBState.OneCitySucess(data)
+
+
+
+                    }
                 }
         }
     }

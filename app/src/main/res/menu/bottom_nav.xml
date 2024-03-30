@@ -7,23 +7,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/home"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:id="@+id/favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/favorite"
-        android:title="Favorite" />
+        android:title="@string/favoritemenu" />
     <item
         android:id="@+id/Alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/alert"
-        android:title="Notification" />
+        android:title="@string/notifications" />
     <item
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/settings"
-        android:title="Settings" />
+        android:title="@string/settings" />
 </menu>

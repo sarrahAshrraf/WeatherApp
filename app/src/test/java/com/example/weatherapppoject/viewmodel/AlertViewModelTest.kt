@@ -36,6 +36,32 @@ fun getSetup(){
     alertViewModel = AlertViewModel(repository)
 }
 
+
+
+    @Test
+    fun getAlerts(): Unit = runBlocking {
+        val alertData = AlertData(
+            5,
+            "1:00 AM",
+            "2023-03-28",
+            "6:00 AM",
+            "2024-03-19",
+            1658828400000L,
+            17653L,
+            1658886000000L,
+            17654L,
+            123456,
+            "39.456",
+            "31.90"
+        )
+        val expectedAlertData = listOf(alertData)
+
+        alertViewModel.insertIntoAlert(alertData)
+        alertViewModel.getAlertData()
+        Assert.assertThat(alertViewModel.alertData.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
+        )
+
+    }
 @Test
 fun insertIntoAlerts(): Unit = runBlocking {
     val alertData = AlertData(

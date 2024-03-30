@@ -32,6 +32,7 @@ class FakeRepository :WeatherRepositoryInter{
         )
     )
     val data = WeatherResponse(
+        1,
         city,
         123.456,
         78.90,
@@ -51,7 +52,7 @@ class FakeRepository :WeatherRepositoryInter{
         apiKey: String,
         lang: String
     ): Flow<WeatherResponse> {
-        return  flowOf(WeatherResponse(city, 0.0,0.0,0,0,0,"0",forecastList,0))
+        return  flowOf(WeatherResponse(1,city, 0.0,0.0,0,0,0,"0",forecastList,0))
     }
 
     override fun getFavoriteData(): Flow<List<WeatherResponse>> = flowOf(favorite)

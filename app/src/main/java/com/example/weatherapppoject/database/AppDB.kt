@@ -27,7 +27,7 @@ abstract class AppDB : RoomDatabase() {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context.applicationContext, AppDB::class.java,
-                    "mioal"
+                    "utifei"
                 ).build()
                 INSTANCE = instance
                 instance}

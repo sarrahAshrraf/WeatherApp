@@ -33,6 +33,7 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.ForeCastApiState
 import com.example.weatherapppoject.utils.NetworkStateReceiver
 import com.example.weatherapppoject.utils.Utils
+import com.example.weatherapppoject.view.HomeActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -252,7 +253,7 @@ class MapsFragment : Fragment() {
         networkStateReceiver = null
     }
     private fun replaceFragments(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()

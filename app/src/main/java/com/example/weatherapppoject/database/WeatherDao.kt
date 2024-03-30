@@ -23,7 +23,8 @@ interface WeatherDao {
 //    =============>
     //get only the data in teh home fragment when no network
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * FROM weather_data where isFav =0 LIMIT 1")
+//    @Query("SELECT * FROM weather_data where isFav =0 LIMIT 1")
+    @Query("SELECT * FROM weather_data where isFav =0 ORDER BY id DESC LIMIT 1")
     fun getWeatherData(): Flow<WeatherResponse>
 
 

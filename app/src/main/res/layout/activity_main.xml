@@ -7,6 +7,17 @@
     android:backgroundTint="#FFFFFF"
     tools:context=".view.SplashScreen">
 
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="1040dp"
+        android:layout_height="960dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backg" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
         android:layout_width="340dp"

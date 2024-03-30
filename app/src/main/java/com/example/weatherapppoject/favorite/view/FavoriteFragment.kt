@@ -1,6 +1,10 @@
 package com.example.weatherapppoject.favorite.view
 
 import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import androidx.fragment.app.FragmentManager
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
@@ -28,6 +32,7 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.utils.DBState
+import com.example.weatherapppoject.view.HomeActivity
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -161,20 +166,49 @@ class FavoriteFragment : Fragment() {
 //            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
             Log.i("==set Onclcik===", "")
             sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
+                if(checkForInternet(requireContext())){
+                    replaceFragments(MapsFragment())
+                }else {
 
-            replaceFragments(MapsFragment())
+                    Toast.makeText(requireContext(),"check yur netwrok",Toast.LENGTH_SHORT).show()
+
+                }
 
         }
 
 
     }
-    private fun replaceFragments(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
 
+private fun replaceFragments(fragment: Fragment) {
+    val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
+    transaction.replace(R.id.frameLayout, fragment)
+    transaction.addToBackStack(null)
+    transaction.commit()
+}
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val network = connectivityManager.activeNetwork ?: return false
+
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
 
 }
 //val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.FAV.name)
