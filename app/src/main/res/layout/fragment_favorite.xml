@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0E3245"
     tools:context=".favorite.view.FavoriteFragment">
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="1040dp"
+        android:layout_height="960dp"
+        app:layout_constraintBottom_toBottomOf="parent"
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backg" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -31,7 +41,7 @@
         android:layout_height="66dp"
         android:layout_marginStart="307dp"
         android:layout_marginTop="586dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginBottom="70dp"
         android:clickable="true"
         android:soundEffectsEnabled="true"
@@ -48,12 +58,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favRecView"
         android:layout_width="409dp"
-        android:layout_height="614dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

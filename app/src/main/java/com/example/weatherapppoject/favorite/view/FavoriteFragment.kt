@@ -1,6 +1,10 @@
 package com.example.weatherapppoject.favorite.view
 
 import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,13 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.databinding.FragmentFavoriteBinding
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModel
 import com.example.weatherapppoject.favorite.viewmodel.FavoriteViewModelFactory
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModel
+import com.example.weatherapppoject.home.viewmodel.HomeFragmentViewModelFactory
 import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
@@ -26,8 +31,8 @@ import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.map.view.MapsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.utils.DBState
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModel
-import com.example.weatherapppoject.viewmodel.HomeFragmentViewModelFactory
+import com.example.weatherapppoject.view.HomeActivity
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,16 +83,6 @@ class FavoriteFragment : Fragment() {
         floatingActionButton  = view.findViewById(R.id.floatingActionButton)
         favRecyclerView = view.findViewById(R.id.favRecView)
         favLayoutManager = LinearLayoutManager(requireContext())
-//        favAdapter = FavoritesAdapter(emptyList()) // Pass an empty list initially
-
-
-//035551414
-
-        val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.GPS.name)
-        val longg = longlat!!.first
-        val latt = longlat.second
-        Log.i("==latttt longggg===", ""+ longg+ latt)
-
         favAdapter = FavoritesAdapter(emptyList(),
             { product, position ->
                 val alertDialogBuilder = AlertDialog.Builder(context)
@@ -104,11 +99,7 @@ class FavoriteFragment : Fragment() {
                 alertDialog.show()
             },
             { product, position ->
-
-                // Navigate to the new fragment
-
                 val bundle = Bundle().apply {
-
                     putDoubleArray("longlat", doubleArrayOf(product.longitude, product.latitude))
                 }
                 // Navigate to the new fragment
@@ -119,7 +110,6 @@ class FavoriteFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
 
-//                replaceFragments(FavoriteDetailsFragment())
                 Toast.makeText(requireContext(),"on card",Toast.LENGTH_SHORT).show()
             }
         )
@@ -142,7 +132,7 @@ class FavoriteFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
 //            favoriteViewModel.showFavItems()
 
-            favoriteViewModel.currentWeather.collect { state ->
+            favoriteViewModel.favorite.collect { state ->
                 when (state) {
                     is DBState.Loading -> {
 //                       binding.animationView.visibility =View.VISIBLE
@@ -174,19 +164,53 @@ class FavoriteFragment : Fragment() {
         floatingActionButton.setOnClickListener {
 //            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
             Log.i("==set Onclcik===", "")
+            sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
+                if(checkForInternet(requireContext())){
+                    replaceFragments(MapsFragment())
+                }else {
 
-            replaceFragments(MapsFragment())
+                    Toast.makeText(requireContext(),"check yur netwrok",Toast.LENGTH_SHORT).show()
+
+                }
 
         }
 
 
     }
-    private fun replaceFragments(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frameLayout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+
+private fun replaceFragments(fragment: Fragment) {
+    val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
+    transaction.replace(R.id.frameLayout, fragment)
+    transaction.addToBackStack(null)
+    transaction.commit()
+}
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val network = connectivityManager.activeNetwork ?: return false
+
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 
-
 }
+//val longlat = sharedPreferencesManager.getLocationFromMap(SharedKey.FAV.name)
+//val longg = longlat!!.first
+//val latt = longlat.second
+//Log.i("==latttt longggg===", ""+ longg+ latt)

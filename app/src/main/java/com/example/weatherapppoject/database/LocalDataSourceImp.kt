@@ -2,6 +2,7 @@ package com.example.weatherapppoject.database
 
 import android.content.Context
 import android.util.Log
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -23,7 +24,18 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
 
     override suspend fun deleteFavData(weatherData: WeatherResponse) {
         Log.i("d======eeee","local data sour4e")
+        dao.deleteFav(weatherData)
+//        dao.deleteFavByLonLat(longitude,latitude)
+    }
+     override suspend fun deleteHomeData(weatherData: WeatherResponse) {
+        Log.i("d======eeee","local data sour4e")
         dao.delete(weatherData)
+//        dao.deleteFavByLonLat(longitude,latitude)
+    }
+
+    override suspend fun deleteHomeData() {
+        Log.i("d======eeee","local data sour4e")
+        dao.deleteFavByIsNotFav()
 //        dao.deleteFavByLonLat(longitude,latitude)
     }
 
@@ -33,6 +45,30 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
 
     override fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse> {
         return dao.getSpecificCityData(longitude,latitude)
+    }
+
+    override suspend fun insertHomeData(weatherData: WeatherResponse, longitude: Double, latitude: Double) {
+        return dao.setHomeStore(weatherData, longitude,latitude)
+    }
+
+    override fun getCityDataHome(): Flow<WeatherResponse> {
+        return dao.getWeatherData()
+    }
+
+    override suspend fun setALertData(alert: AlertData, longitude: Double, latitude: Double) {
+        return dao.setAsAlerted(alert,longitude,latitude)
+    }
+
+    override suspend fun deleteAlertData(weatherAlertedData: AlertData) {
+        dao.deleteAlertDataAll(weatherAlertedData)
+    }
+
+    override fun displayAllAlerts(): Flow<List<AlertData>> {
+        return dao.getAlertsData()
+    }
+
+    override suspend fun insertAlert(alert: AlertData) {
+        dao.insertAlert(alert)
     }
 }
 

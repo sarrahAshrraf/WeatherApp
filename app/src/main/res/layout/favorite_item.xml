@@ -9,15 +9,15 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="334dp"
-        android:layout_height="128dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        android:background="@color/dark_blue"
-        android:backgroundTint="@color/dark_blue"
+        app:cardElevation="0dp"
+        android:background="@drawable/mainwidget"
+        android:backgroundTint="#00FFFFFF"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@color/buttons"
         android:foregroundGravity="center"
         android:padding="16dp"
         app:cardCornerRadius="10dp">
@@ -27,19 +27,31 @@
             android:layout_width="361dp"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="373dp"
+                android:layout_height="108dp"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.23"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/favwidget" />
+
             <TextView
                 android:id="@+id/dayName"
-                android:layout_width="53dp"
+                android:layout_width="96dp"
 
-                android:layout_height="20dp"
+                android:layout_height="17dp"
                 android:text="Day"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.404"
+                app:layout_constraintHorizontal_bias="0.471"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.139" />
+                app:layout_constraintVertical_bias="0.252" />
 
             <TextView
                 android:id="@+id/tvTempRec"
@@ -50,57 +62,42 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.395"
+                app:layout_constraintHorizontal_bias="0.396"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.843" />
-
-            <TextView
-                android:id="@+id/tvTimeRec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
-
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/tvTempRec"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.395"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-
-                app:layout_constraintVertical_bias="0.626" />
+                app:layout_constraintVertical_bias="0.82" />
 
             <TextView
                 android:id="@+id/feelslike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="8dp"
                 android:text="TextView"
-                android:textColor="@color/white"
 
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/tvTempRec"
                 app:layout_constraintEnd_toStartOf="@+id/button"
-                app:layout_constraintHorizontal_bias="0.156"
+                app:layout_constraintHorizontal_bias="0.132"
                 app:layout_constraintStart_toEndOf="@+id/imgeViewRec"
-                app:layout_constraintTop_toBottomOf="@+id/tvTimeRec"
-                app:layout_constraintVertical_bias="0.833" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
-            <Button
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/button"
-                android:layout_width="58dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/deleteicon"
-                android:backgroundTint="@color/white"
+                android:layout_width="54dp"
+                android:layout_height="62dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="19dp"
+                android:layout_marginEnd="19dp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.663"
-                app:layout_constraintStart_toEndOf="@+id/tvTempRec"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/bin" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/imgeViewRec"
@@ -117,6 +114,7 @@
                 app:layout_constraintVertical_bias="0.485"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

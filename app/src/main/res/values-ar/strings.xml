@@ -20,7 +20,50 @@
     <string name="gps">الموقع الحالي</string>
     <string name="map">خريطة</string>
     <string name="search_map">أبحث في الخريطة..</string>
-
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="startDate">موعد البداية</string>
+    <string name="cancel">إلغاء</string>
+    <string name="selectLocation">أختر مكان</string>
+    <string name="notification">إشعارات</string>
+    <string name="alarm">منبة</string>
+    <string name="save">حفظ</string>
+    <string name="endDate">موعد الأنتهاء</string>
+    <string name="addAlertFrom">أحفظ تنبيه من</string>
+    <string name="completeDetails">أكمل أعدادات المنبه</string>
+    <string name="currentLocation">الموقع الحالي</string>
+    <string name="units">الوحدات</string>
+    <string name="metricUnits">المتري</string>
+    <string name="impUnits">الامبراطوري</string>
+    <string name="saveAlertData">حفظ</string>
+    <string name="toDate">إلى</string>
+    <string name="fromDate">من</string>
+    <string name="tempUnits">درجة الحرارة</string>
+    <string name="kalvin">كلفن</string>
+    <string name="c">مئوي</string>
+    <string name="fahrenhiet"> فهرنهايت</string>
+    <string name="appname">منبه الطقس</string>
+    <string name="delete">حذف</string>
+    <string name="location">الموقع</string>
+    <string name="dismiss">تجاهل</string>
+    <string name="alertnotification">تنبيه إشعارات</string>
+    <string name="alertalarm">تنبيه منبه</string>
+    <string name="favoritemenu">المفضلة</string>
+    <string name="home">الرئيسية</string>
+    <string name="notifications">الأشعارات</string>
+    <string name="deletAlertConfirm">هل متأكد من حذف هذا المنبه؟</string>
+    <string name="removeDialogmsg">تأكيد الحذف</string>
+    <string name="ok"> نعم</string>
+    <string name="no">لا</string>
+    <string name="addtofavorite">اضف إلى المفضلة</string>
+    <string name="addtoALert">اضف إلى المنبه</string>
+    <string name="makecurrent">اجعله موقعك الحالي</string>
+    <string name="notfoundlocation">الموقع غير موجود</string>
+    <string name="turnonlocation">قم بتشغيل موقعك</string>
+    <string name="nointernetconnection">لا يوجد أتصال بالأنترنت</string>
+    <string name="alertdatainput">من فضلك أدخل البيانات بشكل صحيح</string>
+    <string name="nowarnings">لا يوجد تحذيرات</string>
+    <string name="nowforecast">الطقس الآن:</string>
 
 
 

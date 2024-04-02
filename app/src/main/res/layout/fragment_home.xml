@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
-    tools:context=".view.HomeFragment">
+    android:background="#0E3245"
+    tools:context=".home.view.HomeFragment">
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -51,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:fontFamily="@font/myfont"
                 android:text="@string/city"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -61,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/myfont"
                 android:text="@string/dayformat"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -76,10 +79,12 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/weatherImgView"
-                    android:layout_width="328dp"
-                    android:layout_height="141dp"
+                    android:layout_width="322dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
                     android:layout_marginStart="19dp"
                     android:layout_marginEnd="19dp"
+                    android:foregroundGravity="center"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +100,7 @@
                     android:id="@+id/tvStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/myfont"
                     android:text="@string/weatherstatus"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -105,10 +111,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:fontFamily="@font/myfont"
                     android:text="@string/weathertemp"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="43sp"
+                    android:textSize="34sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -121,14 +128,14 @@
                     android:textSize="16sp" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="67dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="16dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="0.333"
                         android:orientation="vertical">
 
@@ -140,15 +147,6 @@
                             app:srcCompat="@drawable/cloudsicon" />
 
                         <TextView
-                            android:id="@+id/cloudPercent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/cloudpercent"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
-
-                        <TextView
                             android:id="@+id/tvclouds"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -156,78 +154,98 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
+
+                        <TextView
+
+                            android:id="@+id/cloudPercent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cloudpercent"
+
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="79dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_weight="0.333"
+                        android:layout_margin="10dp"
+                        android:layout_weight="0"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/imageView37"
-                            android:layout_width="60dp"
+                            android:layout_width="48dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/windicon" />
 
                         <TextView
-                            android:id="@+id/windPercent"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tvWind"
+
+                            android:layout_width="79dp"
                             android:layout_height="wrap_content"
-                            android:text="12km/h"
+                            android:layout_gravity="center"
+                            android:text="@string/winds"
+
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/tvWind"
+                            android:id="@+id/windPercent"
                             android:layout_width="wrap_content"
+
                             android:layout_height="wrap_content"
-                            android:text="@string/winds"
+                            android:layout_gravity="center"
+                            android:text="12km/h"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="64dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="0.333"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/imageView38"
-                            android:layout_width="63dp"
-                            android:layout_height="27dp"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/humiditypercent" />
 
                         <TextView
-                            android:id="@+id/humidityPercent"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tvHumidity"
+
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="20%"
+                            android:layout_gravity="center"
+                            android:text="@string/humidity"
+
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="13sp" />
 
                         <TextView
-                            android:id="@+id/tvHumidity"
-                            android:layout_width="match_parent"
+                            android:id="@+id/humidityPercent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/humidity"
+                            android:layout_gravity="center"
+                            android:text="20"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="0.333"
                         android:orientation="vertical">
 
@@ -239,19 +257,26 @@
                             app:srcCompat="@drawable/pressureicon" />
 
                         <TextView
-                            android:id="@+id/pressurePercent"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tvPressure"
+
+                            android:layout_width="76dp"
                             android:layout_height="wrap_content"
-                            android:text="997hPa"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/pressure"
+
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/tvPressure"
-                            android:layout_width="match_parent"
+                            android:id="@+id/pressurePercent"
+                            android:layout_width="74dp"
+
                             android:layout_height="wrap_content"
-                            android:text="@string/pressure"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="997hPa"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="15sp" />
