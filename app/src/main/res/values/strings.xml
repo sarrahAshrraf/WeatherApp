@@ -46,7 +46,7 @@
     <string name="delete">Delete</string>
     <string name="location">Location</string>
     <string name="dismiss">Dismiss</string>
-    <string name="alertnotification">ALert Notification</string>
+    <string name="alertnotification">Alert Notification</string>
     <string name="alertalarm">Alert alarm</string>
     <string name="favoritemenu">Favorite</string>
     <string name="home">Home</string>
@@ -63,6 +63,7 @@
     <string name="nointernetconnection">There is no internet connection</string>
     <string name="alertdatainput">Please enter correct data</string>
     <string name="nowarnings">There are no warnings</string>
+    <string name="nowforecast">Current State:</string>
 
 
 

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.Clouds
 import com.example.weatherapppoject.forecastmodel.Coord
@@ -17,16 +17,11 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.forecastmodel.Wind
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.core.IsEqual
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

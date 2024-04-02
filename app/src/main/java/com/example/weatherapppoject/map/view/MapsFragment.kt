@@ -46,6 +46,8 @@ import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -74,11 +76,12 @@ class MapsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedPrefrencesManager = SharedPrefrencesManager.getInstance(requireContext())
         remoteDataSource = RemoteDataSourceImp()
+        geocoder = Geocoder(requireContext())
         localDataSourceInte = LocalDataSourceImp(requireContext())
         repository= WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
         viewModelFactory = FavoriteViewModelFactory(repository)
         favoriteViewModel = ViewModelProvider(this, viewModelFactory).get(FavoriteViewModel::class.java)
-        mapFactory = MapViewModelFactory(repository)
+        mapFactory = MapViewModelFactory(repository,geocoder,requireContext())
         mapViewModel = ViewModelProvider(this, mapFactory).get(MapFragmentViewModel::class.java)
     }
 
@@ -99,14 +102,13 @@ class MapsFragment : Fragment() {
         networkStateReceiver = NetworkStateReceiver { isConnected ->
             if (isConnected) {
                 binding.tvNetworkIndicator.visibility = View.GONE
-                geocoder = Geocoder(requireContext())
                 val mapFragment =
                     childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
                 mapFragment?.getMapAsync { map ->
                     googleMap = map
                     googleMap.setOnMapClickListener { latLng ->
                         val locationName = getAddressFromLatLng(latLng)
-                        addMarkerToMap(latLng, locationName)
+                        addMarkerToMap(latLng)
                     }
                 }
 
@@ -120,51 +122,24 @@ class MapsFragment : Fragment() {
                     }
                 }
 
-//                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                        // Not needed for this implementation
-//                    }
-//
-//                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                        val searchQuery = s.toString()
-//
-//                        mapViewModel.setSearchQuery(searchQuery)
-//                        viewLifecycleOwner.lifecycleScope.launch {
-//                            searchLocation(searchQuery)
-//                        }
-//                        }
-//
-//
-//                    override fun afterTextChanged(s: Editable?) {
-//                        // Not needed for this implementation
-//                    }
-//                })
-
-//                lifecycleScope.launchWhenStarted {
-//                    mapViewModel.searchResults.collect { searchResult ->
-//                        Toast.makeText(requireContext(), searchResult, Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-
-                binding.imgSearchIcon.setOnClickListener {
-
+                binding.etSearchMap.addTextChangedListener {
                     val searchQuery = binding.etSearchMap.text.toString()
                     if (searchQuery.isNotEmpty()) {
                         lifecycleScope.launch {
                             mapViewModel.setSearchQuery(searchQuery)
-                            searchLocation(searchQuery)
                         }
                     }
+                    mapViewModel.searchResults.onEach { location ->
+                        Log.d("SearchResult", "Location found: $location")
+                    }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+                    mapViewModel.cameraMoveEvent.onEach { latLng ->
+                        moveCameraToLocation(latLng)
+                        addMarkerToMap(latLng)
+
+                    }.launchIn(viewLifecycleOwner.lifecycleScope)
+
                 }
-
-
-
-//
-//                binding.imgSearchIcon.setOnClickListener {
-//                    val searchQuery = binding.etSearchMap.text.toString()
-//                    if (searchQuery.isNotEmpty()) {
-//                        searchLocation(searchQuery)
-//                    }
-//                }
 
                 if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "fav") {
                     binding.btnSelectOrAddOnMap.text = getString(R.string.addtofavorite)
@@ -244,25 +219,25 @@ class MapsFragment : Fragment() {
 
     }
 
-    private fun searchLocation(locationName: String) {
-        val addresses = geocoder.getFromLocationName(locationName, 1)
-        if (addresses!!.isNotEmpty()) {
-            val address = addresses[0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            moveCameraToLocation(latLng)
-            addMarkerToMap(latLng, locationName)
-        } else {
-            Toast.makeText(requireContext(), getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun searchLocation(locationName: String) {
+//        val addresses = geocoder.getFromLocationName(locationName, 1)
+//        if (addresses!!.isNotEmpty()) {
+//            val address = addresses[0]
+//            val latLng = LatLng(address.latitude, address.longitude)
+//            moveCameraToLocation(latLng)
+//            addMarkerToMap(latLng, locationName)
+//        } else {
+//            Toast.makeText(requireContext(), getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun moveCameraToLocation(latLng: LatLng) {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
     }
 
-    private fun addMarkerToMap(latLng: LatLng, title: String) {
+    private fun addMarkerToMap(latLng: LatLng) {
         googleMap.clear()
-        googleMap.addMarker(MarkerOptions().position(latLng).title(title))
+        googleMap.addMarker(MarkerOptions().position(latLng))
         val locationFromMark = getAddressFromLatLng(latLng)
         binding.etSearchMap.setText(locationFromMark)
         if(sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name,"")=="home"){

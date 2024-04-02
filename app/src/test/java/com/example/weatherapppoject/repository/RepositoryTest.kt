@@ -1,9 +1,7 @@
 package com.example.weatherapppoject.repository
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.data.FakeLocalDataCourceImp
 import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.Clouds
@@ -14,11 +12,7 @@ import com.example.weatherapppoject.forecastmodel.Weather
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.forecastmodel.Wind
 import com.example.weatherapppoject.network.FakeApiService
-import com.example.weatherapppoject.network.FakeRemoteDataCource
-import com.google.common.truth.ExpectFailure.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.core.IsEqual
 import org.junit.Assert

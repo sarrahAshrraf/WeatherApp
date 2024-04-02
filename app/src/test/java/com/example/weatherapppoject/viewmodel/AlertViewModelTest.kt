@@ -5,7 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.weatherapppoject.MainRule
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.alert.viewmodel.AlertViewModel
 import com.example.weatherapppoject.getOrAwaitValue
 import com.example.weatherapppoject.repository.FakeRepository

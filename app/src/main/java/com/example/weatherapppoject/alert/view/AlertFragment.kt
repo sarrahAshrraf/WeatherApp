@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.alert.NetworkListener
 import com.example.weatherapppoject.alert.viewmodel.AlertViewModel
 import com.example.weatherapppoject.alert.viewmodel.AlertViewModelFactory

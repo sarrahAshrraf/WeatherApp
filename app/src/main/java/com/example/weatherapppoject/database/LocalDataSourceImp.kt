@@ -2,9 +2,8 @@ package com.example.weatherapppoject.database
 
 import android.content.Context
 import android.util.Log
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
-import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImp(context: Context): LocalDataSourceInte {

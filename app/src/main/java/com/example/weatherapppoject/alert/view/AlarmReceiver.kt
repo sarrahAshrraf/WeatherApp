@@ -7,10 +7,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.media.MediaPlayer
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +23,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.getString
+import androidx.core.view.ViewCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapppoject.R
 
@@ -31,24 +35,31 @@ import com.example.weatherapppoject.network.RemoteDataSource
 import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
+import com.example.weatherapppoject.settings.SettingsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
+import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class AlarmReceiver : BroadcastReceiver(){
 
     private lateinit var CHANEL:String
     private lateinit var type:String
     private lateinit var  repository: WeatherRepositoryImpl
-    private lateinit var alertResults:OneApiCall 
+    private lateinit var alertResults:OneApiCall
+    private lateinit var sharedPreferencesManager: SharedPrefrencesManager
+
     lateinit var remoteDataSource: RemoteDataSource
     lateinit var localDataSourceInte: LocalDataSourceInte
+    var language : String =""
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onReceive(context: Context?, intent: Intent?) {
+        sharedPreferencesManager = SharedPrefrencesManager.getInstance(context!!)
         CHANEL = intent?.getStringExtra("channel").toString()
         type = intent?.getStringExtra(SharedKey.ALERT_TYPE.name).toString()
         remoteDataSource = RemoteDataSourceImp()
@@ -56,14 +67,13 @@ class AlarmReceiver : BroadcastReceiver(){
 
         val lat = intent?.getStringExtra("lat").toString().toDouble()
         val lon = intent?.getStringExtra("lon").toString().toDouble()
+        language = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "")
         var alertMessage= getString(context,R.string.nowarnings)
         repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
 
-
         CoroutineScope(Dispatchers.IO).launch {
-            //languaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,"en").collect{
-                alertResults = it!!
+            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,language).collect{ alertsData->
+                alertResults = alertsData!!
             }
 
             if(!alertResults.alerts.isNullOrEmpty())
@@ -74,15 +84,23 @@ class AlarmReceiver : BroadcastReceiver(){
                 intent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val pendingIntent = PendingIntent.getActivity(context, 0,destinationIntent,
                     PendingIntent.FLAG_IMMUTABLE)
+                val expandedText = NotificationCompat.BigTextStyle()
+                  if(language=="ar"){
+                      expandedText.bigText("الطقس الآن: ${ alertResults.current.weather[0].description}")
+
+                  }else {
+                      expandedText.bigText("Current: ${ alertResults.current.weather[0].description}")
+                  }
                 val builder = NotificationCompat.Builder(context!!, CHANEL)
                     .setSmallIcon(R.drawable.alert)
                     .setContentTitle(alertResults.timezone)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setContentIntent(pendingIntent)
+                    .setStyle(expandedText)
                     .setAutoCancel(true)
-                    .setContentText(alertMessage)
-//                    .set
+                    .setContentText(alertMessage )
+                
 
                 val notificationManager = NotificationManagerCompat.from(context)
 
@@ -100,6 +118,7 @@ class AlarmReceiver : BroadcastReceiver(){
         }
 
     }
+
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     private suspend fun alarmBuilder(context: Context, msgInfo:String) {
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -123,9 +142,7 @@ class AlarmReceiver : BroadcastReceiver(){
             )
 
         layoutParams.gravity = Gravity.TOP
-
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
         withContext(Dispatchers.Main) {
             windowManager.addView(view, layoutParams)
             if (msgInfo == "There are no warnings"){
@@ -138,8 +155,16 @@ class AlarmReceiver : BroadcastReceiver(){
                 animation.playAnimation()
             }
             message.text = msgInfo
-            description.text = "Current State: ${alertResults.current.weather[0].description}"
+            if (language =="ar"){
+                description.text = "الطقس الآن: ${alertResults.current.weather[0].description}"
+                btnDimiss.text="تجاهل"
+            }else {
+                description.text = "Current: ${alertResults.current.weather[0].description}"
+                btnDimiss.text="Dismiss"
+
+            }
             view.visibility = View.VISIBLE
+
 
         }
         mediaPlayer.start()

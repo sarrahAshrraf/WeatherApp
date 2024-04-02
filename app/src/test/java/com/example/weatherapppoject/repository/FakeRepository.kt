@@ -1,6 +1,6 @@
 package com.example.weatherapppoject.repository
 
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.City
 import com.example.weatherapppoject.forecastmodel.Clouds
 import com.example.weatherapppoject.forecastmodel.Coord
@@ -11,7 +11,6 @@ import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.forecastmodel.Wind
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeRepository :WeatherRepositoryInter{

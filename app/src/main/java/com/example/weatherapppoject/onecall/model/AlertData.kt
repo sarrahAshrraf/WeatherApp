@@ -1,4 +1,4 @@
-package com.example.weatherapppoject.alert
+package com.example.weatherapppoject.onecall.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -45,7 +45,7 @@ data class AlertData(
         milleTimeTo,
         milleDateTo,
         requestCode,
-      lontitude ,
-      lattiude
+        lontitude ,
+        lattiude
     )
 }

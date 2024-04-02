@@ -63,6 +63,8 @@
     <string name="nointernetconnection">لا يوجد أتصال بالأنترنت</string>
     <string name="alertdatainput">من فضلك أدخل البيانات بشكل صحيح</string>
     <string name="nowarnings">لا يوجد تحذيرات</string>
+    <string name="nowforecast">الطقس الآن:</string>
+
 
 
 
