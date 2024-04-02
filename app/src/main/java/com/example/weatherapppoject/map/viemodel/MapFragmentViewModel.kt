@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.debounce
+import java.io.IOException
 
 class MapFragmentViewModel(private val weatherRepository: WeatherRepositoryInter,
                            private val geocoder: Geocoder,
@@ -65,18 +66,23 @@ class MapFragmentViewModel(private val weatherRepository: WeatherRepositoryInter
         }
     }
     private fun searchLocation(locationName: String) {
-        val addresses = geocoder.getFromLocationName(locationName, 1)
-        if (addresses!!.isNotEmpty()) {
-            val address = addresses[0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            _searchResults.tryEmit(latLng.toString())
-//            Toast.makeText(context, latLng.toString(), Toast.LENGTH_SHORT).show()
-                        moveCameraToLocation(latLng)
-            addMarkerToMap(latLng, locationName)
-        } else {
-            Toast.makeText(context, context.getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
+        try {
+            val addresses = geocoder.getFromLocationName(locationName, 1)
+            if (addresses!!.isNotEmpty()) {
+                val address = addresses[0]
+                val latLng = LatLng(address.latitude, address.longitude)
+                _searchResults.tryEmit(latLng.toString())
+                moveCameraToLocation(latLng)
+                addMarkerToMap(latLng, locationName)
+            } else {
+                Toast.makeText(context, context.getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: IOException) {
+            // Handle the IOException when there is no network connectivity
+            Toast.makeText(context, "No network connection", Toast.LENGTH_SHORT).show()
         }
     }
+
     fun setSearchQuery(query: String) {
         viewModelScope.launch {
             _searchQuery.emit(query)

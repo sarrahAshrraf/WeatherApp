@@ -107,7 +107,7 @@ class MapsFragment : Fragment() {
                 mapFragment?.getMapAsync { map ->
                     googleMap = map
                     googleMap.setOnMapClickListener { latLng ->
-                        val locationName = getAddressFromLatLng(latLng)
+//                        val locationName = getAddressFromLatLng(latLng)
                         addMarkerToMap(latLng)
                     }
                 }
@@ -133,12 +133,23 @@ class MapsFragment : Fragment() {
                         Log.d("SearchResult", "Location found: $location")
                     }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-                    mapViewModel.cameraMoveEvent.onEach { latLng ->
-                        moveCameraToLocation(latLng)
-                        addMarkerToMap(latLng)
+                    networkStateReceiver = NetworkStateReceiver { isConnected ->
+                        if (isConnected) {
+                            mapViewModel.cameraMoveEvent.onEach { latLng ->
 
-                    }.launchIn(viewLifecycleOwner.lifecycleScope)
+                                moveCameraToLocation(latLng)
+                                addMarkerToMap(latLng)
 
+
+                            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+                        } else {
+
+
+                        }
+                    }
+                    val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+                    requireContext()?.registerReceiver(networkStateReceiver, intentFilter)
                 }
 
                 if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "fav") {
@@ -232,7 +243,17 @@ class MapsFragment : Fragment() {
 //    }
 
     private fun moveCameraToLocation(latLng: LatLng) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+        networkStateReceiver = NetworkStateReceiver { isConnected ->
+            if (isConnected) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+            }else {
+            Toast.makeText(requireContext(), getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
+
+            }
+        }
+
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireContext()?.registerReceiver(networkStateReceiver, intentFilter)
     }
 
     private fun addMarkerToMap(latLng: LatLng) {
