@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapppoject.databinding.FavoriteItemBinding
 import com.example.weatherapppoject.forecastmodel.ForeCastData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
+import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,8 +24,10 @@ class FavoritesAdapter (
     private val onRemoveClick: (WeatherResponse, Int) -> Unit,
     private val onItemClick: (WeatherResponse, Int) -> Unit
 ): RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
+    private lateinit var sharedPreferencesManager: SharedPrefrencesManager
 
-        class ViewHolder(val binding: FavoriteItemBinding) : RecyclerView.ViewHolder(binding.root){}
+
+    class ViewHolder(val binding: FavoriteItemBinding) : RecyclerView.ViewHolder(binding.root){}
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesAdapter.ViewHolder {
             return ViewHolder(FavoriteItemBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -48,7 +51,7 @@ class FavoritesAdapter (
                     onItemClick(currentItem,holder.adapterPosition)
                 }
 
-                tvTempRec.text =  Utils.convertToArabicNumber(currentItem.list[0].main.temp.toString())+".س"
+//                tvTempRec.text = currentItem.list[0].main.temp.toString()
                 Log.i("====RECy", "onBindViewHolder: "+currentItem.list[0].weather[0].description)
 
 

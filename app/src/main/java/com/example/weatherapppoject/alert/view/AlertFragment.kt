@@ -178,10 +178,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         viewModel = ViewModelProvider(requireActivity(), alertFactory).get(AlertViewModel::class.java)
         alertAdapter= AlertAdapter(listOf(),this)
         linearLayoutManager = LinearLayoutManager(context)
-//        binding.swipeRefresh.setOnRefreshListener {
-//            observeAtData()
-//            binding.swipeRefresh.isRefreshing =false
-//        }
         UpdateData()
         binding.alertRV.adapter = alertAdapter
         binding.alertRV.layoutManager = linearLayoutManager
