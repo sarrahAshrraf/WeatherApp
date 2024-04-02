@@ -155,21 +155,14 @@ class FavoriteFragment : Fragment() {
         }
 
 
-
-
-
-
-
-
         floatingActionButton.setOnClickListener {
-//            val db = Room.databaseBuilder(requireContext(), AppDB::class.java, "rr").build()
             Log.i("==set Onclcik===", "")
             sharedPreferencesManager.setMap(SharedKey.MAP.name,"fav")
                 if(checkForInternet(requireContext())){
                     replaceFragments(MapsFragment())
                 }else {
 
-                    Toast.makeText(requireContext(),"check yur netwrok",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),getString(R.string.networkstatus),Toast.LENGTH_SHORT).show()
 
                 }
 

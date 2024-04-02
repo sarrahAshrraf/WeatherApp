@@ -178,10 +178,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         viewModel = ViewModelProvider(requireActivity(), alertFactory).get(AlertViewModel::class.java)
         alertAdapter= AlertAdapter(listOf(),this)
         linearLayoutManager = LinearLayoutManager(context)
-//        binding.swipeRefresh.setOnRefreshListener {
-//            observeAtData()
-//            binding.swipeRefresh.isRefreshing =false
-//        }
         UpdateData()
         binding.alertRV.adapter = alertAdapter
         binding.alertRV.layoutManager = linearLayoutManager
@@ -292,7 +288,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    // picker time and picker date
     private fun pickTime(dialogBinding: AlertDialogBinding, choose: Int) {
         val calendarTime = Calendar.getInstance()
         val timePicker = TimePickerDialog.OnTimeSetListener { timePicker, hourOfDay, minute ->
@@ -377,11 +372,7 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
 
     }
 
-    // set Alarm
     private fun setAlarm(type:String) {
-        var noOfDays = calenderToDate - calenderFromDate
-        val days = TimeUnit.MILLISECONDS.toDays(noOfDays)
-        val dayInMilliSecond = 24 * 60 * 60 * 1000
         alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(requireContext(), AlarmReceiver::class.java)
         intent.putExtra("channel",channelCode)
@@ -389,15 +380,9 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         intent.putExtra("lat",lat)
         intent.putExtra("lon",lon)
 
-        for (i in 0..days) {
-            createNotificationChannel()
-            pIntent =
-                PendingIntent.getBroadcast(requireContext(), (requestCode + i).toInt(), intent,
-                    PendingIntent.FLAG_IMMUTABLE)
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP, trigerTime(calenderFromDate,calenderFromTime).timeInMillis + (i * dayInMilliSecond), pIntent
-            )
-        }
+        createNotificationChannel()
+        pIntent = PendingIntent.getBroadcast(requireContext(), requestCode.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calenderToTime, pIntent)
     }
 
 
