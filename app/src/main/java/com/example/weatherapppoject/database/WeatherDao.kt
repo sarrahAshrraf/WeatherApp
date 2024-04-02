@@ -8,8 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
-import com.example.weatherapppoject.alert.AlertData
-import com.example.weatherapppoject.forecastmodel.ForeCastData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +22,8 @@ interface WeatherDao {
 //    =============>
     //get only the data in teh home fragment when no network
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * FROM weather_data where isFav =0 LIMIT 1")
+//    @Query("SELECT * FROM weather_data where isFav =0 LIMIT 1")
+    @Query("SELECT * FROM weather_data where isFav =0 ORDER BY id DESC LIMIT 1")
     fun getWeatherData(): Flow<WeatherResponse>
 
 

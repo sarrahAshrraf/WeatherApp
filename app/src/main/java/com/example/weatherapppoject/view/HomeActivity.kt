@@ -1,10 +1,12 @@
 package com.example.weatherapppoject.view
 
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.weatherapppoject.R
@@ -16,6 +18,8 @@ import com.example.weatherapppoject.settings.SettingsFragment
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
 import com.example.weatherapppoject.utils.NetworkStateReceiver
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Locale
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -30,6 +34,15 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPrefrencesManager = SharedPrefrencesManager.getInstance(this)
         sharedPrefrencesManager.savelocationChoice(SharedKey.GPS.name, "gps")
+        if( sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name,"") =="en"){
+            setLocale("en")
+        }
+        else if ( sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name,"") =="ar"){
+            setLocale("ar")
+        }
+        else{//null
+            setLocale("en")
+        }
         replaceFragment(HomeFragment())
 
         networkReceiver = NetworkStateReceiver { isConnected ->
@@ -61,7 +74,6 @@ class HomeActivity : AppCompatActivity() {
                 }
 
 
-//                Toast.makeText(this, "No network connection available", Toast.LENGTH_SHORT).show()
             }
             true
         }
@@ -85,10 +97,28 @@ class HomeActivity : AppCompatActivity() {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
         }
     }
+private fun replaceFragment(fragment: Fragment) {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.frameLayout, fragment)
+        .addToBackStack(null)
+        .commit()
+}
 
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayout, fragment)
-            .commit()
+    private fun setLocale(language: String) {
+        val resources = this.resources
+        val config = Configuration(resources.configuration)
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        ViewCompat.setLayoutDirection(this.window.decorView, if (language == "ar") ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR)
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(networkReceiver)
+    }
+
+
 }

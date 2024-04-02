@@ -18,13 +18,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherapppoject.R
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.alert.NetworkListener
 import com.example.weatherapppoject.alert.viewmodel.AlertViewModel
 import com.example.weatherapppoject.alert.viewmodel.AlertViewModelFactory
@@ -38,6 +37,7 @@ import com.example.weatherapppoject.network.RemoteDataSourceImp
 import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.sharedprefrences.SharedKey
 import com.example.weatherapppoject.sharedprefrences.SharedPrefrencesManager
+import com.example.weatherapppoject.view.HomeActivity
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -107,57 +107,57 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
 
         }
 
-        binding.radioSelection.setOnCheckedChangeListener { radioGroup, checkedId ->
-//           binding.linearLayout.setOnClickListener {
-               val checkedRadioButton = radioGroup.findViewById<RadioButton>(checkedId)
-
-               if (!checkedRadioButton.isChecked) {
-//                checkedRadioButton.isChecked = true
-               } else {
-                   when (checkedId) {
-                       R.id.radioCurrent -> {
-                           binding.radioMap.isChecked = false
-                           lon= 30.006545148789886.toString()
-                           lat = 31.243691112649426.toString()
-                           Toast.makeText(
-                               requireContext(),
-                               "Current location has been saved",
-                               Toast.LENGTH_SHORT
-                           ).show()
-
-                           sharedPreferencesManager.setMap(SharedKey.MAP.name, "home")
-                       }
-
-                       R.id.radioMap -> {
-                        binding.radioCurrent.isChecked = false
-
-                           Toast.makeText(
-                               requireContext(),
-                               "Map location has been selected",
-                               Toast.LENGTH_SHORT
-                           ).show()
-
-                           sharedPreferencesManager.setMap(SharedKey.MAP.name, "alert")
-                           replaceFragments(MapsFragment())
-
-                   }
-               }
-           }
-        }
-
-//        binding.btnMapALert.setOnClickListener {
+//        binding.radioSelection.setOnCheckedChangeListener { radioGroup, checkedId ->
+////           binding.linearLayout.setOnClickListener {
+//               val checkedRadioButton = radioGroup.findViewById<RadioButton>(checkedId)
 //
-//            if (NetworkListener.getConnectivity(requireContext())) {
-//            sharedPreferencesManager.setMap(SharedKey.MAP.name,"alert")
-//            replaceFragments(MapsFragment())}
-//            else {
-//                Snackbar.make(
-//                    binding.btnMapALert,
-//                    "There is no internet connection",
-//                    Snackbar.LENGTH_LONG
-//                ).show()
-//            }
+//               if (!checkedRadioButton.isChecked) {
+////                checkedRadioButton.isChecked = true
+//               } else {
+//                   when (checkedId) {
+//                       R.id.radioCurrent -> {
+//                           binding.radioMap.isChecked = false
+//                           lon= 30.006545148789886.toString()
+//                           lat = 31.243691112649426.toString()
+//                           Toast.makeText(
+//                               requireContext(),
+//                               "Current location has been saved",
+//                               Toast.LENGTH_SHORT
+//                           ).show()
+//                           replaceFragments(MapsFragment())
+//                           sharedPreferencesManager.setMap(SharedKey.MAP.name, "home")
+//                       }
+//
+//                       R.id.radioMap -> {
+//                        binding.radioCurrent.isChecked = false
+//
+//                           Toast.makeText(
+//                               requireContext(),
+//                               "Map location has been selected",
+//                               Toast.LENGTH_SHORT
+//                           ).show()
+//
+//                           sharedPreferencesManager.setMap(SharedKey.MAP.name, "alert")
+//                           replaceFragments(MapsFragment())
+//
+//                   }
+//               }
+//           }
 //        }
+
+        binding.btnLocationAlert.setOnClickListener {
+
+            if (NetworkListener.getConnectivity(requireContext())) {
+            sharedPreferencesManager.setMap(SharedKey.MAP.name,"alert")
+            replaceFragments(MapsFragment())}
+            else {
+                Snackbar.make(
+                    binding.btnLocationAlert,
+                    getString(R.string.nointernetconnection),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
 //        binding.btnLocationAlert.setOnClickListener{
 //
 //            sharedPreferencesManager.setMap(SharedKey.MAP.name, "home")
@@ -196,14 +196,14 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
                 //TODO + don't open the maaaaap bardooooooo
                 Snackbar.make(
                     binding.btnCompleteAction,
-                    "There is no internet connection",
+                    getString(R.string.nointernetconnection),
                     Snackbar.LENGTH_LONG
                 ).show()
         }
         return binding.root
     }
     fun UpdateData(){
-        viewModel.alertData.observe(viewLifecycleOwner) { data ->
+        viewModel.alerts.observe(viewLifecycleOwner) { data ->
             if (data.isNotEmpty()) {
                 binding.lottieLayerName.visibility = View.GONE
             }else
@@ -216,7 +216,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         val dialogBinding = AlertDialogBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext())
         dialog.setContentView(dialogBinding.root)
-//        dialogBinding.tvLat.text = lat
         dialogBinding.fromBtn.setOnClickListener {
             pickTime(dialogBinding, 1)
             pickDate(dialogBinding, 1)
@@ -250,7 +249,7 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
                 channelCode = requestCode.toString()
                 edit.putString("channel",channelCode)
                 edit.commit()
-                viewModel.insertIntoAlert(
+                viewModel.insertOneALert(
                     AlertData(
                         timeOne!!,
                         dateOneSelected!!,
@@ -273,7 +272,7 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
             } else
                 Toast.makeText(
                     requireContext(),
-                    "Warning! please complete all fields and don't set the end date before start date",
+                    getString(R.string.alertdatainput),
                     Toast.LENGTH_LONG
                 ).show()
         }
@@ -287,13 +286,12 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         dialog.show()
     }
 
-      private fun replaceFragments(fragment: Fragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+    private fun replaceFragments(fragment: Fragment) {
+        val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frameLayout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
     // picker time and picker date
     private fun pickTime(dialogBinding: AlertDialogBinding, choose: Int) {
         val calendarTime = Calendar.getInstance()
@@ -375,7 +373,7 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
     }
 
     fun deleteAlert(alertData: AlertData) {
-        viewModel.deleteFromAlert(alertData)
+        viewModel.deleteOneAlert(alertData)
 
     }
 
@@ -403,12 +401,12 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
     }
 
 
-    override fun cancleAlarm(alertData: AlertData) {
+    override fun onAlarmCLick(alertData: AlertData) {
         var noOfDays = alertData.milleDateTo - alertData.milleDateFrom
         val days = TimeUnit.MILLISECONDS.toDays(noOfDays)
         alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(activity, AlarmReceiver::class.java)
-        Log.i("days ", "cancleAlarm: "+days)
+
         for (i in 0..days) {
             pIntent =
                 PendingIntent.getBroadcast(context, (alertData.requestCode + i).toInt(), intent,
@@ -432,7 +430,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
         trigerCalender.set(Calendar.MINUTE,testCanlender.get(Calendar.MINUTE))
         return trigerCalender
     }
-    //create notification
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "channel display name"
@@ -444,7 +441,6 @@ class AlertFragment : Fragment(),onClickLinsterInterface {
             notificationManager?.createNotificationChannel(channel)
         }
     }
-
 
     private fun requestOverAppPermission() {
         startActivityForResult(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION),20)

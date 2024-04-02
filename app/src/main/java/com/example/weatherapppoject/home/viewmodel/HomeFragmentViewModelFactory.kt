@@ -11,7 +11,7 @@ class HomeFragmentViewModelFactory (
         return if (modelClass.isAssignableFrom(HomeFragmentViewModel::class.java)){
             HomeFragmentViewModel(weathRepo) as T}
         else{
-            throw IllegalArgumentException("viewModel class notfound")
+            throw IllegalArgumentException("viewModel class not found")
         }
     }
 

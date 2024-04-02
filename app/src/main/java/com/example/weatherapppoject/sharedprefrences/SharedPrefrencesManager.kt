@@ -6,28 +6,20 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
-//make it single tone
 class SharedPrefrencesManager private constructor(context: Context){
+    private val sharedPreferences: SharedPreferences =
+        context.applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+   fun saveLanguage(key: String, value: String) { sharedPreferences.edit().putString(key, value).apply() }
+    fun getLanguae(key: String, defaultValue: String): String { return sharedPreferences.getString(key, defaultValue) ?: defaultValue }
 
-                private val sharedPreferences: SharedPreferences =
-                        context.applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-
-                fun saveLanguage(key: String, value: String) {
-                        sharedPreferences.edit().putString(key, value).apply()
-                }
-
-
-
-    fun getLanguae(key: String, defaultValue: String): String {
+    fun saveWindUnit(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply() }
+    fun getWindUnit(key: String, defaultValue: String): String {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
     fun saveTempUnit(key: String, value: String) {
-        sharedPreferences.edit().putString(key, value).apply()
-    }
-
-
-
+        sharedPreferences.edit().putString(key, value).apply() }
     fun getTempUnit(key: String, defaultValue: String): String {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
@@ -35,8 +27,6 @@ class SharedPrefrencesManager private constructor(context: Context){
     fun saveUnitsType(key: String, value: String) {
         sharedPreferences.edit().putString(key, value).apply()
     }
-
-
 
     fun getUnitsType(key: String, defaultValue: String): String {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
@@ -46,63 +36,56 @@ class SharedPrefrencesManager private constructor(context: Context){
         sharedPreferences.edit().putString(key, value).apply()
     }
 
-
-
     fun getCountryName(key: String, defaultValue: String): String {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
     fun removeKey(key: String) {
         sharedPreferences.edit().remove(key).apply()
     }
-                fun saveLocationFromMap(key: String, longt: Double, lat:Double) {
-                    val editor = sharedPreferences.edit()
-                    editor.putString(key + "_longt", longt.toString())
-                    editor.putString(key + "_lat", lat.toString())
-                    editor.apply()
-                }
-                fun savelocationChoice(key: String, value: String) {
-                    sharedPreferences.edit().putString(key, value).apply()
-                }
-                fun getlocationChoice(key: String, defaultValue: String): String {
-                    return sharedPreferences.getString(key, defaultValue) ?: defaultValue
-                }
-            fun getLocationFromMap(key: String): Pair<Double, Double>? {
-                val longtKey = key + "_longt"
-                val latKey = key + "_lat"
-                val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
-                val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+    fun saveLocationFromMap(key: String, longt: Double, lat:Double) {
+    val editor = sharedPreferences.edit()
+    editor.putString(key + "_longt", longt.toString())
+    editor.putString(key + "_lat", lat.toString())
+    editor.apply()
+}
+    fun savelocationChoice(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+    fun getlocationChoice(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+    fun getLocationFromMap(key: String): Pair<Double, Double>? {
+        val longtKey = key + "_longt"
+        val latKey = key + "_lat"
+        val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+        val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
 
-                if (longt != null && lat != null) {
-                    return Pair(longt, lat)
-                }
+        if (longt != null && lat != null) {
+            return Pair(longt, lat)
+        }
 
-                return null
-            }
+        return null
+    }
 
-                    fun saveLocationToHOme(key: String, longt: Double, lat:Double) {
-                        val editor = sharedPreferences.edit()
-                        editor.putString(key + "_longt", longt.toString())
-                        editor.putString(key + "_lat", lat.toString())
-                        editor.apply()
-                    }
+    fun saveLocationToHOme(key: String, longt: Double, lat:Double) {
+        val editor = sharedPreferences.edit()
+        editor.putString(key + "_longt", longt.toString())
+        editor.putString(key + "_lat", lat.toString())
+        editor.apply()
+    }
 
-                fun getLocationToHOme(key: String): Pair<Double, Double>? {
-                    val longtKey = key + "_longt"
-                    val latKey = key + "_lat"
-                    val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
-                    val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
+    fun getLocationToHOme(key: String): Pair<Double, Double>? {
+        val longtKey = key + "_longt"
+        val latKey = key + "_lat"
+        val longt = sharedPreferences.getString(longtKey, null)?.toDoubleOrNull()
+        val lat = sharedPreferences.getString(latKey, null)?.toDoubleOrNull()
 
-                    if (longt != null && lat != null) {
-                        return Pair(longt, lat)
-                    }
+        if (longt != null && lat != null) {
+            return Pair(longt, lat)
+        }
 
-                    return null
-                }
-
-
-
-
-
+        return null
+    }
 
     fun saveLocationToAlert(key: String, longt: Double, lat:Double) {
         val editor = sharedPreferences.edit()
@@ -125,7 +108,6 @@ class SharedPrefrencesManager private constructor(context: Context){
     }
 
 
-
     fun savecurrentLocationToMap(key: String, latlang: LatLng) {
         val editor = sharedPreferences.edit()
         editor.putString(key + "_longt", latlang.latitude.toString())
@@ -146,32 +128,23 @@ class SharedPrefrencesManager private constructor(context: Context){
         return null
     }
 
+    fun setMap(key: String, value: String) {
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+    fun getSavedMap(key: String, defaultValue: String): String {
+        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
+    }
+        companion object {
+                private const val PREF_NAME = "MyAppPreferences"
+                private var instance: SharedPrefrencesManager? = null
 
-//                fun setMap(map:String){
-//                   sharedPreferences.edit().putString(SharedKey.MAP.name,"").apply()
-//
-//                }
-//                fun getSavedMap(): String? {
-//                    return sharedPreferences!!.getString(SharedKey.MAP.name,"")
-//                }
-
-                    fun setMap(key: String, value: String) {
-                        sharedPreferences.edit().putString(key, value).apply()
-                    }
-                    fun getSavedMap(key: String, defaultValue: String): String {
-                        return sharedPreferences.getString(key, defaultValue) ?: defaultValue
-                    }
-                companion object {
-                        private const val PREF_NAME = "MyAppPreferences"
-                        private var instance: SharedPrefrencesManager? = null
-
-                        @OptIn(InternalCoroutinesApi::class)
-                        fun getInstance(context: Context): SharedPrefrencesManager {
-                                return instance ?: synchronized(this) {
-                                        instance ?: SharedPrefrencesManager(context).also { instance = it }
-                                }
+                @OptIn(InternalCoroutinesApi::class)
+                fun getInstance(context: Context): SharedPrefrencesManager {
+                        return instance ?: synchronized(this) {
+                                instance ?: SharedPrefrencesManager(context).also { instance = it }
                         }
                 }
+        }
         }
 
 
@@ -182,10 +155,11 @@ enum class SharedKey {
         Home, // save lan and long to home
         FAV, //save lan and long to fave
         ALERT,
-    UNITS,
-    CURMAP,
-    TEMP_UNIT,
-    ALERT_TYPE
+        UNITS,
+        CURMAP,
+        TEMP_UNIT,
+        ALERT_TYPE,
+
 
 
 }

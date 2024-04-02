@@ -1,18 +1,11 @@
 package com.example.weatherapppoject.repository
 
-import com.example.weatherapppoject.alert.AlertData
+import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 
 interface WeatherRepositoryInter {
-//    suspend fun getCurrentWeather(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String
-//    ): Flow<WeatherList>
 
     //network opreation
     suspend fun getFiveDaysWeather(
@@ -31,30 +24,21 @@ interface WeatherRepositoryInter {
         lang: String
     ): Flow<OneApiCall>
 
-//    fun getAlertData(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String,
-//        apiKey: String,
-//        lang: String
-//    ): SharedFlow<Flow<OneApiCall>>
-
 
     //database operation
      fun getFavoriteData(): Flow<List<WeatherResponse>>
      suspend fun insertfavIntoDB(fav: WeatherResponse, longitude: Double, latitude: Double)
      suspend fun deleteFromFav(weatherData: WeatherResponse)
-      fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse>
+     suspend fun deleteFromHome(weatherData: WeatherResponse)
+
+    fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse>
       suspend fun insertHomeData(weatherData: WeatherResponse,longitude: Double, latitude: Double)
     fun getFavCityInfoHome(): Flow<WeatherResponse>
     suspend fun deleteHome()
 
-
     ////=>local + alert
 
-//    fun getAlertedData(): Flow<List<OneApiCall>>
     fun getAlertedData(): Flow<List<AlertData>>
-
     suspend fun insertAlertIntoDB(alerts: AlertData, longitude: Double, latitude: Double)
     suspend fun insertAlerts(alert : AlertData)
     suspend fun deleteFromAlerts(alertWeatherData: AlertData)

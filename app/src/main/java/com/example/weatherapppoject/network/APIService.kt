@@ -10,7 +10,6 @@ interface APIService {
 
     @GET("2.5/forecast?")
     suspend fun getForeCast(
-//        @Query("q") city : String,
         @Query("lat") lat: Double,
         @Query("lon") long: Double,
         @Query("units") units: String,
@@ -19,7 +18,7 @@ interface APIService {
 
     ): WeatherResponse
 
-
+//for alerts data
     @GET("3.0/onecall")
     suspend fun getAlerts(
         @Query("lat") lat: Double,
