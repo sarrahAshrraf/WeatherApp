@@ -7,14 +7,22 @@ import com.example.weatherapppoject.repository.WeatherRepositoryInter
 import com.example.weatherapppoject.utils.ForeCastApiState
 import com.example.weatherapppoject.utils.Utils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.debounce
 
 class MapFragmentViewModel (private val weatherRepository: WeatherRepositoryInter) : ViewModel() {
 
     private val _WeatherInfo = MutableStateFlow<ForeCastApiState>(ForeCastApiState.Loading())
     val weatherData: StateFlow<ForeCastApiState> = _WeatherInfo
+
+    private val _searchResults = MutableSharedFlow<String>() // Define a sharedFlow for search results
+    val searchResults: SharedFlow<String> = _searchResults.asSharedFlow()
 
     fun getForecastData(latitude: Double, longitude: Double, lang: String, units:String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -25,5 +33,11 @@ class MapFragmentViewModel (private val weatherRepository: WeatherRepositoryInte
         }
     }
 
+    fun setSearchQuery(query: String){
+        viewModelScope.launch{
+            _searchResults.emit(query)
+        }
+
+    }
 
 }

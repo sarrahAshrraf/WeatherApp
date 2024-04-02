@@ -7,11 +7,14 @@ import android.net.ConnectivityManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherapppoject.R
@@ -73,10 +76,8 @@ class MapsFragment : Fragment() {
         remoteDataSource = RemoteDataSourceImp()
         localDataSourceInte = LocalDataSourceImp(requireContext())
         repository= WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
-
         viewModelFactory = FavoriteViewModelFactory(repository)
         favoriteViewModel = ViewModelProvider(this, viewModelFactory).get(FavoriteViewModel::class.java)
-
         mapFactory = MapViewModelFactory(repository)
         mapViewModel = ViewModelProvider(this, mapFactory).get(MapFragmentViewModel::class.java)
     }
@@ -110,7 +111,6 @@ class MapsFragment : Fragment() {
                 }
 
                 binding.imgCurrentLocation.setOnClickListener {
-
                     val myLong = 30.006179
                     val myLat = 31.2683708
                     val mylatlang = LatLng(myLat, myLong)
@@ -119,18 +119,59 @@ class MapsFragment : Fragment() {
                         moveCameraToLocation(mylatlang)
                     }
                 }
+
+//                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                        // Not needed for this implementation
+//                    }
+//
+//                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                        val searchQuery = s.toString()
+//
+//                        mapViewModel.setSearchQuery(searchQuery)
+//                        viewLifecycleOwner.lifecycleScope.launch {
+//                            searchLocation(searchQuery)
+//                        }
+//                        }
+//
+//
+//                    override fun afterTextChanged(s: Editable?) {
+//                        // Not needed for this implementation
+//                    }
+//                })
+
+//                lifecycleScope.launchWhenStarted {
+//                    mapViewModel.searchResults.collect { searchResult ->
+//                        Toast.makeText(requireContext(), searchResult, Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+
                 binding.imgSearchIcon.setOnClickListener {
+
                     val searchQuery = binding.etSearchMap.text.toString()
                     if (searchQuery.isNotEmpty()) {
-                        searchLocation(searchQuery)
+                        lifecycleScope.launch {
+                            mapViewModel.setSearchQuery(searchQuery)
+                            searchLocation(searchQuery)
+                        }
                     }
                 }
+
+
+
+//
+//                binding.imgSearchIcon.setOnClickListener {
+//                    val searchQuery = binding.etSearchMap.text.toString()
+//                    if (searchQuery.isNotEmpty()) {
+//                        searchLocation(searchQuery)
+//                    }
+//                }
+
                 if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "fav") {
-                    binding.btnSelectOrAddOnMap.text = "Add to favorite"
+                    binding.btnSelectOrAddOnMap.text = getString(R.string.addtofavorite)
                 } else if (sharedPrefrencesManager.getSavedMap(SharedKey.MAP.name, "") == "home") {
-                    binding.btnSelectOrAddOnMap.text = "Make Current location"
+                    binding.btnSelectOrAddOnMap.text = getString(R.string.makecurrent)
                 } else {
-                    binding.btnSelectOrAddOnMap.text = "Add to alerts"
+                    binding.btnSelectOrAddOnMap.text = getString(R.string.addtoALert)
                 }
 
                 binding.btnSelectOrAddOnMap.setOnClickListener {
@@ -211,7 +252,7 @@ class MapsFragment : Fragment() {
             moveCameraToLocation(latLng)
             addMarkerToMap(latLng, locationName)
         } else {
-            Toast.makeText(requireContext(), "Location not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.notfoundlocation), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -237,8 +278,6 @@ class MapsFragment : Fragment() {
         }
 
     }
-
-
     private fun getAddressFromLatLng(latLng: LatLng): String {
         val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
         return if (addresses!!.isNotEmpty()) {

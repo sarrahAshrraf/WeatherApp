@@ -2,42 +2,37 @@ package com.example.weatherapppoject.alert.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.alert.AlertData
-import com.example.weatherapppoject.databinding.AlertRecycleviewLayoutBinding
+import com.example.weatherapppoject.databinding.AlertDetailsItemBinding
 import java.util.Calendar
 
 class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClickLinsterInterface): RecyclerView.Adapter<AlertAdapter.myViewHolder>() {
     lateinit var context: Context
-    lateinit var alertBinding: AlertRecycleviewLayoutBinding
-    class myViewHolder(val viewBinding: AlertRecycleviewLayoutBinding): RecyclerView.ViewHolder(viewBinding.root)
+    lateinit var alertBinding: AlertDetailsItemBinding
+    class myViewHolder(val viewBinding: AlertDetailsItemBinding): RecyclerView.ViewHolder(viewBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        alertBinding = AlertRecycleviewLayoutBinding.inflate(inflater,parent,false)
+        alertBinding = AlertDetailsItemBinding.inflate(inflater,parent,false)
         context=parent.context
         return myViewHolder(alertBinding)
     }
 
     override fun onBindViewHolder(holder: myViewHolder, position: Int) {
         var alertItem = alertList[position]
-        val endTime = trigerTime(alertItem.milleDateTo,alertItem.milleTimeTo)
-//        if(Calendar.getInstance().timeInMillis > endTime.timeInMillis)
-//            onClick.cancleAlarm(alertItem)
-        holder.viewBinding.fromTimeCard.text = alertItem.fromTime
-        holder.viewBinding.fromDateCard.text = alertItem.fromDate
-        holder.viewBinding.toTimeCard.text = alertItem.toTime
-        holder.viewBinding.toDateCard.text = alertItem.toDate
-        holder.viewBinding.alertCardDeleteBtn.setOnClickListener{
+        val endTime = choosenTime(alertItem.milleDateTo,alertItem.milleTimeTo)
+        if(Calendar.getInstance().timeInMillis > endTime.timeInMillis)
+            onClick.onAlarmCLick(alertItem)
+        holder.viewBinding.timeStartTxt.text = alertItem.fromTime
+        holder.viewBinding.startDateText.text = alertItem.fromDate
+        holder.viewBinding.timeEndTxt.text = alertItem.toTime
+        holder.viewBinding.endDateText.text = alertItem.toDate
+        holder.viewBinding.button.setOnClickListener{
             dialogDeleteConfirmation(alertItem)
         }
 
@@ -46,7 +41,7 @@ class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClick
     override fun getItemCount(): Int {
         return alertList.size
     }
-    fun trigerTime(toDate:Long,toTime:Long): Calendar {
+    fun choosenTime(toDate:Long, toTime:Long): Calendar {
         var testCanlender = Calendar.getInstance()
         testCanlender.timeInMillis = toDate
         val trigerCalender = Calendar.getInstance()
@@ -65,15 +60,14 @@ class AlertAdapter (private var alertList: List<AlertData>, var onClick: onClick
     }
     fun dialogDeleteConfirmation(alertItem: AlertData) {
 
-
         val alertDialogBuilder = AlertDialog.Builder(context)
-        alertDialogBuilder.setTitle("Delete Confirmation")
-        alertDialogBuilder.setMessage("Are you sure you want to remove this alert?")
-        alertDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-            onClick.cancleAlarm(alertItem)
+        alertDialogBuilder.setTitle(R.string.removeDialogmsg)
+        alertDialogBuilder.setMessage(R.string.deletAlertConfirm)
+        alertDialogBuilder.setPositiveButton(R.string.ok) { dialog, _ ->
+            onClick.onAlarmCLick(alertItem)
             dialog.dismiss()
         }
-        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+        alertDialogBuilder.setNegativeButton(R.string.no) { dialog, _ ->
             dialog.dismiss()
         }
         val alertDialog = alertDialogBuilder.create()

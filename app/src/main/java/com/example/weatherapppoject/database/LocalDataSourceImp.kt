@@ -25,6 +25,11 @@ class LocalDataSourceImp(context: Context): LocalDataSourceInte {
 
     override suspend fun deleteFavData(weatherData: WeatherResponse) {
         Log.i("d======eeee","local data sour4e")
+        dao.deleteFav(weatherData)
+//        dao.deleteFavByLonLat(longitude,latitude)
+    }
+     override suspend fun deleteHomeData(weatherData: WeatherResponse) {
+        Log.i("d======eeee","local data sour4e")
         dao.delete(weatherData)
 //        dao.deleteFavByLonLat(longitude,latitude)
     }

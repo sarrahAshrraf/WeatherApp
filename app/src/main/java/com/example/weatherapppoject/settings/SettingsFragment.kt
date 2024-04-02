@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -43,14 +42,13 @@ class SettingsFragment : Fragment() {
           }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setLocale(sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "default"))
 
         binding.locationToggle.addOnButtonCheckedListener { group, checkedId, isChecked ->
             when (checkedId) {
-                R.id.button1 -> {
+                R.id.mapBtn -> {
                     if (isChecked) {
-                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
-                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.mapBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.gpsBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "map")
                         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
                         sharedPreferencesManager.saveLanguage(SharedKey.GPS.name, "map")
@@ -58,102 +56,143 @@ class SettingsFragment : Fragment() {
                             replaceFragments(MapsFragment())
                         }
                         else {
-                            Toast.makeText(requireContext(),"check yur netwrok",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),getString(R.string.networkstatus),Toast.LENGTH_SHORT).show()
                         }
 
                     } else {
-                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.mapBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
                 }
-                R.id.button3 -> {
+                R.id.gpsBtn -> {
                     if (isChecked) {
-                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
-                        binding.button1.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.gpsBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.mapBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.savelocationChoice(SharedKey.GPS.name , "gps")
                         sharedPreferencesManager.setMap(SharedKey.MAP.name,"home")
 
 
 
                     } else {
-                        binding.button3.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.gpsBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
                 }
             }
         }
 
-        binding.langueRadioGrop.setOnCheckedChangeListener { group, checkedId ->
-            val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-            if (!checkedRadioButton.isChecked) {
-                checkedRadioButton.isChecked = true
-            } else {
-                when (checkedId) {
-                    R.id.arRdiobtn -> {
-                        binding.enRdiobtn.isChecked = false
-                        Toast.makeText(requireContext(),"en", Toast.LENGTH_SHORT).show()
+
+        binding.langueRadioGrop.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when (checkedId) {
+                R.id.arRdiobtn -> {
+                    if (isChecked) {
+                        binding.arRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.enRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         setLocale("ar")
                         sharedPreferencesManager.saveLanguage(SharedKey.LANGUAGE.name, "ar")
 
+                    } else {
+                        binding.arRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
-                    R.id.enRdiobtn -> {
-                        binding.arRdiobtn.isChecked = false
-                        Toast.makeText(requireContext(),"ar",Toast.LENGTH_SHORT).show()
+                }
+                R.id.enRdiobtn -> {
+                    if (isChecked) {
+                        binding.enRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.arRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.saveLanguage(SharedKey.LANGUAGE.name, "en")
-
                         setLocale("en")
+
+
+                    } else {
+                        binding.enRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
                 }
             }
         }
 
-        binding.unitsRadioGrop.setOnCheckedChangeListener { group, checkedId ->
-            val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-            if (!checkedRadioButton.isChecked) {
-                checkedRadioButton.isChecked = true
-            } else {
-                when (checkedId) {
-                    R.id.matricRdiobtn -> {
-                        binding.impRdiobtn.isChecked = false
-                        Toast.makeText(requireContext(),"metric", Toast.LENGTH_SHORT).show()
+
+
+
+
+        binding.unitsRadioGrop.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when (checkedId) {
+                R.id.matricRdiobtn -> {
+                    if (isChecked) {
+                        binding.matricRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.impRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+
                         sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "metric") //m/s
 
+                    } else {
+                        binding.matricRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
-                    R.id.impRdiobtn -> {
-                        binding.matricRdiobtn.isChecked = false
-                        Toast.makeText(requireContext(),"impa",Toast.LENGTH_SHORT).show()
+                }
+                R.id.impRdiobtn -> {
+                    if (isChecked) {
+                        binding.impRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.matricRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.saveUnitsType(SharedKey.UNITS.name, "imperial") // miles/hrs
 
+
+
+                    } else {
+                        binding.impRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
                 }
             }
         }
 
 
-        binding.tempUnitsRadioGrop.setOnCheckedChangeListener { group, checkedId ->
-            val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-            if (!checkedRadioButton.isChecked) {
-                checkedRadioButton.isChecked = true
-            } else {
-                when (checkedId) {//c
-                    R.id.CRdiobtn -> {
-                        binding.KRdiobtn.isChecked = false
-                        binding.FRdiobtn.isChecked = false
+
+
+        binding.tempUnitsRadioGrop.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            when (checkedId) {
+                R.id.CRdiobtn -> {
+                    if (isChecked) {
+                        binding.CRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.KRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.FRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
 
                         sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "metric")
 
+                    } else {
+                        binding.CRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
-                    R.id.KRdiobtn -> {///k
-                        binding.CRdiobtn.isChecked = false
-                        binding.FRdiobtn.isChecked = false
+                }
+                R.id.KRdiobtn -> {
+                    if (isChecked) {
+
+                        binding.KRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.CRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.FRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "standard")
+
+
+
+
+                    } else {
+                        binding.KRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
-                    R.id.FRdiobtn -> {///k
-                        binding.KRdiobtn.isChecked = false
-                        binding.CRdiobtn.isChecked = false
+                }
+
+
+                R.id.FRdiobtn -> {
+                    if (isChecked) {
+
+                        binding.FRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        binding.CRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
+                        binding.KRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                         sharedPreferencesManager.saveTempUnit(SharedKey.TEMP_UNIT.name, "imperial")
+
+
+
+
+                    } else {
+                        binding.FRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.buttons)
                     }
                 }
             }
-        }
+
+            }
+
 
     }
     private fun checkForInternet(context: Context): Boolean {
@@ -179,32 +218,7 @@ class SettingsFragment : Fragment() {
             return networkInfo.isConnected
         }
     }
-    private fun recreateFragment() {
-        // Save any necessary data or state here
 
-        val currentFragment = parentFragmentManager.findFragmentById(R.id.frameLayout)
-        val fragmentTransaction = parentFragmentManager.beginTransaction()
-
-        // Recreate the fragment
-        fragmentTransaction.detach(currentFragment!!)
-        fragmentTransaction.attach(currentFragment)
-        fragmentTransaction.commit()
-    }
-
-//    private fun setLocale(language: String) {
-//                val resources = requireContext().resources
-//        val config = Configuration(resources.configuration)
-//        val locale = Locale(language)
-//        Locale.setDefault(locale)
-//        config.setLocale(locale)
-//        resources.updateConfiguration(config, resources.displayMetrics)
-//        ViewCompat.setLayoutDirection(requireActivity().window.decorView, if (language == "ar") ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR)
-//        recreateFragment()
-//
-////        settingsViewModel.putBooleanInSharedPreferences("isLayoutChangedBySettings", true)
-//
-//
-//    }
 
     private fun setLocale(languageCode: String) {
         val resources = requireContext().resources
@@ -217,33 +231,37 @@ class SettingsFragment : Fragment() {
         replaceFragments(SettingsFragment())
         updateBottomNavigationBarTitles()
     }
-//    private fun setLocale(languageCode: String) {
-//        val locale = Locale(languageCode)
-//        Locale.setDefault(locale)
-//        val resources = requireContext().resources
-//
-//        val config = Configuration(resources.configuration)
-//        config.setLocale(locale)
-//        val context= ContextUtils.wrapContext(requireContext(), locale)
-//        val translatedSettingsText = context.getString(R.string.settings)
-//        val translatedLanguageText = context.getString(R.string.language)
-//
-//        binding.tvSettings.text = translatedSettingsText
-//        binding.textView10.text = translatedLanguageText
-//
-//    }
+
     override fun onResume() {
         super.onResume()
         updateBottomNavigationBarTitles()//todo check
         val selectedWindUnit = sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "metric")
         val selectedTempUnit = sharedPreferencesManager.getTempUnit(SharedKey.TEMP_UNIT.name, "metric")
-        val selctedLocation = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "")
+        val selctedLocation = sharedPreferencesManager.getlocationChoice(SharedKey.GPS.name, "")
+        val languageType = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "")
+
+        when (languageType) {
+            "ar" -> binding.arRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+            else ->binding.enRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+        }
 
         when (selectedWindUnit) {
-            "metric" -> binding.matricRdiobtn.isChecked = true
-            else -> binding.impRdiobtn.isChecked = true
+            "metric" ->  binding.matricRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+            else ->  binding.impRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+        }
+        when(selectedTempUnit){
+            "metric" -> binding.CRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+            "standard"->binding.KRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+            else -> binding.FRdiobtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
 
         }
+        when(selctedLocation){
+        "map" -> binding.mapBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+          else -> binding.gpsBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+        }
+
+
+
     }
     private fun replaceFragments(fragment: Fragment) {
         val transaction = (context as HomeActivity).supportFragmentManager.beginTransaction()
@@ -269,13 +287,5 @@ class SettingsFragment : Fragment() {
 
 }
 
-
-//object ContextUtils {
-//    fun wrapContext(baseContext: Context, locale: Locale): Context {
-//        val config = Configuration(baseContext.resources.configuration)
-//        Locale.setDefault(locale)
-//        config.setLocale(locale)
-//        return baseContext.createConfigurationContext(config)
-//    }
 }
 

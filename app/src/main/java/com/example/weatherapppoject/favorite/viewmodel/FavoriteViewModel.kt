@@ -4,11 +4,9 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
-import com.example.weatherapppoject.repository.WeatherRepositoryImpl
 import com.example.weatherapppoject.repository.WeatherRepositoryInter
 import com.example.weatherapppoject.utils.DBState
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +18,7 @@ import kotlinx.coroutines.withContext
 
 class FavoriteViewModel (private val weatherRepository: WeatherRepositoryInter) : ViewModel() {
     private val _favData = MutableStateFlow<DBState>(DBState.Loading())
-    val currentWeather: StateFlow<DBState> = _favData
+    val favorite: StateFlow<DBState> = _favData
     fun addToFavorites(fav: WeatherResponse, long: Double, lat: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepository.insertfavIntoDB(fav, long, lat)

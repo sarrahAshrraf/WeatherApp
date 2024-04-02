@@ -15,7 +15,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -56,9 +55,9 @@ fun getSetup(){
         )
         val expectedAlertData = listOf(alertData)
 
-        alertViewModel.insertIntoAlert(alertData)
-        alertViewModel.getAlertData()
-        Assert.assertThat(alertViewModel.alertData.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
+        alertViewModel.insertOneALert(alertData)
+        alertViewModel.getAlerts()
+        Assert.assertThat(alertViewModel.alerts.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
         )
 
     }
@@ -80,9 +79,9 @@ fun insertIntoAlerts(): Unit = runBlocking {
     )
     val expectedAlertData = listOf(alertData)
 
-    alertViewModel.insertIntoAlert(alertData)
-    alertViewModel.getAlertData()
-    Assert.assertThat(alertViewModel.alertData.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
+    alertViewModel.insertOneALert(alertData)
+    alertViewModel.getAlerts()
+    Assert.assertThat(alertViewModel.alerts.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
     )
 
 }
@@ -104,17 +103,12 @@ fun insertIntoAlerts(): Unit = runBlocking {
             "78.90"
         )
 
-        alertViewModel.insertIntoAlert(alertData)
-        alertViewModel.deleteFromAlert(alertData)
+        alertViewModel.insertOneALert(alertData)
+        alertViewModel.deleteOneAlert(alertData)
         val expectedAlertData = emptyList<AlertData>()
-        Assert.assertThat(alertViewModel.alertData.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
+        Assert.assertThat(alertViewModel.alerts.getOrAwaitValue(), CoreMatchers.equalTo(expectedAlertData)
         )
 
     }
 
 }
-
-
-//
-//    verify(repository).insertAlerts(alertData)
-//    verify(repository).getAlertedData()

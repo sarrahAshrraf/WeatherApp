@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.shareIn
 
-class WeatherRepositoryImpl private constructor(
+class WeatherRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
      private val localDataSource: LocalDataSourceInte
 ) : WeatherRepositoryInter {
@@ -42,7 +42,6 @@ class WeatherRepositoryImpl private constructor(
         apiKey: String,
         lang: String
     ): Flow<WeatherResponse> {
-        Log.i("=====23d", "HI: ")
         return  try {
             remoteDataSource.getFiveDaysInfo(latitude, longitude, units, apiKey, lang)
         }catch (e: Exception){
@@ -59,7 +58,6 @@ class WeatherRepositoryImpl private constructor(
         apiKey: String,
         lang: String
     ): Flow<OneApiCall> {
-        Log.i("=====23d", "HI: ")
         return  try {
             remoteDataSource.getALerts(latitude, longitude, units, apiKey, lang)
         }catch (e: Exception){
@@ -85,6 +83,9 @@ class WeatherRepositoryImpl private constructor(
 
     override suspend fun deleteFromFav(weatherData: WeatherResponse) {
         localDataSource.deleteFavData(weatherData)
+    }
+    override suspend fun deleteFromHome(weatherData: WeatherResponse) {
+        localDataSource.deleteHomeData(weatherData)
     }
 
     override fun getFavCityInfo(longitude: Double, latitude: Double) :Flow<WeatherResponse> {

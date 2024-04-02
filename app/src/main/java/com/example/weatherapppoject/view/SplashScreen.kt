@@ -23,7 +23,7 @@ class SplashScreen : AppCompatActivity() {
             binding.animationView.playAnimation()
             Glide.with(this)
                 .asGif()
-                .load(R.drawable.wordsplashscreen)
+                .load(R.drawable.splashword)
                 .into(binding.imageView)
             handler.postDelayed({
                 binding.animationView.cancelAnimation()

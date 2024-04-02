@@ -56,6 +56,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import java.util.Locale
 
 
@@ -78,18 +79,15 @@ class HomeFragment : Fragment() {
     private var mainLongitude:Double =0.0
     private var mainLatitude: Double =0.0
     private var language : String = "default"
-    private var units : String = "metric" //"metric" celisuc
+    private var units : String = "metric"
     private var tempUnit : String="metric"
-//    private var countryName : String =""
-//    private var networkStateReceiver: NetworkStateReceiver? = null
-    //default -> kalvin ,,,, imperial: F
+
 
     override fun onStart() {
         super.onStart()
         if (checkPermission()) {
             if (context?.let { isLocationEnabled(it) } == true) {
                 getFreshLocation()
-                Toast.makeText(requireContext(), "location is enabled", Toast.LENGTH_SHORT).show()
             } else {
                 enableLocation()
             }
@@ -137,32 +135,13 @@ class HomeFragment : Fragment() {
             getWeatherData()
             getFiveDaysData()
             getTodayData()
-
         }
         else {
             getWeathDataFromDB()
         }
-//
-//        networkStateReceiver = NetworkStateReceiver { isConnected ->
-//            if (isConnected) {
-//                getWeatherData()
-//                getFiveDaysData()
-//                getTodayData()
-//
-//            }
-//            else { //db
-//                getWeathDataFromDB()
-//            }
-//        }
-//        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-//        requireContext()?.registerReceiver(networkStateReceiver, intentFilter)
     }
 
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        requireContext()?.unregisterReceiver(networkStateReceiver)
-//        networkStateReceiver = null
-//    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -174,11 +153,6 @@ class HomeFragment : Fragment() {
                     is ForeCastApiState.Suceess -> {
                         binding.scrollView2.visibility = View.VISIBLE
                         binding.progressBar.visibility = View.GONE
-//
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            viewModel.removeFromDataBase()
-//                            Log.i("===db scope", "onViewCreated: ")
-//                        }
                         binding.tvTemp.visibility = View.VISIBLE
                         binding.weatherImgView.visibility = View.VISIBLE
                         Log.i("===succe in home", "onViewCreated: ")
@@ -203,11 +177,10 @@ class HomeFragment : Fragment() {
                         val isArabicLanguage = sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "") == "ar"
                         val isMetricUnits = sharedPreferencesManager.getUnitsType(SharedKey.UNITS.name, "")
 
-//                        setLocale(if (isArabicLanguage) "ar" else "en")
 
                         binding.tvTemp.text = buildTemperatureText(temperature, tempUnit, isArabicLanguage)
-                        binding.windPercent.text = buildWindSpeedText(windSpeed, isMetricUnits,tempUnit, isArabicLanguage) +"%"
-                        binding.cloudPercent.text = buildText(clouds, isArabicLanguage)
+                        binding.windPercent.text = buildWindSpeedText(windSpeed, isMetricUnits,tempUnit, isArabicLanguage)
+                        binding.cloudPercent.text = buildText(clouds, isArabicLanguage) +"%"
                         binding.tvDayFormat.text = buildText(Utils.getDate(dateTime).toString(),isArabicLanguage)
                         binding.humidityPercent.text = buildText(humidity,isArabicLanguage)
                         binding.pressurePercent.text = buildText(pressure,isArabicLanguage)
@@ -246,7 +219,6 @@ class HomeFragment : Fragment() {
         Log.i("=======db enter fun", "getWeathDataFromDB: ")
         CoroutineScope(Dispatchers.IO).launch {
                 viewModel.showWeatherDataFromDB()}
-//        viewModel.showWeatherDataFromDB()
         lifecycleScope.launch(Dispatchers.Main) {
                 viewModel.favDataHome.collect { state ->
                     when (state) {
@@ -259,7 +231,6 @@ class HomeFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             binding.scrollView2.visibility = View.VISIBLE
                             binding.apply {
-//                                city.text = state.cityData.city.name
                                 tvTemp.text = state.cityData.list[0].main.temp.toString()
                                 humidityPercent.text = state.cityData.list[0].main.humidity.toString()
                                 pressurePercent.text = state.cityData.list[0].main.pressure.toString()
@@ -306,18 +277,22 @@ class HomeFragment : Fragment() {
             windSpeedUnit == "imperial" && (tempUnit == "metric" || tempUnit == "standard") -> windSpeed?.let { Utils.convertToMilePerHour(it) }
             windSpeedUnit == "imperial" && (tempUnit == "imperial") -> windSpeed
             else -> 0.0
-
         }
 
         val speedText = if (isArabicLanguage) {
-            Utils.convertToArabicNumber(convertedWindSpeed?.toString() ?: "")
+            val decimalFormat = DecimalFormat("#0.00")
+            val formattedSpeed = decimalFormat.format(convertedWindSpeed ?: 0.0)
+            Utils.convertToArabicNumber(formattedSpeed)
         } else {
-            convertedWindSpeed?.toString() ?: ""
+            convertedWindSpeed?.let {
+                val decimalFormat = DecimalFormat("#0.00")
+                decimalFormat.format(it)
+            } ?: ""
         }
 
         val unitText = when (windSpeedUnit) {
             "metric" -> if (isArabicLanguage) "م/ث" else "m/s"
-            "imperial" -> if (isArabicLanguage) "ميل/س" else "m/h"
+            "imperial" -> if (isArabicLanguage) "م/س" else "m/h"
             else -> ""
         }
 
@@ -341,20 +316,18 @@ class HomeFragment : Fragment() {
                         binding.scrollView2.visibility = View.VISIBLE
                         binding.progressBar.visibility = View.GONE
                         binding.todayDetailsRecView.visibility = View.VISIBLE
-                        binding.todayDetailsRecView.visibility = View.VISIBLE
+                        binding.FivedaysRec.visibility = View.VISIBLE
+                        binding.tvTodayRecTxt.visibility = View.VISIBLE
+                        binding.textDays.visibility = View.VISIBLE
+
                         val forecastList = weatherResponse.data.list
                         val forecastItems = forecastList
                             .take(8)
                         if (sharedPreferencesManager.getLanguae(
-                                SharedKey.LANGUAGE.name,
-                                ""
-                            ) == "ar"
-                        ) {
-//                            setLocale("ar")
+                                SharedKey.LANGUAGE.name, "") == "ar") {
                             todayAdapter = TodayAdapter(forecastItems, language, tempUnit)
                             binding.todayDetailsRecView.adapter = todayAdapter
                         } else {
-//                            setLocale("en")
                             todayAdapter = TodayAdapter(forecastItems, language, tempUnit)
                             binding.todayDetailsRecView.adapter = todayAdapter
                         }
@@ -398,13 +371,10 @@ class HomeFragment : Fragment() {
                             val hour = time.split(":")[0].toInt()
                             hour == 12
                         }
-                        if (sharedPreferencesManager.getLanguae(
-                            SharedKey.LANGUAGE.name, "") == "ar") {
-//                            setLocale("ar")
+                        if (sharedPreferencesManager.getLanguae(SharedKey.LANGUAGE.name, "") == "ar") {
                             weekAdapter = WeekAdapter(filteredList, language, tempUnit)
                             binding.FivedaysRec.adapter = weekAdapter
                         } else {
-//                            setLocale("en")
                             weekAdapter = WeekAdapter(filteredList, language, tempUnit)
                             binding.FivedaysRec.adapter = weekAdapter
                         }
@@ -498,7 +468,6 @@ class HomeFragment : Fragment() {
             if (addresses.isNotEmpty()) {
                 val address = addresses[0]
                 val city = address.countryName
-//                countryName = city
                 binding.city.text = city
 
             }
@@ -515,15 +484,13 @@ class HomeFragment : Fragment() {
                 val address = addresses[0]
                 val locality = address.adminArea
                if (locality.isNotEmpty()) {
-//                   networkStateReceiver = NetworkStateReceiver { isConnected ->
                        if (checkForInternet(requireContext())) {
                            binding.tvFullocation.text = locality!!.toString()
                        } else {
                            getWeathDataFromDB() }
 
                    }
-//                   val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-//                   requireContext()?.registerReceiver(networkStateReceiver, intentFilter)
+
                }
             }
         }
@@ -531,7 +498,7 @@ class HomeFragment : Fragment() {
 
 
     private fun enableLocation() {
-        Toast.makeText(requireContext(), "Turn On location", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.turnonlocation), Toast.LENGTH_LONG).show()
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(intent)
 
@@ -583,35 +550,5 @@ class HomeFragment : Fragment() {
             return networkInfo.isConnected
         }
     }
-
-//    private fun setLocale(languageCode: String) {
-//        val resources = requireContext().resources
-//        val config = Configuration(resources.configuration)
-//        val locale = Locale(languageCode)
-//        Locale.setDefault(locale)
-//        config.setLocale(locale)
-//        resources.updateConfiguration(config, resources.displayMetrics)
-//        ViewCompat.setLayoutDirection(
-//            requireActivity().window.decorView,
-//            if (languageCode == "ar") ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR
-//        )
-//
-//    }
-//        val context= ContextUtils.wrapContext(requireContext(), locale)
-//        val translatecloudsText = context.getString(R.string.clouds)
-//        val translatedwindText = context.getString(R.string.winds)
-//        val translatedhumidityText = context.getString(R.string.humidity)
-//        val translatedpressureText = context.getString(R.string.pressure)
-//        val translatedtodayRecText = context.getString(R.string.today)
-//        val translatedDayRecText = context.getString(R.string.next5days)
-//
-//        binding.tvclouds.text = translatecloudsText
-//        binding.tvWind.text = translatedwindText
-//        binding.tvHumidity.text = translatedhumidityText
-//        binding.tvPressure.text = translatedpressureText
-//        binding.tvTodayRecTxt.text = translatedtodayRecText
-//        binding.textDays.text = translatedDayRecText
-
-
 
 }

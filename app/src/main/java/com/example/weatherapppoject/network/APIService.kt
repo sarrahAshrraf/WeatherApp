@@ -18,7 +18,7 @@ interface APIService {
 
     ): WeatherResponse
 
-
+//for alerts data
     @GET("3.0/onecall")
     suspend fun getAlerts(
         @Query("lat") lat: Double,

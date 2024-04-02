@@ -17,8 +17,6 @@ import kotlinx.coroutines.launch
 
 
 class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryInter) : ViewModel() {
-//    private val _alertData = MutableStateFlow<OneCallState>(OneCallState.Loading())
-//    val alertsData: StateFlow<OneCallState> = _alertData
 
     private val _fiveDaysWeather = MutableStateFlow<ForeCastApiState>(ForeCastApiState.Loading())
     val weatherData: StateFlow<ForeCastApiState> = _fiveDaysWeather
@@ -46,42 +44,17 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryInte
                 }else {
                         _favData.value = DBState.OneCitySucess(data)
 
-
-
                     }
                 }
         }
     }
 
-    fun removeFromDataBase() {
+    fun removeFromDataBase(weatherResponse: WeatherResponse) {
         viewModelScope.launch(Dispatchers.IO) {
-            weatherRepository.deleteHome()
+            weatherRepository.deleteFromHome(weatherResponse)
         }
     }
 
-
-//    fun getCurrentWeather(latitude: Double, longitude: Double) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val units = "metric"
-//            val apiKey = Utils.APIKEY
-//            weatherRepository.getFiveDaysWeather(latitude, longitude, units, apiKey, "en").collect {
-//                _fiveDaysWeather.value = ApiState.Suceess(it)
-//            }
-//        }
-//    }
-
-
-//    fun getAlertsInfo(latitude: Double, longitude: Double) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val units = "metric"
-//            val apiKey = Utils.APIKEY
-//            val lang = "en"
-//            weatherRepository.getAlertData(46.8182, 8.2275, units, apiKey, lang).collect {
-////            weatherRepository.getAlertData(31.2683793, 30.006182, units, apiKey, lang).collect {
-//                _alertData.value = OneCallState.Suceess(it)
-//            }
-//        }
-//    }
 
     fun getFiveDaysWeather(latitude: Double, longitude: Double, lang: String, units: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -92,107 +65,4 @@ class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryInte
         }
     }
 }
-
-//insert alert data
-
-
-////alert
-//    private val _alerts = MutableStateFlow<ALertDBState>(ALertDBState.Loading())
-//    val AlertData: StateFlow<ALertDBState> = _alerts
-
-
-
-
-//
-//    private val _alertData = MutableLiveData<OneApiCall>()
-//    val alertsData: LiveData<OneApiCall> = _alertData
-
-//    fun getalertsInfo(latitude: Double, longitude: Double) {
-//        viewModelScope.launch {
-//          try{  val units = "metric"
-//            val apiKey = Utils.APIKEY
-//
-//            val weatherList = weatherRepository.getAlertData(latitude, longitude, units, apiKey,"en")
-//              _alertData.value = weatherList}
-//
-//          catch (e: Exception) {
-//              Log.i("+======", "getFiveDaysWeather: Eroor" +e)
-//          }
-//        }
-//    }
-
-
-//    private val _favCity = MutableStateFlow<DBState>(DBState.Loading())
-//    val currentWeather: StateFlow<DBState> = _favCity
-
-//    fun addToAlerts(alerts: OneApiCall, long: Double, lat: Double) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            weatherRepository.insertAlertIntoDB(alerts, long, lat)
-//            Log.i("=======", "addToFavorites: done")
-////            withContext(Dispatchers.Main){
-////                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
-////            }
-//        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    fun getFiveDaysWeather(latitude: Double , longitude: Double) {
-//        viewModelScope.launch {
-//            try {
-//                val units = "metric"
-//                val apiKey = Utils.APIKEY
-//                val lang = "ar"
-//                val weatherResponse = weatherRepository.getFiveDaysWeather(latitude,longitude, units, apiKey,lang)
-//                _fiveDaysWeather.value = weatherResponse
-//            } catch (e: Exception) {
-//                Log.i("+======", "getFiveDaysWeather: Eroor" +e)
-//            }
-//        }
-//    }
-
-
-//class HomeFragmentViewModel(private val weatherRepository: WeatherRepositoryImpl) : ViewModel()  {
-//    private val weatherData = MutableLiveData<List<Weather>>() //observable -> emit
-//    val data: LiveData<List<Weather>> = weatherData //observable
-//
-//    //retrofit
-//    fun getCurrentWeatherData() {
-//        viewModelScope.launch (Dispatchers.IO){
-//            val weatherList = weatherRepository.getCurrentWeather()
-//            weatherData.postValue(weatherList)
-//
-//        }
-//    }
-//}
 

@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getString
 import com.airbnb.lottie.LottieAnimationView
 import com.example.weatherapppoject.R
 
@@ -55,12 +56,13 @@ class AlarmReceiver : BroadcastReceiver(){
 
         val lat = intent?.getStringExtra("lat").toString().toDouble()
         val lon = intent?.getStringExtra("lon").toString().toDouble()
-        var alertMessage="There are no warnings"
+        var alertMessage= getString(context,R.string.nowarnings)
         repository = WeatherRepositoryImpl.getInstance(remoteDataSource,localDataSourceInte)
 
 
         CoroutineScope(Dispatchers.IO).launch {
-            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,"metric").collect{
+            //languaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            repository.getAlertData(lat,lon,"metric",Utils.APIKEY,"en").collect{
                 alertResults = it!!
             }
 
@@ -68,18 +70,20 @@ class AlarmReceiver : BroadcastReceiver(){
                 alertMessage = (alertResults.alerts!!.get(0).event)
 
             if (type.equals("notification")){
-                val intent2 = Intent(context, AlertFragment::class.java)
+                val destinationIntent = Intent(context, AlertFragment::class.java)
                 intent?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                val pendingIntent = PendingIntent.getActivity(context, 0,intent2,
+                val pendingIntent = PendingIntent.getActivity(context, 0,destinationIntent,
                     PendingIntent.FLAG_IMMUTABLE)
                 val builder = NotificationCompat.Builder(context!!, CHANEL)
                     .setSmallIcon(R.drawable.alert)
                     .setContentTitle(alertResults.timezone)
-                    .setContentText(alertMessage)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
-                    .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setContentText(alertMessage)
+//                    .set
+
                 val notificationManager = NotificationManagerCompat.from(context)
 
                 if (ActivityCompat.checkSelfPermission(
@@ -90,14 +94,14 @@ class AlarmReceiver : BroadcastReceiver(){
                 notificationManager.notify(1, builder.build())
             }
             else{
-                alarm(context,alertMessage)
+                alarmBuilder(context,alertMessage)
             }
 
         }
 
     }
     @SuppressLint("MissingInflatedId", "SetTextI18n")
-    private suspend fun alarm(context: Context, msgInfo:String) {
+    private suspend fun alarmBuilder(context: Context, msgInfo:String) {
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         else
@@ -134,7 +138,7 @@ class AlarmReceiver : BroadcastReceiver(){
                 animation.playAnimation()
             }
             message.text = msgInfo
-            description.text =  "Current State: ${alertResults.current.weather[0].description}"
+            description.text = "Current State: ${alertResults.current.weather[0].description}"
             view.visibility = View.VISIBLE
 
         }

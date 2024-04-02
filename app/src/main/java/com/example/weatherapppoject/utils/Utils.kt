@@ -8,6 +8,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.weatherapppoject.R
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -73,22 +74,40 @@ class Utils {
             return numberFormat.format(number)
         }
 
-        fun convertToMeterPerSec(speed: Double): Double {
-            return speed / 2.237
-        }
+//        fun convertToMeterPerSec(speed: Double): Double {
+//            return speed / 2.237
+//        }
+fun convertToMeterPerSec(speed: Double): Double {
+    val arabicNumbers = arrayOf("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩")
+    val englishNumbers = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+    var speedStr = speed.toString()
+    for (i in arabicNumbers.indices) {
+        speedStr = speedStr.replace(arabicNumbers[i], englishNumbers[i])
+    }
+
+    return speedStr.toDouble() / 2.237
+}
 
         fun convertToMilePerHour(speed: Double): Double {
-            return speed * 2.237
+            val arabicNumbers = arrayOf("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩")
+            val englishNumbers = arrayOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 
-        }
-
-        fun getTempSymbol(unit : String) :String{
-            return when(unit){
-                "metric" -> "C"
-                "standard" -> "K"
-                else -> "F"
+            var speedStr = speed.toString()
+            for (i in arabicNumbers.indices) {
+                speedStr = speedStr.replace(arabicNumbers[i], englishNumbers[i])
             }
+
+            return speedStr.toDouble() * 2.237
         }
+
+//        fun convertToMilePerHour(speed: Double): Double {
+//            return speed * 2.237
+//
+//        }
+
+        fun Double.round(decimals: Int): Double = "%.${decimals}f".format(this).toDouble()
+
 
         @SuppressLint("ResourceType")
         fun getWeatherIcon(iconId: String, animationView: LottieAnimationView) {

@@ -1,8 +1,6 @@
 package com.example.weatherapppoject.favorite.view
 
 import android.annotation.SuppressLint
-import android.location.Address
-import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -36,11 +34,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FavoriteDetailsFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteDetailsBinding
-
     private lateinit var remoteDataSource: RemoteDataSource
     private lateinit var localDataSourceInte: LocalDataSourceInte
     private lateinit var favoriteViewModel: FavoriteViewModel
@@ -51,11 +47,8 @@ class FavoriteDetailsFragment : Fragment() {
     private lateinit var todayadapter: WeekAdapter
     private lateinit var viewModel: HomeFragmentViewModel
     lateinit var HomeviewModelFactory: HomeFragmentViewModelFactory
-    private lateinit var fuoadapter : FavoritesAdapter
     private var language : String ="default"
     private var units : String ="default"
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +105,7 @@ class FavoriteDetailsFragment : Fragment() {
         is ForeCastApiState.Loading -> {
         lifecycleScope.launch(Dispatchers.Main) {
         favoriteViewModel.showWeatherDetails(longitude, latitude)
-        favoriteViewModel.currentWeather.collect { state ->
+        favoriteViewModel.favorite.collect { state ->
             when (state) {
              is DBState.Loading -> {}
              is DBState.OneCitySucess -> {
@@ -169,22 +162,13 @@ lifecycleScope.launch(Dispatchers.Main) {
         }
         todayadapter = WeekAdapter(filteredList,language,units)
         binding.FivedaysRec.adapter = todayadapter
-
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            favoriteViewModel.addToFavorites(
-//                weatherResponse.data,
-//                weatherResponse.data.city.coord.lon,
-//                weatherResponse.data.city.coord.lat
-//            )
-//        }
     }
 
     is ForeCastApiState.Loading -> {
         lifecycleScope.launch(Dispatchers.Main) {
             favoriteViewModel.showWeatherDetails(longitude, latitude)
 
-            favoriteViewModel.currentWeather.collect { state ->
+            favoriteViewModel.favorite.collect { state ->
                 when (state) {
                     is DBState.Loading -> {
                         Log.i("====loading details name", "fav details fragment: ")

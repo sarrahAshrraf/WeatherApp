@@ -5,10 +5,11 @@ import com.example.weatherapppoject.database.LocalDataSourceInte
 import com.example.weatherapppoject.forecastmodel.WeatherResponse
 import com.example.weatherapppoject.onecall.model.OneApiCall
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeLocalDataCourceImp (var homeAndfav : MutableList<WeatherResponse> = mutableListOf(),
-                              val oneapi : MutableList<OneApiCall> = mutableListOf(),
+                              val oneapi : MutableList<WeatherResponse> = mutableListOf(),
                               val alert : MutableList<AlertData> = mutableListOf() )
         : LocalDataSourceInte {
 
@@ -20,15 +21,20 @@ class FakeLocalDataCourceImp (var homeAndfav : MutableList<WeatherResponse> = mu
         longitude: Double,
         latitude: Double
     ) {
-        TODO("Not yet implemented")
+        homeAndfav.removeFirst()
+        homeAndfav.add(favorite)
     }
 
     override suspend fun deleteFavData(weatherData: WeatherResponse) {
+        homeAndfav.remove(weatherData)
+    }
+
+    override suspend fun deleteHomeData(weatherData: WeatherResponse) {
         TODO("Not yet implemented")
     }
 
-    override fun displayAllFav(): Flow<List<WeatherResponse>> {
-        TODO("Not yet implemented")
+    override fun displayAllFav(): Flow<List<WeatherResponse>>  = homeAndfav.let {
+        return@let flowOf(it)
     }
 
     override fun getCityData(longitude: Double, latitude: Double): Flow<WeatherResponse> {
@@ -40,11 +46,12 @@ class FakeLocalDataCourceImp (var homeAndfav : MutableList<WeatherResponse> = mu
         longitude: Double,
         latitude: Double
     ) {
-        TODO("Not yet implemented")
+        homeAndfav.removeFirst()
+        homeAndfav.add(weatherData)
     }
 
-    override fun getCityDataHome(): Flow<WeatherResponse> {
-        TODO("Not yet implemented")
+    override fun getCityDataHome(): Flow<WeatherResponse>  = homeAndfav.let {
+        return@let it.asFlow()
     }
 
     override suspend fun deleteHomeData() {
@@ -56,7 +63,7 @@ class FakeLocalDataCourceImp (var homeAndfav : MutableList<WeatherResponse> = mu
     }
 
     override suspend fun deleteAlertData(weatherAlertedData: AlertData) {
-        TODO("Not yet implemented")
+        alert.remove(weatherAlertedData)
     }
 
     override fun displayAllAlerts(): Flow<List<AlertData>>  = alert.let{
@@ -70,41 +77,3 @@ class FakeLocalDataCourceImp (var homeAndfav : MutableList<WeatherResponse> = mu
 
 }
 
-
-//override suspend fun insertHomeWeather(entityHome: EntityHome) {
-//            home.removeFirst()
-//            home.add(entityHome)
-//        }
-//
-//        override val getHomeWeather: Flow<EntityHome> = home.let {
-//            return@let it.asFlow()
-//        }
-//
-//        override val getFavorite: Flow<List<EntityFavorite>> = favorite.let {
-//            return@let flowOf(it)
-//        }
-//
-//        override suspend fun insertFavorite(entityFavorite: EntityFavorite) {
-//            favorite.add(entityFavorite)
-//        }
-//
-//        override suspend fun deleteFavorite(entityFavorite: EntityFavorite) {
-//            favorite.remove(entityFavorite)
-//        }
-//
-//        override val getAlert: Flow<List<EntityAlert>> = alert.let {
-//            return@let flowOf(it)
-//        }
-//
-//        override suspend fun insertAlert(entityAlert: EntityAlert) {
-//            alert.add(entityAlert)
-//        }
-//
-//        override suspend fun deleteAlert(entityAlert: EntityAlert) {
-//            alert.remove(entityAlert)
-//        }
-//
-//        override fun getAlertById(id: String): EntityAlert {
-//            return alert[id.toInt()]
-//        }
-//    }

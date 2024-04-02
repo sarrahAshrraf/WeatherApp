@@ -97,12 +97,6 @@ class HomeActivity : AppCompatActivity() {
             binding.tvNetworkIndicator.visibility = View.VISIBLE
         }
     }
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.frameLayout, fragment)
-//            .commit()
-//    }
 private fun replaceFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .replace(R.id.frameLayout, fragment)
@@ -118,18 +112,8 @@ private fun replaceFragment(fragment: Fragment) {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
         ViewCompat.setLayoutDirection(this.window.decorView, if (language == "ar") ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR)
-//        updateBottomNavigationBarTitles()
     }
 
-    fun setUpNavBar(){
-    if( sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name,"") =="en"){
-            setLocale("en")
-
-        }
-        else if ( sharedPrefrencesManager.getLanguae(SharedKey.LANGUAGE.name,"") =="ar"){
-            setLocale("ar")
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()

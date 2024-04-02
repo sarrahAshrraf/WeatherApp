@@ -80,7 +80,7 @@
         android:background="@color/white"
         android:enabled="true"
         android:gravity="center"
-        android:text="Add to favorites"
+        android:text="Select"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:visibility="visible"

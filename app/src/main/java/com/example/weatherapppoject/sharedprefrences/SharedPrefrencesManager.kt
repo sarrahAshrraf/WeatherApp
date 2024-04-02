@@ -159,7 +159,7 @@ enum class SharedKey {
         CURMAP,
         TEMP_UNIT,
         ALERT_TYPE,
-    WIND
+
 
 
 }

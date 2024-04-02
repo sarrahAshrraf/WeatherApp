@@ -51,6 +51,22 @@
     <string name="favoritemenu">المفضلة</string>
     <string name="home">الرئيسية</string>
     <string name="notifications">الأشعارات</string>
+    <string name="deletAlertConfirm">هل متأكد من حذف هذا المنبه؟</string>
+    <string name="removeDialogmsg">تأكيد الحذف</string>
+    <string name="ok"> نعم</string>
+    <string name="no">لا</string>
+    <string name="addtofavorite">اضف إلى المفضلة</string>
+    <string name="addtoALert">اضف إلى المنبه</string>
+    <string name="makecurrent">اجعله موقعك الحالي</string>
+    <string name="notfoundlocation">الموقع غير موجود</string>
+    <string name="turnonlocation">قم بتشغيل موقعك</string>
+    <string name="nointernetconnection">لا يوجد أتصال بالأنترنت</string>
+    <string name="alertdatainput">من فضلك أدخل البيانات بشكل صحيح</string>
+    <string name="nowarnings">لا يوجد تحذيرات</string>
+
+
+
+
 
 
 </resources>

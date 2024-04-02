@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.fragment.app.FragmentManager
 import com.example.weatherapppoject.R
 import com.example.weatherapppoject.database.LocalDataSourceImp
 import com.example.weatherapppoject.database.LocalDataSourceInte
@@ -133,7 +132,7 @@ class FavoriteFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
 //            favoriteViewModel.showFavItems()
 
-            favoriteViewModel.currentWeather.collect { state ->
+            favoriteViewModel.favorite.collect { state ->
                 when (state) {
                     is DBState.Loading -> {
 //                       binding.animationView.visibility =View.VISIBLE

@@ -10,7 +10,7 @@ class FavoriteViewModelFactory ( val weathRepo: WeatherRepositoryImpl
         return if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)){
             FavoriteViewModel(weathRepo) as T}
         else{
-            throw IllegalArgumentException("viewModel class notfound")
+            throw IllegalArgumentException("viewModel class not found")
         }
     }
 

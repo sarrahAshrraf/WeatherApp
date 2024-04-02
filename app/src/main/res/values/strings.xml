@@ -22,13 +22,13 @@
     <string name="search_map">Search…</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="startDate">start Date</string>
+    <string name="startDate">Start From</string>
     <string name="cancel">Cancel</string>
     <string name="selectLocation">Select Location</string>
     <string name="notification">Notification</string>
     <string name="alarm">Alarm</string>
     <string name="save">Save</string>
-    <string name="endDate">End Date</string>
+    <string name="endDate">End in</string>
     <string name="addAlertFrom">Add alert from </string>
     <string name="completeDetails">Compelete alert setup</string>
     <string name="currentLocation">Current location</string>
@@ -51,6 +51,25 @@
     <string name="favoritemenu">Favorite</string>
     <string name="home">Home</string>
     <string name="notifications">Notification</string>
+    <string name="deletAlertConfirm">Are you sure you want to remove this alert?</string>
+    <string name="removeDialogmsg">Delete Confirmation</string>
+    <string name="ok">Ok</string>
+    <string name="no">Cancel</string>
+    <string name="addtofavorite">Add to Favorite</string>
+    <string name="addtoALert">Add to Alert</string>
+    <string name="makecurrent">Make current location</string>
+    <string name="notfoundlocation">Location not found</string>
+    <string name="turnonlocation">Turn On location</string>
+    <string name="nointernetconnection">There is no internet connection</string>
+    <string name="alertdatainput">Please enter correct data</string>
+    <string name="nowarnings">There are no warnings</string>
+
+
+
+
+
+
+
 
 
 </resources>

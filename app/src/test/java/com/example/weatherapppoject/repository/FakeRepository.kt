@@ -20,6 +20,10 @@ class FakeRepository :WeatherRepositoryInter{
     var favorite : MutableList<WeatherResponse> = mutableListOf()
     var alert : MutableList<AlertData> = mutableListOf()
 
+    val latitude = 78.9
+    val longitude = 123.456
+    val lang = "en"
+    val units = "metric"
     val city = City(Coord(12.345, 67.890), "Country", 123, "City", 100000, 123456, 789012, 3600)
     val forecastList = mutableListOf(
         ForeCastData(
@@ -32,13 +36,13 @@ class FakeRepository :WeatherRepositoryInter{
             Wind(10, 2.5, 3.4)
         )
     )
-    val data = WeatherResponse(
-        1,
+    val fakeWeatherData = WeatherResponse(
+        9,
         city,
         123.456,
         78.90,
         5,
-        1,
+        0,
         0,
         "200",
         forecastList,
@@ -47,13 +51,13 @@ class FakeRepository :WeatherRepositoryInter{
 
 
     override suspend fun getFiveDaysWeather(
-        latitude: Double,
-        longitude: Double,
+        latitudee: Double,
+        longitudee: Double,
         units: String,
         apiKey: String,
         lang: String
     ): Flow<WeatherResponse> {
-        return  flowOf(WeatherResponse(1,city, 0.0,0.0,0,0,0,"0",forecastList,0))
+        return  flowOf(WeatherResponse(9,city, longitude,latitude,5,0,0,"200",forecastList,0))
     }
 
     override fun getFavoriteData(): Flow<List<WeatherResponse>> = flowOf(favorite)
@@ -68,6 +72,10 @@ class FakeRepository :WeatherRepositoryInter{
 
     override suspend fun deleteFromFav(weatherData: WeatherResponse) {
         favorite.remove(weatherData)
+    }
+
+    override suspend fun deleteFromHome(weatherData: WeatherResponse) {
+        home.remove(weatherData)
     }
 
     override fun getAlertedData(): Flow<List<AlertData>> = flowOf(alert)
@@ -97,7 +105,7 @@ class FakeRepository :WeatherRepositoryInter{
 
 
     override fun getFavCityInfo(longitude: Double, latitude: Double): Flow<WeatherResponse> {
-        TODO("Not yet implemented")
+      return flowOf(favorite.first())
     }
 
     override suspend fun insertHomeData(
@@ -109,18 +117,7 @@ class FakeRepository :WeatherRepositoryInter{
     }
 
     override fun getFavCityInfoHome(): Flow<WeatherResponse> {
-        return flow {
-            if (home.isNotEmpty()) {
-                emit(home.first())
-            } else {
-                home.clear()
-                emit(home.first())
-            }
-        }
-
-
-
-//        return flowOf(home.first())
+        return flowOf(home.first())
     }
 
 
@@ -138,7 +135,6 @@ class FakeRepository :WeatherRepositoryInter{
 
     override suspend fun deleteHome() {
         home.clear()
-//        remove(home.first())
     }
 
 
