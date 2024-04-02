@@ -1,5 +1,6 @@
 package com.example.weatherapppoject.repository
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.weatherapppoject.onecall.model.AlertData
 import com.example.weatherapppoject.data.FakeLocalDataCourceImp
@@ -17,11 +18,13 @@ import kotlinx.coroutines.test.runTest
 import org.hamcrest.core.IsEqual
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
+@RunWith(JUnit4::class)
 class RepositoryTest {
     val lang = "en"
     val city = City(Coord(12.345, 67.890), "Country", 123, "City", 100000, 123456, 789012, 3600)
@@ -127,7 +130,8 @@ class RepositoryTest {
     private lateinit var localSource : FakeLocalDataCourceImp
     private lateinit var repository: WeatherRepositoryImpl
 
-
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
     @Before
     fun getSetup(){
         remoteSource = FakeApiService(remote)

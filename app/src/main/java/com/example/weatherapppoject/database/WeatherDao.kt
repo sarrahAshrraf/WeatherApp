@@ -55,12 +55,8 @@ interface WeatherDao {
     suspend fun deleteFavByIsNotFav()
     @Query("DELETE FROM weather_data WHERE isFav = 1 AND longitude = :longitude AND latitude = :latitude")
     suspend fun deleteFavByLonLat(longitude: Double, latitude: Double)
-
     @Delete
     suspend fun delete(weatherData: WeatherResponse)
-
-
-
 
     //retreive all fav cities in the favorite fragment
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
@@ -89,10 +85,6 @@ interface WeatherDao {
     suspend fun insertAlert(favorite: AlertData)
     @Transaction
     suspend fun setAsAlerted(alert: AlertData, longitude: Double, latitude: Double) {
-//        alert.isALert = 1
-//        alert.lat = latitude
-//        alert.lon = longitude
-        Log.i("====db set", "setAsFavorite: ")
         insertAlert(alert)
     }
 
